@@ -40,7 +40,7 @@ const About = () => {
 
       {/* Outer frame */}
       <div className="relative z-10 mx-auto min-h-screen max-w-7xl px-6 md:px-10 lg:px-12">
-        <div className="pointer-events-none absolute inset-6 rounded-[28px] border border-white/15 md:inset-10 lg:inset-12" />
+        <div className="pointer-events-none absolute inset-6 rounded-[28px] border-0 md:border md:border-white/15 md:inset-10 lg:inset-12" />
 
         {/* Centered layout */}
         <div className="relative flex min-h-screen items-center justify-center py-24">
@@ -67,11 +67,7 @@ const About = () => {
                 About <span className="text-emerald-300">Me</span>
               </h2>
 
-              <p className="mt-3 text-white/70">
-                Junior UX Designer with a strong foundation in user-centered
-                design, research, and interaction design — passionate about
-                building intuitive, accessible, and scalable digital products.
-              </p>
+             
             </div>
 
             {/* Body */}

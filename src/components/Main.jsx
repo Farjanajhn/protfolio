@@ -20,7 +20,7 @@ const Main = () => {
 
       {/* Outer frame */}
       <div className="relative z-10 mx-auto min-h-screen max-w-7xl px-6 md:px-10 lg:px-12">
-        <div className="pointer-events-none absolute inset-6 rounded-[28px] border border-white/15 md:inset-10 lg:inset-12" />
+        <div className="pointer-events-none absolute inset-6 rounded-[28px] border-0 md:border md:border-white/15 md:inset-10 lg:inset-12" />
 
         {/* Centered layout */}
         <div className="relative justify-center flex min-h-screen items-center">
@@ -101,7 +101,7 @@ const Main = () => {
 
               {/* Availability */}
               <p className="mt-6 text-sm text-white/60">
-                Open to UX/UI internships & collaborations
+                Open to UX/UI job opportunities, internships & collaborations
               </p>
             </div>
           </div>

@@ -56,7 +56,7 @@ const Projects = () => {
 
       {/* Outer frame (same as hero/about) */}
       <div className="relative z-10 mx-auto min-h-screen max-w-7xl px-6 md:px-10 lg:px-12">
-        <div className="pointer-events-none absolute inset-6 rounded-[28px] border border-white/15 md:inset-10 lg:inset-12" />
+        <div className="pointer-events-none absolute inset-6 rounded-[28px] border-0 md:border md:border-white/15 md:inset-10 lg:inset-12" />
 
         {/* Centered layout */}
         <div className="relative flex min-h-screen items-center justify-center py-24">
