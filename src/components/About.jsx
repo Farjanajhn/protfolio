@@ -108,16 +108,17 @@ const About = () => {
 
                   {/* Resume buttons */}
                   <div className="mt-6 grid gap-3">
-                  
+                  <a
+  href="/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
+  download="Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
+  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 text-sm font-semibold text-black transition hover:bg-emerald-300"
+>
+  <FaDownload />
+  Download Resume (PDF)
+</a>
 
-                    <a
-                      href="/public/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
-                      download
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 text-sm font-semibold text-black transition hover:bg-emerald-300"
-                    >
-                      <FaDownload />
-                      Download Resume (PDF)
-                    </a>
+                  
+                    
                   </div>
                 </div>
               </div>
