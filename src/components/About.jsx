@@ -1,95 +1,242 @@
-import { useEffect } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import { FaEye } from 'react-icons/fa';
-import img from './../assets/image/myImage.png';
+// About.jsx — MATCHES Main.jsx style (dark + framed + glass + centered layout)
+// Focused on profile, education, skills & interests (NO experience section)
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { FaEye } from "react-icons/fa";
+import img from "./../assets/image/myImage.png";
 
 const About = () => {
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 800, once: true, easing: "ease-out-cubic" });
   }, []);
 
+  const toolChips = [
+    "Figma",
+    "Miro (basic)",
+    "MAXQDA",
+    "VS Code",
+    "GitHub",
+    "React",
+    "Tailwind CSS",
+    "Usability Testing",
+    "Journey Mapping",
+    "Information Architecture",
+    "Accessibility (WCAG)",
+    "Design Systems",
+    "Wireframing",
+    "Prototyping",
+    "Mixed-Methods UX Research",
+  ];
+
   return (
-   
-    <section 
-      id="about" 
-      className="relative bg-gradient-to-br from-gray-50 to-gray-100 py-24 px-6 md:px-20 overflow-hidden"
+    <section
+      id="about"
+      className="relative min-h-screen overflow-hidden bg-[#0b0f14]"
     >
-       <hr className="border-black mb-12" />
-      <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-20 max-w-6xl mx-auto">
-        
-        
-        {/* Profile Image */}
-      
-        <div 
-          data-aos="fade-right"
-          className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border shadow-md mx-auto md:mx-0"
-        >
-          <img 
-            src={img} 
-            alt="Farjana Jahan Sathi - Profile" 
-            className="w-full h-full object-cover"
-          />
+      {/* Background tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-emerald-900/10" />
+
+      {/* Outer frame */}
+      <div className="relative z-10 mx-auto min-h-screen max-w-7xl px-6 md:px-10 lg:px-12">
+        <div className="pointer-events-none absolute inset-6 rounded-[28px] border border-white/15 md:inset-10 lg:inset-12" />
+
+        {/* Centered layout */}
+        <div className="relative flex min-h-screen items-center justify-center py-24">
+          {/* Content card */}
+          <div
+            className="w-full max-w-5xl rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-md shadow-2xl sm:p-8 md:p-10"
+            data-aos="fade-up"
+          >
+            {/* Header */}
+            <div className="text-center md:text-left">
+              <div className="flex flex-wrap justify-center gap-2 md:justify-start">
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
+                  Junior UX Designer
+                </span>
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
+                  HCI & UX Master’s Graduate
+                </span>
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
+                  Research · Accessibility · SaaS UX
+                </span>
+              </div>
+
+              <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                About <span className="text-emerald-300">Me</span>
+              </h2>
+
+              <p className="mt-3 text-white/70">
+                Junior UX Designer with a strong foundation in user-centered
+                design, research, and interaction design — passionate about
+                building intuitive, accessible, and scalable digital products.
+              </p>
+            </div>
+
+            {/* Body */}
+            <div className="mt-10 grid gap-10 md:grid-cols-12 md:items-start">
+              {/* Left: image + education */}
+              <div className="md:col-span-5" data-aos="fade-right">
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  {/* Profile image */}
+                  <div className="mx-auto h-52 w-52 overflow-hidden rounded-2xl border border-white/10 sm:h-60 sm:w-60 md:mx-0">
+                    <img
+                      src={img}
+                      alt="Farjana Jahan Sathi"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  {/* Personal info */}
+                  <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm text-white/85">
+                      <span className="font-semibold text-white">
+                        Farjana Jahan Sathi
+                      </span>
+                    </p>
+                    <p className="mt-1 text-sm text-white/70">
+                      Umeå, Sweden
+                    </p>
+                    <p className="mt-1 text-sm text-white/70">
+                      English (Fluent) · Swedish (Professional) · Bengali (Native)
+                    </p>
+                  </div>
+
+                  {/* Education highlight */}
+                  <div className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4">
+                    <p className="text-sm text-white/85">
+                      🎓{" "}
+                      <span className="font-semibold text-white">
+                        MSc in Human–Computer Interaction & User Experience
+                      </span>
+                    </p>
+                    <p className="mt-1 text-sm text-white/70">
+                      Umeå University, Sweden · Aug 2023 – Jun 2025
+                    </p>
+                    <p className="mt-1  font-semibold text-white">
+  Thesis:{" "}
+  <a
+    href="https://umu.diva-portal.org/smash/record.jsf?pid=diva2%3A1977119&dswid=3290"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="font-medium text-emerald-300 underline-offset-4 hover:underline"
+  >
+    Evaluating the International Usability of ULTRA — Mixed-Method Approach
+  </a>
+</p>
+                    
+                  </div>
+
+                  {/* Resume button */}
+                  <div className="mt-6">
+                    <a
+                      href="https://drive.google.com/file/d/1LHlzw5ugACEz9GUWWl6L1ZajfKRdvUcV/view?usp=sharing"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 text-sm font-semibold text-black transition hover:bg-emerald-300"
+                    >
+                      <FaEye className="text-lg" />
+                      View Resume
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: profile + skills */}
+              <div className="md:col-span-7" data-aos="fade-left">
+                <div className="space-y-4 text-white/80 leading-relaxed">
+                  <p>
+                    I’m{" "}
+                    <span className="font-semibold text-white">Farjana</span>, a{" "}
+                    <span className="font-semibold text-white">
+                      Junior UX Designer
+                    </span>{" "}
+                    with a background in Human–Computer Interaction and User
+                    Experience.
+                  </p>
+
+                  <p>
+                    My work is driven by{" "}
+                    <span className="font-semibold text-white">
+                      user-centered problem solving
+                    </span>
+                    , combining qualitative research, usability testing, and
+                    thoughtful interaction design to simplify complex systems.
+                  </p>
+
+                  <p>
+                    I’m particularly interested in{" "}
+                    <span className="italic text-emerald-300">
+                      SaaS UX, inclusive design, and human–AI interaction
+                    </span>
+                    , and enjoy translating research insights into clear,
+                    scalable interfaces.
+                  </p>
+                </div>
+
+                {/* Core competencies */}
+                <div className="mt-8">
+                  <h3 className="text-lg font-semibold text-white">
+                    Core Competencies
+                  </h3>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="font-semibold text-white">
+                        UX & Product Design
+                      </p>
+                      <p className="mt-1 text-sm text-white/70">
+                        Wireframing, user flows, interaction design, UI systems
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="font-semibold text-white">User Research</p>
+                      <p className="mt-1 text-sm text-white/70">
+                        Interviews, usability testing, insight synthesis
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="font-semibold text-white">
+                        Prototyping & Iteration
+                      </p>
+                      <p className="mt-1 text-sm text-white/70">
+                        Low–hi-fi prototyping, feedback-driven design
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="font-semibold text-white">
+                        Front-End Awareness
+                      </p>
+                      <p className="mt-1 text-sm text-white/70">
+                        React, HTML, CSS, Tailwind, design–dev handoff
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Tools chips */}
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {toolChips.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/85"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className="mt-6 text-sm text-white/60">
+                    Interests: Human–AI collaboration, inclusive & assistive
+                    design, data-driven UX, scalable design systems, and SaaS UX.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="mt-12 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          </div>
         </div>
-
-        {/* About Text */}
-        <div 
-  data-aos="fade-left" 
-  className="text-center md:text-left max-w-2xl"
->
-  <h1 className="text-4xl font-bold mb-6 text-gray-900">
-    I’m <span className="font-semibold text-black">Farjana</span>
-  </h1>
-  
-  <p className="text-lg leading-relaxed text-gray-900">
-            — a passionate <span className="font-semibold text-black">Product Designer </span> 
-      
-    and <span className="font-semibold text-black">MERN Stack Developer</span> based in Umeå, Sweden.  
-    With a strong foundation in <span className="font-semibold text-black">Human-Computer Interaction and User Experience </span> 
-    and a background in development, I bring together 
-     <span className="font-semibold text-black"> design thinking</span> and 
-    <span className="font-semibold text-black"> technical expertise </span> 
-     to create digital solutions that feel simple, intuitive, and human. ✨
-  </p>
-
-  <p className="text-lg leading-relaxed text-gray-700 mt-4">
-    For me, design is more than just aesthetics — it’s about 
-    <span className="font-semibold text-black"> problem-solving </span> 
-     and crafting experiences that empower people in meaningful ways.  
-    I believe every interface tells a story, and my goal is to make sure that story 
-    is one of <span className="font-semibold text-black">clarity, accessibility, and joy</span>.
-  </p>
-
-  <p className="text-lg leading-relaxed text-gray-700 mt-4">
-    As a lifelong learner, I thrive at the intersection of 
-     <span className="font-semibold text-black"> creativity </span> and 
-     <span className="font-semibold text-black"> technology </span>. 
-    Whether I’m building interfaces in React, prototyping in Figma, or conducting user research, 
-    I’m always guided by one principle: 
-     <span className="italic text-black"> put the user first </span>. 🚀
-  </p>
-
-  <p className="text-lg leading-relaxed text-gray-700 mt-4">
-    Outside of work, you’ll find me <span className="font-semibold text-black">
-    exploring new cultures and languages , or reading books</span> to unwind.  
-    These passions fuel my creativity and help me design products that connect with people on a deeper level. 
-  </p>
-
-  {/* Resume Button */}
-  <div className="mt-8">
-    <a 
-      href="https://drive.google.com/file/d/1LHlzw5ugACEz9GUWWl6L1ZajfKRdvUcV/view?usp=sharing" 
-      target="_blank" 
-      rel="noopener noreferrer"
-    >
-      <button 
-        className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white font-medium rounded-md shadow hover:bg-gray-700 transition"
-      >
-        <FaEye className="text-lg" /> See Resume
-      </button>
-    </a>
-  </div>
-</div>
       </div>
     </section>
   );

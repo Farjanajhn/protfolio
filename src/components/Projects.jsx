@@ -1,11 +1,31 @@
+// Projects.jsx — MATCHES your Main/About/Skills style (dark + framed + glass)
+// Keeps your data + routing. Modern cards, consistent chips, centered layout.
+
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 
-import final from '../assets/image/UX1st/happy2.png'
-import mockup1 from "../assets/image/UX2nd/mockup1.png";
+import final from "../assets/image/UX1st/happy2.png";
+import Mockup3 from "../assets/image/UX3RD/Mockup3.png";
+import hero2 from "../assets/image/UX2nd/hero2.png";
+
 
 // Project data
 const uxProjects = [
+  {
+    title: "MyGov",
+    description:
+      "Designing clearer navigation and feedback to reduce confusion in MyGov BD services.",
+    link: "/projects/Third",
+    backgroundImage: Mockup3,
+  },
+
+  {
+    title: "Trubble Buddy",
+    description:
+      "A co-designed therapy support system created with youth stakeholders.",
+    link: "/projects/second",
+    backgroundImage: hero2,
+  },
   {
     title: "Blossom Buddy",
     description:
@@ -13,25 +33,13 @@ const uxProjects = [
     link: "/projects/first",
     backgroundImage: final,
   },
-  {
-    title: "Trubble Buddy",
-    description:
-      "A co-designed therapy support system created with youth stakeholders.",
-    link: "/projects/second",
-    backgroundImage:mockup1 ,
-  },
+ 
   {
     title: "Ultra Public transportation mobile app redesign",
     description:
       "Redesign of Ultra based on Master’s thesis research, focusing on usability, inclusivity, and seamless commuting.",
     link: "#",
-  
-  },
-  {
-    title: "E-daak (Coming Soon)",
-    description:
-      "A digital letterbox service for Bangladesh, enabling secure delivery of bills, documents, and payments — inspired by Sweden’s Kivra.",
-    link: "#",
+    // no image yet
   },
 ];
 
@@ -41,23 +49,52 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      className="bg-gradient-to-br from-gray-50 to-gray-100 py-20 px-6 md:px-20"
+      className="relative min-h-screen overflow-hidden bg-[#0b0f14]"
     >
-       <hr className="border-black mb-12" />
-      <div className="mx-auto max-w-6xl">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-gray-900">UI/UX Projects</h2>
-          <p className="mt-4 mx-auto max-w-2xl text-gray-700">
-            Showcasing projects focused on user research and interaction design.
-          </p>
-        </div>
+      {/* Background tint (same vibe as other sections) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-emerald-900/10" />
 
-        {/* Project Cards */}
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-          {projects.map((project, idx) => (
-            <ProjectCard key={idx} {...project} />
-          ))}
+      {/* Outer frame (same as hero/about) */}
+      <div className="relative z-10 mx-auto min-h-screen max-w-7xl px-6 md:px-10 lg:px-12">
+        <div className="pointer-events-none absolute inset-6 rounded-[28px] border border-white/15 md:inset-10 lg:inset-12" />
+
+        {/* Centered layout */}
+        <div className="relative flex min-h-screen items-center justify-center py-24">
+          <div className="w-full max-w-6xl">
+            {/* Header */}
+            <div className="text-center md:text-left">
+              <div className="flex flex-wrap justify-center gap-2 md:justify-start">
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
+                  Case Studies
+                </span>
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
+                  Research · UI · Prototyping
+                </span>
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
+                  HCI · UX
+                </span>
+              </div>
+
+              <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                UX <span className="text-emerald-300">Projects</span>
+              </h2>
+
+              <p className="mt-3 max-w-2xl text-white/70 md:max-w-3xl">
+                A selection of UX projects focused on user research, interaction
+                design, and building clear, accessible experiences.
+              </p>
+            </div>
+
+            {/* Cards grid */}
+            <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+              {projects.map((project, idx) => (
+                <ProjectCard key={idx} {...project} />
+              ))}
+            </div>
+
+            {/* Subtle divider */}
+            <div className="mt-14 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          </div>
         </div>
       </div>
     </section>
@@ -69,68 +106,70 @@ function ProjectCard({ title, description, link, backgroundImage }) {
 
   return (
     <article
-      className="group relative overflow-hidden rounded-2xl transition-transform duration-300 hover:-translate-y-1"
+      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl transition hover:-translate-y-1 hover:border-white/15"
       aria-label={title}
     >
-      {/* Elegant gradient ring on hover */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-200/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      {/* Hover glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-emerald-300/10 blur-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      />
 
-      <div className="relative rounded-2xl border border-gray-200 bg-white shadow-md transition-shadow duration-300 group-hover:shadow-lg">
-        {/* Media area: with or without image */}
-        {backgroundImage ? (
-          <div className="relative overflow-hidden rounded-t-2xl">
-            <div
-              className="aspect-[16/10] w-full bg-cover bg-center"
-              style={{ backgroundImage: `url(${backgroundImage})` }}
-              role="img"
-              aria-label={`${title} cover image`}
-            />
-            {/* Dark overlay for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent opacity-90 transition-opacity group-hover:opacity-100" />
-            {/* Top-right chip */}
-            <div className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-gray-800 shadow">
-              Case Study
+      {/* Media */}
+      {backgroundImage ? (
+        <div className="relative overflow-hidden rounded-t-3xl">
+          <div
+            className="aspect-[16/10] w-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${backgroundImage})` }}
+            role="img"
+            aria-label={`${title} cover image`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+
+          <div className="absolute right-3 top-3 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+            Case Study
+          </div>
+        </div>
+      ) : (
+        <div className="relative grid aspect-[16/10] place-items-center rounded-t-3xl border-b border-white/10 bg-white/5">
+          <div className="text-center">
+            <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-xl bg-emerald-400 text-black text-lg font-bold shadow">
+              UX
             </div>
+            <p className="text-sm text-white/70">Visual preview coming soon</p>
           </div>
-        ) : (
-          // Fallback media if no image
-          <div className="relative grid aspect-[16/10] place-items-center rounded-t-2xl bg-gradient-to-br from-gray-100 to-gray-200">
-            <div className="text-center">
-              <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-xl mt-4 bg-gray-900 text-white text-xl shadow">
-                UI
-              </div>
-              <p className="text-sm text-gray-600">Visual preview coming soon</p>
-            </div>
-            <div className="pointer-events-none absolute inset-0 rounded-t-2xl ring-1 ring-inset ring-white/50" />
-          </div>
-        )}
 
-        {/* Content */}
-        <div className="p-6">
-          <h3 className="text-2xl font-bold text-gray-900">{title}</h3>
-          <p className="mt-2 line-clamp-3 text-gray-700">{description}</p>
-
-          {/* Button */}
-          <div className="mt-5">
-            {isComingSoon ? (
-              <button
-                disabled
-                className="w-full cursor-not-allowed rounded-md bg-gray-400 text-white shadow px-4 py-2"
-                aria-disabled="true"
-                title="Case study coming soon"
-              >
-                Coming Soon
-              </button>
-            ) : (
-              <Link
-                to={link}
-                className="inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-white shadow outline-none transition hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-900/50"
-                aria-label={`View case study: ${title}`}
-              >
-                View Case Study
-              </Link>
-            )}
+          <div className="absolute right-3 top-3 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+            Case Study
           </div>
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-white">{title}</h3>
+        <p className="mt-2 line-clamp-3 text-white/75">{description}</p>
+
+        {/* Button */}
+        <div className="mt-5">
+          {isComingSoon ? (
+            <button
+              disabled
+              className="w-full cursor-not-allowed rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white/60"
+              aria-disabled="true"
+              title="Case study coming soon"
+            >
+              Coming Soon
+            </button>
+          ) : (
+            <Link
+              to={link}
+              className="inline-flex w-full items-center justify-center rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/60"
+              aria-label={`View case study: ${title}`}
+            >
+              View Case Study
+            </Link>
+          )}
         </div>
       </div>
     </article>
@@ -138,7 +177,6 @@ function ProjectCard({ title, description, link, backgroundImage }) {
 }
 
 export default Projects;
-
 
 
 
