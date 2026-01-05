@@ -111,7 +111,7 @@ const About = () => {
                   
 
                     <a
-                      href="/src/assets/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
+                      href="/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
                       download
                       className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 text-sm font-semibold text-black transition hover:bg-emerald-300"
                     >
