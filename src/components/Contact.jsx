@@ -77,7 +77,7 @@ const Contact = () => {
                 <span className="text-emerald-300">amazing</span>
               </h2>
               <p className="mt-3 max-w-2xl text-white/70">
-                Send a message about a project, internship, or collaboration.
+                Send a message about a job opportunity, project, internship, or collaboration.
               </p>
             </div>
 

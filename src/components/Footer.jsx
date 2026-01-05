@@ -93,7 +93,7 @@ const Footer = () => {
             </div>
 
             <p className="mt-6 text-xs text-white/40">
-              Open to UX/UI internships & collaborations
+              Open to UX/UI Job opportunities, internships & collaborations
             </p>
           </div>
         </div>
