@@ -73,7 +73,7 @@ const About = () => {
               {/* Left */}
               <div className="md:col-span-5" data-aos="fade-right">
                 <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                  <div className="mx-auto h-52 w-52 overflow-hidden rounded-2xl border border-white/10 sm:h-60 sm:w-60 md:mx-0">
+                  <div className="mx-auto h-52 w-52 overflow-hidden rounded-2xl border border-white/10 sm:h-60 sm:w-60 md:mx-auto ">
                     <img
                       src={img}
                       alt="Farjana Jahan Sathi"
@@ -101,9 +101,17 @@ const About = () => {
                       Umeå University · Aug 2023 – Jun 2025
                     </p>
                     <p className="mt-1 text-sm text-white">
-                      Thesis: Evaluating the International Usability of ULTRA —
-                      Mixed-Method Approach
-                    </p>
+  Thesis: Evaluating the International Usability of ULTRA — Mixed-Method Approach
+</p>
+
+<a
+  href="https://umu.diva-portal.org/smash/record.jsf?pid=diva2%3A1977119&dswid=2404"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="mt-1 inline-block text-xs text-white/70 underline hover:text-white"
+>
+  View full thesis
+</a>
                   </div>
 
                   {/* Resume buttons */}
