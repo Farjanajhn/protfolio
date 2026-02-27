@@ -7,10 +7,19 @@ import { useMemo } from "react";
 import final from "../assets/image/UX1st/happy2.png";
 import Mockup3 from "../assets/image/UX3RD/Mockup3.png";
 import hero2 from "../assets/image/UX2nd/hero2.png";
+import COVER from "../assets/image/UX4TH/Artboard.png";
 
 
 // Project data
 const uxProjects = [
+  {
+    title: "Ultra Public transportation mobile app redesign",
+    description:
+      "Redesign of Ultra based on Master’s thesis research, focusing on usability, inclusivity, and seamless commuting.",
+    link: "/projects/four",
+    backgroundImage:COVER
+    // no image yet
+  },
   {
     title: "MyGov",
     description:
@@ -34,13 +43,7 @@ const uxProjects = [
     backgroundImage: final,
   },
  
-  {
-    title: "Ultra Public transportation mobile app redesign",
-    description:
-      "Redesign of Ultra based on Master’s thesis research, focusing on usability, inclusivity, and seamless commuting.",
-    link: "#",
-    // no image yet
-  },
+  
 ];
 
 const Projects = () => {

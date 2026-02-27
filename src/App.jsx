@@ -84,6 +84,7 @@ import Skills from './components/Skills';
 import FirstProject from './pages/FirstProject';
 import SecondProject from './pages/SecondProject';
 import ThirdProject from './pages/ThirdProject';
+import FourthProject from './pages/FourthProject';
 
 // ✅ Main home layout
 function Home() {
@@ -108,6 +109,7 @@ function App() {
       <Route path="/projects/first" element={<FirstProject />} />
       <Route path="/projects/second" element={<SecondProject />} />
       <Route path="/projects/third" element={<ThirdProject />} />
+      <Route path="/projects/four" element={<FourthProject />} />
     </Routes>
   );
 }
