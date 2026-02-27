@@ -3,7 +3,7 @@
 // Primary color: #014590
 // Full file — Ultra case study context (images kept; you can replace later)
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -147,27 +147,6 @@ const FourthProject = () => {
     document.title = "Ultra — UX Case Study";
   }, []);
 
-  const toc = useMemo(
-    () => [
-      { id: "overview", label: "Overview" },
-      { id: "problem", label: "Problem" },
-      { id: "solution", label: "Solution" },
-      { id: "audience", label: "Target Users" },
-      { id: "approach", label: "Approach" },
-      { id: "design-thinking", label: "Design Thinking" },
-      { id: "personas", label: "Personas" },
-      { id: "empathy", label: "Empathy Map" },
-      { id: "moscow", label: "MoSCoW" },
-      { id: "competitive", label: "Competitive" },
-      
-      { id: "design-system", label: "Design System" },
-      { id: "midfi", label: "Mid-Fi" },
-      { id: "hifi", label: "Hi-Fi" },
-    
-      { id: "learning-feedback", label: "Learning & Feedback" },
-    ],
-    []
-  );
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0f141b]">
@@ -205,10 +184,6 @@ const FourthProject = () => {
             <p className="mt-3 max-w-3xl text-sm md:text-base lg:text-lg leading-relaxed text-white/90">
               A research-driven UX case study focused on improving{" "}
               <span className="text-[#9ecbff] font-semibold">
-                discoverability of real-time tracking
-              </span>
-              ,{" "}
-              <span className="text-[#9ecbff] font-semibold">
                 ticket clarity for newcomers
               </span>
               , and{" "}
@@ -229,49 +204,41 @@ const FourthProject = () => {
               />
             </div>
 
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              <Stat emoji="👤" label="My Role" value="UX Research + UI Designer" />
-              <Stat emoji="🧪" label="Method" value="Interviews" />
-              <Stat emoji="📱" label="Platform" value="Mobile App" />
-              <Stat emoji="🧩" label="Focus" value="Inclusivity" />
-            </div>
+          
           </div>
         </header>
 
-        {/* TOC */}
-        <div className="mb-6">
-          <Toc items={toc} />
-        </div>
+    
 
         <main className="space-y-2 pb-24">
           {/* Overview */}
-          <Section id="overview" title="Overview">
+          <Section id="overview" title="Project Overview">
             <p>
               Ultra is a public transportation app used in Umeå for planning trips,
               viewing departures, and purchasing/activating tickets. This case study
               evaluates usability through a cultural and usage-context lens by
-              comparing insights from two respondents: a{" "}
-              <strong className="text-white">foreign daily user</strong> and a{" "}
-              <strong className="text-white">Swedish infrequent user</strong>.
+              comparing insights from different perspective of {" "}
+              <strong className="text-white">Users</strong> 
             </p>
 
             <div className="grid gap-5 md:grid-cols-2" data-aos="fade-up">
+                 <Card title="Project Details">
+                <ul className="list-inside list-disc space-y-2">
+                  <li>Duration: 6–8 weeks</li>
+                  <li>Role: UX Researcher & UI Designer</li>
+                  <li>Tools: Figma, Chatgpt, Discod, Doc, FigJam</li>
+                             <li>Methods: Interviews, wireframing, prototyping</li>
+                </ul>
+              </Card>
               <Card title="Project Focus">
                 <ul className="list-inside list-disc space-y-2">
-                  <li>Improve discoverability of real-time bus tracking</li>
                   <li>Reduce confusion in ticket types and labels</li>
                   <li>Support both routine and occasional travel patterns</li>
                   <li>Increase inclusivity for non-Swedish speakers</li>
                 </ul>
               </Card>
-
-              <Card title="Deliverables">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>User personas + empathy maps</li>
-                  <li>MoSCoW prioritization</li>
-                  <li>Competitive benchmarking grid</li>
-                </ul>
-              </Card>
+ 
+           
             </div>
           </Section>
 
@@ -281,33 +248,14 @@ const FourthProject = () => {
           <Section id="problem" title="Problem Statement" kicker="What is broken today">
             <Card title="Problem Statement">
               <p>
-                Users struggle to access key information quickly in Ultra due to
-                hidden or unclear features (especially real-time tracking),
-                confusing ticket terminology for newcomers, and insufficient
-                context for door-to-door planning. These issues increase
-                uncertainty, waiting anxiety (especially in winter), and reduce
-                confidence for non-native users.
+                Using the Ultra app shouldn’t feel stressful — but for many users, it does.
+Buying a ticket can feel confusing, important information isn’t always easy to find, and real-time updates aren’t clear at a quick glance. Simple tasks often take more steps than expected.
+For newcomers and non-native users, unclear ticket terms and limited guidance make things even harder. Instead of feeling confident before boarding, users often feel uncertain and rushed.
+Public transport should reduce stress — not add to it.
               </p>
             </Card>
 
-            <div className="grid gap-5 md:grid-cols-2" data-aos="fade-up">
-              <Card title="Observed Friction (from interviews)">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>Live bus tracking exists but is hard to find</li>
-                  <li>Map view feels too zoomed-in; bus icon not obvious</li>
-                  <li>Ticket categories/labels confusing (e.g., Rabatt/Discount)</li>
-                  <li>Stops search breaks with å/ä/ö for English keyboards</li>
-                </ul>
-              </Card>
-              <Card title="Why It Matters">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>Higher stress when waiting (cold, uncertainty)</li>
-                  <li>More reliance on Google Maps instead of Ultra</li>
-                  <li>Lower inclusivity for newcomers and foreign residents</li>
-                  <li>Reduced trust when the system status is unclear</li>
-                </ul>
-              </Card>
-            </div>
+       
           </Section>
 
           <Divider />
@@ -316,33 +264,13 @@ const FourthProject = () => {
           <Section id="solution" title="Possible Solution" kicker="What we propose">
             <Card title="Proposed Improvement Direction">
               <p>
-                Improve Ultra’s information visibility and inclusivity by making
-                real-time tracking obvious, simplifying ticket language, and adding
-                context-aware shortcuts like “Next bus near you” and “From your usual stop”.
-                The goal is faster decisions, fewer steps, and more confidence—without
-                increasing interface complexity.
+           This redesign aims to make Ultra feel clearer, faster, and more welcoming for everyone.
+First, improve information visibility by bringing the most important actions — like buying a ticket or checking departures — directly to the home screen. Users shouldn’t have to search or second-guess where to tap.
+Second, simplify ticket language and remove confusing terms, especially for newcomers and non-native users. Using clear labels and short, helpful explanations can reduce hesitation and prevent mistakes.
+The focus is on making everyday travel feel straightforward and stress-free.
               </p>
             </Card>
 
-            <div className="grid gap-5 md:grid-cols-2" data-aos="fade-up">
-              <Card title="Core UX Improvements">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>One-tap “Track bus live” entry point from Stops</li>
-                  <li>Clearer bus icon + auto zoom-out to show bus presence</li>
-                  <li>Ticket labels rewritten in plain language (EN + SV)</li>
-                  <li>Smarter stop search: keyboard-friendly suggestions</li>
-                </ul>
-              </Card>
-
-              <Card title="Success Metrics (conceptual)">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>Reduced time to find next departure</li>
-                  <li>Reduced errors in ticket selection</li>
-                  <li>Higher discoverability of live tracking</li>
-                  <li>Improved perceived trust + comfort</li>
-                </ul>
-              </Card>
-            </div>
           </Section>
 
           <Divider />
@@ -395,33 +323,7 @@ const FourthProject = () => {
               </p>
             </Card>
 
-            <div className="grid gap-5 md:grid-cols-2" data-aos="fade-up">
-              <Card title="Principles">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>
-                    <strong className="text-white">Speed to information</strong> (next bus, live position)
-                  </li>
-                  <li>
-                    <strong className="text-white">Plain language</strong> (ticket labels)
-                  </li>
-                  <li>
-                    <strong className="text-white">Discoverability</strong> (find features without “knowing”)
-                  </li>
-                  <li>
-                    <strong className="text-white">Inclusivity</strong> (language + keyboard constraints)
-                  </li>
-                </ul>
-              </Card>
-
-              <Card title="Key UX opportunities">
-                <ul className="list-inside list-disc space-y-2">
-                  <li>Nearest stop card on home screen</li>
-                  <li>“Next buses from your favorite stop” shortcut</li>
-                  <li>Ticket buying guidance (simple explanations)</li>
-                  <li>Clear “live” indicator on maps and departure lists</li>
-                </ul>
-              </Card>
-            </div>
+          
           </Section>
 
           <Divider />
@@ -463,7 +365,7 @@ const FourthProject = () => {
 
           {/* Empathy */}
           <Section id="empathy" title="Empathy Map" kicker="Needs, pain points, and goals">
-            <Card title="Empathy Map (R0 & R1)">
+            <Card >
               <Img src={EP} alt="Empathy map" maxH="max-h-[580px]" />
             </Card>
           </Section>
