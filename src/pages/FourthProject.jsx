@@ -1,9 +1,11 @@
 // FourthProject.jsx — Ultra Public Transportation App UX Case Study
 // DARK + GLASS style with LIGHT BLUE IMAGE BACKGROUNDS
 // Primary color: #014590
-// Full file — Ultra case study context (images kept; you can replace later)
+// ✅ Updated: more human tone (less “AI-ish”), cleaner writing
+// ✅ Updated: removed ALL scrollable image panels (no ScrollPanel)
+// ✅ Kept: your content + same images + same overall layout style
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -21,11 +23,10 @@ import COMPONENT from "../assets/image/UX4TH/components.png";
 import G from "../assets/image/UX4TH/grid.png";
 import MIFI from "../assets/image/UX4TH/high.png";
 import LD from "../assets/image/UX4TH/screen1.png";
-
+import Language from "../assets/image/UX4TH/Language.png";
 import APPLY from "../assets/image/UX4TH/pt.png";
 import TRACK from "../assets/image/UX4TH/bt.png";
-
-
+import Userflow1 from "../assets/image/UX4TH/Userflow1.png";
 
 // ---------- UI helpers ----------
 const Divider = () => (
@@ -83,7 +84,6 @@ const Stat = ({ emoji, label, value }) => (
  * ✅ MODERN Img (ONE border only)
  * - single modern glass frame
  * - light blue gradient background
- * - no nested borders
  * - consistent padding (image never touches edges)
  */
 const Img = ({ src, alt, maxH = "max-h-[560px]" }) => (
@@ -94,14 +94,6 @@ const Img = ({ src, alt, maxH = "max-h-[560px]" }) => (
       className={`w-full object-contain ${maxH} rounded-2xl`}
       loading="lazy"
     />
-  </div>
-);
-
-const ScrollPanel = ({ children }) => (
-  <div className="rounded-3xl border border-white/12 bg-white/[0.07] p-3 shadow-2xl backdrop-blur-md">
-    <div className="max-h-[650px] overflow-y-auto pr-2 [scrollbar-width:thin]">
-      {children}
-    </div>
   </div>
 );
 
@@ -147,6 +139,26 @@ const FourthProject = () => {
     document.title = "Ultra — UX Case Study";
   }, []);
 
+  const tocItems = useMemo(
+    () => [
+      { id: "overview", label: "Overview" },
+      { id: "problem", label: "Problem" },
+      { id: "solution", label: "Solution" },
+      { id: "audience", label: "Users" },
+      { id: "approach", label: "Approach" },
+      { id: "design-thinking", label: "Process" },
+      { id: "personas", label: "Personas" },
+      { id: "empathy", label: "Empathy" },
+      { id: "moscow", label: "MoSCoW" },
+      { id: "competitive", label: "Competitive" },
+      { id: "userflow", label: "Userflow" },
+      { id: "design-system", label: "Style guide" },
+      { id: "midfi", label: "Mid-fi" },
+      { id: "hifi", label: "Hi-fi" },
+      { id: "learning-feedback", label: "Learnings" },
+    ],
+    []
+  );
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0f141b]">
@@ -171,7 +183,7 @@ const FourthProject = () => {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-8 lg:px-10">
         {/* Hero */}
-        <header className="pt-20 pb-10">
+        <header className="pt-20 pb-8">
           <div className="rounded-3xl border border-white/12 bg-white/[0.07] p-6 shadow-2xl backdrop-blur-md">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/90">
               <span>🚌 Ultra · Public Transportation · Umeå</span>
@@ -182,19 +194,20 @@ const FourthProject = () => {
             </h1>
 
             <p className="mt-3 max-w-3xl text-sm md:text-base lg:text-lg leading-relaxed text-white/90">
-              A research-driven UX case study focused on improving{" "}
+              This project focuses on two things Ultra users need the most:{" "}
               <span className="text-[#9ecbff] font-semibold">
-                ticket clarity for newcomers
-              </span>
-              , and{" "}
-              <span className="text-[#9ecbff] font-semibold">
-                faster “next bus” access
+                clearer ticket choices
               </span>{" "}
-              — especially for users with different language backgrounds and
-              travel habits.
+              and{" "}
+              <span className="text-[#9ecbff] font-semibold">
+                quicker access to the next bus
+              </span>
+              . It’s especially important for people who don’t speak Swedish
+              fluently or are still getting used to how public transport works in
+              Sweden.
             </p>
 
-            {/* ✅ HERO IMAGE BLOCK (kept; you’ll replace later) */}
+            {/* HERO IMAGE */}
             <div className="mt-6 w-full h-full overflow-hidden rounded-2xl shadow-lg bg-gradient-to-br from-[#eaf3ff] via-[#dbeaff] to-[#cfe3ff] p-2">
               <img
                 src={IMG}
@@ -204,107 +217,160 @@ const FourthProject = () => {
               />
             </div>
 
-          
+            <div className="mt-6 grid gap-4 md:grid-cols-3" data-aos="fade-up">
+              <Stat emoji="🎓" value="Master’s thesis" label="Project context" />
+              <Stat emoji="🌍" value="International usability" label="Main lens" />
+              <Stat emoji="🧭" value="Clarity + speed" label="Design focus" />
+            </div>
           </div>
         </header>
 
-    
+        {/* TOC */}
+        <div className="mb-6">
+          <Toc items={tocItems} />
+        </div>
 
         <main className="space-y-2 pb-24">
           {/* Overview */}
           <Section id="overview" title="Project Overview">
             <p>
-              Ultra is a public transportation app used in Umeå for planning trips,
-              viewing departures, and purchasing/activating tickets. This case study
-              evaluates usability through a cultural and usage-context lens by
-              comparing insights from different perspective of {" "}
-              <strong className="text-white">Users</strong> 
+              Ultra is the official public transportation app for Umeå, Sweden.
+              It helps people plan trips, buy tickets, and track buses in real
+              time. This case study is based on my thesis work that looked at
+              Ultra’s usability for international users in a culturally diverse
+              city.
+            </p>
+
+            <p>
+              The full study used mixed methods (55 survey responses and 10
+              interviews). For the design work here, I focused on two
+              representative users:
+              <strong className="text-white">
+                {" "}
+                Nimali (international, familiar frequent user)
+              </strong>{" "}
+              and{" "}
+              <strong className="text-white">
+                Erik (Swedish, familiar infrequent user)
+              </strong>
+              .
+            </p>
+
+            <p className="text-white/85">
+              <strong className="text-white">Goal:</strong> remove the biggest
+              friction points in ticketing and “next bus” access so the app
+              feels more inclusive, clearer, and more reliable—without slowing
+              down experienced users.
             </p>
 
             <div className="grid gap-5 md:grid-cols-2" data-aos="fade-up">
-                 <Card title="Project Details">
+              <Card title="Project Details">
                 <ul className="list-inside list-disc space-y-2">
                   <li>Duration: 6–8 weeks</li>
                   <li>Role: UX Researcher & UI Designer</li>
-                  <li>Tools: Figma, Chatgpt, Discod, Doc, FigJam</li>
-                             <li>Methods: Interviews, wireframing, prototyping</li>
+                  <li>Tools: Figma, ChatGPT, Discord, Docs, FigJam</li>
+                  <li>Methods: Interviews, wireframing, prototyping</li>
                 </ul>
               </Card>
-              <Card title="Project Focus">
+
+              <Card title="What I focused on">
                 <ul className="list-inside list-disc space-y-2">
-                  <li>Reduce confusion in ticket types and labels</li>
-                  <li>Support both routine and occasional travel patterns</li>
-                  <li>Increase inclusivity for non-Swedish speakers</li>
+                  <li>Reduce confusion around ticket types and labels</li>
+                  <li>Support both frequent and occasional travel patterns</li>
+                  <li>Make English usage feel complete and dependable</li>
                 </ul>
               </Card>
- 
-           
             </div>
           </Section>
 
           <Divider />
 
           {/* Problem */}
-          <Section id="problem" title="Problem Statement" kicker="What is broken today">
-            <Card title="Problem Statement">
+          <Section id="problem" title="Problem Statement" kicker="What’s hard today">
+            <Card title="The problem in plain words">
               <p>
-                Using the Ultra app shouldn’t feel stressful — but for many users, it does.
-Buying a ticket can feel confusing, important information isn’t always easy to find, and real-time updates aren’t clear at a quick glance. Simple tasks often take more steps than expected.
-For newcomers and non-native users, unclear ticket terms and limited guidance make things even harder. Instead of feeling confident before boarding, users often feel uncertain and rushed.
-Public transport should reduce stress — not add to it.
+                Ultra shouldn’t feel stressful, but it often does—especially
+                when you’re about to board and need to act fast. Buying a ticket
+                can feel confusing, important info is easy to miss, and live
+                updates aren’t always clear at a glance.
+              </p>
+              <p className="text-white/85">
+                For newcomers and non-native Swedish speakers, unclear ticket
+                terms and limited guidance make the experience feel risky. The
+                result is hesitation, second-guessing, and sometimes relying on
+                other apps (like Google Maps) just to feel confident.
+              </p>
+              <p className="text-white font-semibold">
+                Public transport should reduce stress—not add to it.
               </p>
             </Card>
-
-       
           </Section>
 
           <Divider />
 
           {/* Solution */}
-          <Section id="solution" title="Possible Solution" kicker="What we propose">
-            <Card title="Proposed Improvement Direction">
+          <Section id="solution" title="Possible Solution" kicker="What I’m proposing">
+            <Card title="Direction for improvements">
               <p>
-           This redesign aims to make Ultra feel clearer, faster, and more welcoming for everyone.
-First, improve information visibility by bringing the most important actions — like buying a ticket or checking departures — directly to the home screen. Users shouldn’t have to search or second-guess where to tap.
-Second, simplify ticket language and remove confusing terms, especially for newcomers and non-native users. Using clear labels and short, helpful explanations can reduce hesitation and prevent mistakes.
-The focus is on making everyday travel feel straightforward and stress-free.
+                The redesign is meant to make Ultra feel clearer, faster, and
+                more welcoming.
+              </p>
+              <ul className="list-inside list-disc space-y-2">
+                <li>
+                  Put the most important actions (tickets + departures) right on
+                  the home screen.
+                </li>
+                <li>
+                  Replace confusing ticket terms with clearer labels and short
+                  explanations.
+                </li>
+                <li>
+                  Add small “confidence boosts” during ticket purchase—so users
+                  know they picked the right thing.
+                </li>
+              </ul>
+              <p className="text-white/85">
+                The aim is simple: everyday travel should feel straightforward,
+                even if you’re new to the system.
               </p>
             </Card>
-
           </Section>
 
           <Divider />
 
           {/* Audience */}
-          <Section id="audience" title="Target Users" kicker="Who we designed for">
+          <Section id="audience" title="Target Users" kicker="Who this design is for">
             <div className="grid gap-5 md:grid-cols-2" data-aos="fade-up">
               <Card title="Primary audiences">
                 <ul className="list-inside list-disc space-y-2">
                   <li>
-                    <strong className="text-white">Foreign daily commuters</strong> — rely on Ultra daily,
-                    low Swedish proficiency, need clarity and predictable flows
+                    <strong className="text-white">Foreign daily commuters</strong>{" "}
+                    — rely on Ultra often, may not speak Swedish fluently, need
+                    predictable flows
                   </li>
                   <li>
-                    <strong className="text-white">Swedish infrequent riders</strong> — use buses for errands,
-                    need quick access and minimal input
+                    <strong className="text-white">Swedish occasional riders</strong>{" "}
+                    — take the bus for errands, want quick access and minimal
+                    setup
                   </li>
                   <li>
-                    <strong className="text-white">Newcomers</strong> — unfamiliar with zones/terms and local
-                    norms, need guidance and plain language
+                    <strong className="text-white">Newcomers</strong> — still
+                    learning ticket rules and local norms, need plain language
+                    and guidance
                   </li>
                   <li>
-                    <strong className="text-white">Cold-weather riders</strong> — value certainty and reduced waiting
-                    time outdoors
+                    <strong className="text-white">Cold-weather riders</strong>{" "}
+                    — want certainty and less waiting time outdoors
                   </li>
                 </ul>
               </Card>
 
-              <Card title="Accessibility & inclusivity considerations">
+              <Card title="Inclusivity considerations">
                 <ul className="list-inside list-disc space-y-2">
-                  <li>Language consistency (complete English coverage)</li>
-                  <li>Clear system status (late bus cues + confirmations)</li>
-                  <li>Discoverable controls (live tracking, filters, favorites)</li>
-                  <li>Keyboard and spelling tolerance for stop searches</li>
+                  <li>Complete English coverage (no Swedish leftovers)</li>
+                  <li>Clear status feedback (late bus cues, confirmations)</li>
+                  <li>Easy-to-find controls (tracking, favorites, filters)</li>
+                  <li>Search that forgives spelling and language differences</li>
                 </ul>
               </Card>
             </div>
@@ -314,45 +380,56 @@ The focus is on making everyday travel feel straightforward and stress-free.
 
           {/* Approach */}
           <Section id="approach" title="Design Approach" kicker="How decisions were made">
-            <Card title="Research-driven approach">
+            <Card title="Research-informed design">
               <p>
-                This study used interview insights to identify friction points in
-                information visibility, language clarity, and discoverability.
-                Recommendations align with usability principles: visibility of system status,
-                recognition over recall, and minimal user input for frequent tasks.
+                I used interview insights to identify where people got stuck:
+                missing information, unclear ticket logic, language gaps, and
+                features that are hard to discover under time pressure.
+              </p>
+              <p className="text-white/85">
+                The design recommendations follow classic usability principles:
+                make system status visible, reduce memory load, and keep common
+                tasks quick.
               </p>
             </Card>
-
-          
           </Section>
 
           <Divider />
 
           {/* Design Thinking */}
-          <Section id="design-thinking" title="Design Thinking Process" kicker="Process overview">
-            <Img src={Design_Process} alt="Design thinking process" maxH="max-h-[580px]" />
+          <Section
+            id="design-thinking"
+            title="Design Thinking Process"
+            kicker="Process overview"
+          >
+            <Img
+              src={Design_Process}
+              alt="Design thinking process"
+              maxH="max-h-[580px]"
+            />
           </Section>
 
           <Divider />
 
           {/* Personas */}
-          <Section id="personas" title="Personas" kicker="User perspective">
+          <Section id="personas" title="Personas" kicker="Two viewpoints">
             <div className="space-y-6" data-aos="fade-up">
-              <Card title="Primary Persona — Foreign Daily User (Nimali)">
+              <Card title="Primary Persona — Foreign frequent user (Nimali)">
                 <p>
-                  Represents a daily commuter with low Swedish proficiency who depends on
-                  Ultra for stop times and ticketing. Needs clear language, stable feedback,
-                  and less clutter in busy areas.
+                  Nimali uses Ultra often but isn’t fully comfortable with
+                  Swedish. She double-checks ticket details to avoid mistakes
+                  and prefers flows that feel predictable and clear.
                 </p>
                 <div className="mt-4">
                   <Img src={UP2} alt="Persona 1" maxH="max-h-[580px]" />
                 </div>
               </Card>
 
-              <Card title="Secondary Persona — Swedish Infrequent User (Erik)">
+              <Card title="Secondary Persona — Swedish occasional user (Erik)">
                 <p>
-                  Represents an occasional rider who wants quick, location-aware info
-                  and minimal input. Defaults to Google Maps for door-to-door context.
+                  Erik uses the bus less often and wants quick, location-aware
+                  information. When the app feels slow or unclear, he defaults
+                  to Google Maps for the bigger travel picture.
                 </p>
                 <div className="mt-4">
                   <Img src={UP1} alt="Persona 2" maxH="max-h-[580px]" />
@@ -364,8 +441,8 @@ The focus is on making everyday travel feel straightforward and stress-free.
           <Divider />
 
           {/* Empathy */}
-          <Section id="empathy" title="Empathy Map" kicker="Needs, pain points, and goals">
-            <Card >
+          <Section id="empathy" title="Empathy Map" kicker="Needs, pain points, goals">
+            <Card>
               <Img src={EP} alt="Empathy map" maxH="max-h-[580px]" />
             </Card>
           </Section>
@@ -374,10 +451,11 @@ The focus is on making everyday travel feel straightforward and stress-free.
 
           {/* MoSCoW */}
           <Section id="moscow" title="MoSCoW Model" kicker="Feature prioritization">
-            <Card title="MoSCoW Model – Ultra Improvements">
+            <Card title="What gets fixed first">
               <p>
-                Prioritization focuses on discoverability and clarity first (must-have),
-                then convenience and personalization (should-have).
+                I prioritized changes that reduce confusion and risk first
+                (must-have), then improvements that add convenience and polish
+                (should-have).
               </p>
               <div className="mt-4">
                 <Img src={MC} alt="MoSCoW model" maxH="max-h-[580px]" />
@@ -388,11 +466,15 @@ The focus is on making everyday travel feel straightforward and stress-free.
           <Divider />
 
           {/* Competitive */}
-          <Section id="competitive" title="Competitive Analysis" kicker="Learning from similar apps">
+          <Section
+            id="competitive"
+            title="Competitive Analysis"
+            kicker="Learning from similar apps"
+          >
             <p>
-              Competitors often emphasize door-to-door planning, clear live tracking entry points,
-              and fast “next departure” access on launch. Ultra can retain its strengths (tickets and
-              local service info) while improving discoverability and context-aware guidance.
+              Many competing apps lead with “next departure” and door-to-door
+              planning. Ultra can keep its strengths (ticketing + local info)
+              and still improve discoverability and context-aware guidance.
             </p>
             <div className="mt-4">
               <Img src={CP} alt="Competitive analysis" maxH="max-h-[580px]" />
@@ -401,16 +483,34 @@ The focus is on making everyday travel feel straightforward and stress-free.
 
           <Divider />
 
+          {/* Userflow */}
+          <Section color="white" id="userflow" title="Userflow" kicker="Planning a trip">
+            <p>
+              I mapped the trip-planning flow to see where people hesitate or
+              lose confidence—especially when switching between planning and
+              buying a ticket.
+            </p>
+            <div className="mt-4">
+              <Img src={Userflow1} alt="User Flow" maxH="max-h-[580px]" />
+            </div>
+          </Section>
+
+          <Divider />
 
           {/* Design System */}
-          <Section id="design-system" title="Design System" kicker="Typography, components, grid">
+          <Section
+            id="design-system"
+            title="Style guide"
+            kicker="Typography, components, grid system"
+          >
             <div className="space-y-5" data-aos="fade-up">
               <Card title="Typography & Color">
                 <p className="text-white/85">
-                  Primary accent color:{" "}
-                  <span className="font-semibold text-[#9ecbff]">#014590</span>.
-                  The design system keeps contrast high for readability while maintaining
-                  a calm, transport-inspired visual identity.
+                  I kept the interface calm and high-contrast for quick reading.
+                  The primary accent is{" "}
+                  <span className="font-semibold text-[#9ecbff]">#014590</span>,
+                  used to highlight actions and key states without making the UI
+                  noisy.
                 </p>
                 <Img src={TYPOGRAPHY} alt="Typography and colors" maxH="max-h-[580px]" />
               </Card>
@@ -420,7 +520,7 @@ The focus is on making everyday travel feel straightforward and stress-free.
               <Card title="Components">
                 <Img src={COMPONENT} alt="Components" maxH="max-h-[580px]" />
               </Card>
-              <Card title="Grids System">
+              <Card title="Grid System">
                 <Img src={G} alt="Grid" maxH="max-h-[580px]" />
               </Card>
             </div>
@@ -430,61 +530,66 @@ The focus is on making everyday travel feel straightforward and stress-free.
 
           {/* Mid-Fi */}
           <Section id="midfi" title="Mid-Fidelity" kicker="Structure before visuals">
+            <p>
+              Mid-fi helped validate hierarchy and flow before adding visual
+              polish—especially around ticket clarity and quick actions.
+            </p>
             <Img src={MIFI} alt="Mid fidelity" maxH="max-h-[580px]" />
           </Section>
 
           <Divider />
 
           {/* Hi-Fi */}
-          <Section id="hifi" title="High-Fidelity & Design Explanation" kicker="Key screens">
-            <ScrollPanel>
-              <div className="space-y-4">
-                <Card title="Landing / Home (Quick access)">
-                  <Img src={LD} alt="Landing page" maxH="max-h-[540px]" />
-                </Card>
-               
-                <Card title="Plan a Trip (Reduced input)">
-                  <Img src={APPLY} alt="Trip planning" maxH="max-h-[540px]" />
-                </Card>
-                <Card title="Buy a Ticket">
-                  <Img src={TRACK} alt="Live tracking" maxH="max-h-[540px]" />
-                </Card>
-                
-              </div>
-            </ScrollPanel>
+          <Section id="hifi" title="High-Fidelity Screens" kicker="Key screens">
+            <div className="space-y-4">
+              <Card title="Landing / Home (quick access)">
+                <Img src={LD} alt="Landing page" maxH="max-h-[540px]" />
+              </Card>
+
+              <Card title="Language change (Swedish vs English)">
+                <p className="text-white/85">
+                  Language consistency is a big trust factor. If someone chooses
+                  English, they expect the whole experience to stay in English.
+                </p>
+                <Img src={Language} alt="Language change" maxH="max-h-[540px]" />
+              </Card>
+
+              <Card title="Plan a trip (reduced input)">
+                <Img src={APPLY} alt="Trip planning" maxH="max-h-[540px]" />
+              </Card>
+
+              <Card title="Buy a ticket (clearer choices)">
+                <Img src={TRACK} alt="Buy a ticket" maxH="max-h-[540px]" />
+              </Card>
+            </div>
           </Section>
 
           <Divider />
-
-
 
           {/* Learning & Feedback */}
           <Section
             id="learning-feedback"
             title="Learning & Feedback"
-            kicker="What worked and what I learned"
+            kicker="What I learned from this project"
           >
             <div className="grid gap-5 md:grid-cols-1" data-aos="fade-up">
-              <Card title="Key Learnings">
+              <Card title="Key learnings">
                 <ul className="list-inside list-disc space-y-2">
-                  <li>Discoverability matters more than feature quantity.</li>
-                  <li>Real-time tracking needs clearer entry points and visuals.</li>
-                  <li>Plain language improves inclusivity and reduces errors.</li>
-                  <li>Location-aware shortcuts reduce user effort significantly.</li>
+                  <li>Discoverability matters more than adding more features.</li>
+                  <li>Live tracking only helps when it’s easy to find and easy to trust.</li>
+                  <li>Plain language reduces stress and prevents mistakes.</li>
+                  <li>Shortcuts and location-aware defaults save real effort.</li>
                 </ul>
               </Card>
-            </div>
 
-            <div className="grid gap-5 md:grid-cols-1" data-aos="fade-up">
-
-              <Card title="Impact (Portfolio framing)">
+              <Card title="Impact (portfolio framing)">
                 <p>
-                  This case study strengthened my ability to translate{" "}
+                  This case study helped me practice turning{" "}
                   <span className="text-[#9ecbff] font-semibold">
-                    qualitative insights
+                    qualitative research
                   </span>{" "}
-                  into actionable UX priorities for public systems—where speed,
-                  clarity, and trust are essential.
+                  into practical design decisions—especially for a public service
+                  where clarity, speed, and trust really matter.
                 </p>
               </Card>
             </div>
@@ -498,7 +603,7 @@ The focus is on making everyday travel feel straightforward and stress-free.
               href="/"
               className="inline-flex items-center gap-2 rounded-xl bg-[#014590] px-6 py-3 text-white font-semibold shadow hover:opacity-90 transition"
             >
-              <span>← Back to Home </span>
+              <span>← Back to Home</span>
             </a>
           </div>
         </main>
