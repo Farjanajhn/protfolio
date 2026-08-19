@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { useMemo, useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 import final   from "../assets/image/UX1st/happy2.png";
 import Mockup3 from "../assets/image/UX3RD/Mockup3.png";
 import hero2   from "../assets/image/UX2nd/hero2.png";

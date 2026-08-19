@@ -335,7 +335,7 @@ const FourthProject = () => {
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22, alignItems: "center" }}>
                 <Tag>🚌 Ultra · Umeå</Tag>
                 <Tag>UX Case Study</Tag>
-                {!isMobile && <Tag>Master's Thesis</Tag>}
+                {!isMobile && <Tag> Part of a Master's Thesis</Tag>}
               </div>
 
               {/* Title */}
@@ -381,7 +381,7 @@ const FourthProject = () => {
             <InfoCard title="Context" accent>
               <p style={base}>
                 Ultra is Umeå's official public transport app — trip planning, ticketing, real-time tracking.
-                This case study emerges from mixed-methods thesis research: 55 surveys and 10 interviews
+                This case study emerges from a Master's thesis research: 10 interviews
                 focused on usability for international users in a culturally diverse city.
               </p>
               <p style={{ ...base, marginTop: 10 }}>

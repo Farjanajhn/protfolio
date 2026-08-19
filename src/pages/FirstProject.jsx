@@ -9,7 +9,6 @@ import ideation  from "../assets/image/ideation.jpg";
 import ideation2 from "../assets/image/ideation2.jpg";
 import ideation3 from "../assets/image/ideation3.jpg";
 import project1  from "../assets/image/project_1.jpg";
-import project2  from "../assets/image/UX1st/project2.png";
 import happy     from "../assets/image/UX1st/happy2.png";
 import healthy   from "../assets/image/UX1st/all.png";
 import sad       from "../assets/image/UX1st/sad.png";

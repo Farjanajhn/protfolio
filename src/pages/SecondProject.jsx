@@ -10,7 +10,6 @@ import bby3          from "../assets/image/bby3.png";
 import bby4          from "../assets/image/bby4.png";
 import landing2      from "../assets/image/UX2nd/landing-2.png";
 import mockup1       from "../assets/image/UX2nd/mockup1.png";
-import mockup2       from "../assets/image/UX2nd/mockup2.png";
 import lifi          from "../assets/image/UX2nd/lifi.png";
 import soundImg      from "../assets/image/UX2nd/Sound.png";
 import temperatureImg from "../assets/image/UX2nd/temparature.png";
