@@ -363,7 +363,7 @@ const FourthProject = () => {
 
               {/* Stat cards — 3 col on desktop/tablet, 3 col on mobile too (smaller) */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: isMobile ? 10 : 16, marginBottom: isMobile ? 28 : 0 }}>
-                 <StatCard emoji="📑" value="57"  label="Survey Participants"  isMobile={isMobile} delay={100} />
+                 
                 <StatCard emoji="🎙" value="10"  label="User interviews"  isMobile={isMobile} delay={100} />
                 <StatCard emoji="⏱" value="8"   suffix=" weeks"  label="Duration"        isMobile={isMobile} delay={200} />
                 <StatCard emoji="🌍" value="2"   label="Key personas"    isMobile={isMobile} delay={300} />
