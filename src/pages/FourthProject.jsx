@@ -454,7 +454,7 @@ const FourthProject = () => {
           <div style={grid2} data-aos="fade-up">
             <InfoCard title="Primary audiences">
               <ul style={ul}>
-                {[["🌍","Foreign daily commuters","Frequent users who need predictable, clear flows."],["🇸🇪","Swedish occasional riders","Want quick, location-aware access, minimal setup."],["🆕","Newcomers","Still learning ticket rules — need plain language guidance."],["🧊","Cold-weather riders","Want certainty and minimal outdoor waiting time."]].map(([icon, name, desc]) => (
+                {[["🌍","Foreign daily commuters","Frequent users who need predictable, clear flows."],["🇸🇪","Swedish occasional riders","Want quick, location-aware access, minimal setup."],["🆕","Newcomers","Still learning ticket rules — need plain language guidance."]].map(([icon, name, desc]) => (
                   <li key={name} style={{ listStyle: "none", display: "flex", gap: 10, paddingBottom: 10, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                     <span style={{ fontSize: 16 }}>{icon}</span>
                     <div>
@@ -467,7 +467,7 @@ const FourthProject = () => {
             </InfoCard>
             <InfoCard title="Inclusivity considerations">
               <ul style={ul}>
-                {["Complete English coverage — no Swedish leftovers","Clear status feedback — late bus cues, confirmations","Easy-to-find controls — tracking, favorites, filters","Forgiving search — handles spelling & language differences"].map((t, i) => <BulletItem key={i}>{t}</BulletItem>)}
+                {["Complete English coverage — no Swedish leftovers","Clear status feedback — late bus cues, confirmations","Easy-to-find controls — tracking, favorites, filters"].map((t, i) => <BulletItem key={i}>{t}</BulletItem>)}
               </ul>
             </InfoCard>
           </div>
@@ -479,7 +479,7 @@ const FourthProject = () => {
         <section id="design-thinking" style={{ scrollMarginTop: 68 }}>
           <SectionHead kicker="Process overview" title="Design Thinking Process" isMobile={isMobile} />
           <div data-aos="fade-up">
-            <Frame src={Design_Process} alt="Design thinking process" maxH={isMobile ? 220 : 520} caption="Double Diamond — Empathize → Define → Ideate → Prototype → Test" />
+            <Frame src={Design_Process} alt="Design thinking process" maxH={isMobile ? 220 : 520} caption="Discover → Define → Ideate → Design" />
           </div>
         </section>
 
@@ -559,7 +559,7 @@ const FourthProject = () => {
           <SectionHead kicker="Planning a trip" title="User Flow" isMobile={isMobile} />
           <InfoCard>
             <p style={{ ...base, marginBottom: 18 }}>Mapped the trip-planning flow to identify where users hesitate — especially at the handoff between planning and purchasing a ticket.</p>
-            <Frame src={Userflow1} alt="User flow diagram" maxH={isMobile ? 240 : 520} caption="Primary flow: Home → Search → Select route → Buy ticket → Confirmation" />
+            <Frame src={Userflow1} alt="User flow diagram" maxH={isMobile ? 240 : 520} caption="Primary flow: Home → Plan Trip → My ticket → Buy ticket" />
           </InfoCard>
         </section>
 
