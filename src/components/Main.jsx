@@ -4,8 +4,8 @@
 // - White cards with hairline borders, soft layered shadows, pill CTAs
 // - Playful "sticker" accents carry personality while the layout stays quiet
 // - Single <h1>, AA contrast, visible focus, reduced-motion support
+// - Class names are prefixed (home-hero / hh-) so daisyUI's .hero/.btn/.badge can't override them
 
-import main from "./../assets/image/img11.png";
 import main2 from "./../assets/image/myImage.jpg";
 
 const LINKS = [
@@ -35,15 +35,15 @@ const ArrowUpRight = () => (
 );
 
 const Main = () => (
-  <section id="main" className="hero" aria-labelledby="hero-title">
+  <section id="main" className="home-hero" aria-labelledby="hero-title">
     <style>{css}</style>
 
-    <div className="hero__inner">
-      <div className="hero__grid">
+    <div className="home-hero__inner">
+      <div className="home-hero__grid">
         {/* ── Copy ── */}
-        <div className="hero__copy">
-          <p className="badge reveal" style={{ "--d": "0ms" }}>
-            <span className="badge__dot" aria-hidden="true" />
+        <div className="home-hero__copy">
+          <p className="hh-badge reveal" style={{ "--d": "0ms" }}>
+            <span className="hh-badge__dot" aria-hidden="true" />
             Open to UX/UI roles · Umeå, Sweden
           </p>
 
@@ -51,28 +51,28 @@ const Main = () => (
             Farjana — UX/UI Designer
           </p>
 
-          <h1 id="hero-title" className="hero__title reveal" style={{ "--d": "120ms" }}>
+          <h1 id="hero-title" className="home-hero__title reveal" style={{ "--d": "120ms" }}>
             I design products that feel{" "}
-            <span className="hero__mark">obvious</span> to use.
+            <span className="home-hero__mark">obvious</span> to use.
           </h1>
 
-          <p className="hero__lede reveal" style={{ "--d": "200ms" }}>
+          <p className="home-hero__lede reveal" style={{ "--d": "200ms" }}>
             From research and wireframes to polished, accessible interfaces. I turn
             messy problems into clear flows, then test them with real people.
           </p>
 
-          <div className="hero__actions reveal" style={{ "--d": "280ms" }}>
-            <a href="#projects" className="btn btn--primary">
+          <div className="home-hero__actions reveal" style={{ "--d": "280ms" }}>
+            <a href="#projects" className="hh-btn hh-btn--primary">
               See selected work <Arrow />
             </a>
-            <a href="#message" className="btn btn--secondary">
+            <a href="#message" className="hh-btn hh-btn--secondary">
               Get in touch
             </a>
           </div>
 
-          <nav className="hero__social reveal" style={{ "--d": "340ms" }} aria-label="Social profiles">
+          <nav className="home-hero__social reveal" style={{ "--d": "340ms" }} aria-label="Social profiles">
             {LINKS.map(({ label, href }) => (
-              <a key={label} href={href} target="_blank" rel="noreferrer" className="btn-utility">
+              <a key={label} href={href} target="_blank" rel="noreferrer" className="hh-utility">
                 {label} <ArrowUpRight />
               </a>
             ))}
@@ -80,7 +80,7 @@ const Main = () => (
         </div>
 
         {/* ── Portrait card ── */}
-        <div className="hero__visual reveal" style={{ "--d": "160ms" }}>
+        <div className="home-hero__visual reveal" style={{ "--d": "160ms" }}>
           <span className="sticker sticker--sky" aria-hidden="true" />
           <span className="sticker sticker--pink" aria-hidden="true" />
           <span className="sticker sticker--orange" aria-hidden="true" />
@@ -117,7 +117,7 @@ export default Main;
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.hero {
+.home-hero {
   /* Color tokens */
   --primary: #0075de;
   --primary-active: #005bab;
@@ -155,14 +155,14 @@ const css = `
   overflow: hidden;
 }
 
-.hero__inner {
+.home-hero__inner {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 64px 24px 56px;
 }
 
-.hero__grid {
+.home-hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: 64px;
@@ -170,7 +170,7 @@ const css = `
 }
 
 /* Badge pill */
-.badge {
+.hh-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -184,7 +184,7 @@ const css = `
   font-weight: 500;
   line-height: 1.43;
 }
-.badge__dot {
+.hh-badge__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -206,7 +206,7 @@ const css = `
 .eyebrow--small { margin: 0 0 4px; }
 
 /* Headline */
-.hero__title {
+.home-hero__title {
   margin: 0;
   font-size: clamp(40px, 5.6vw, 64px);
   font-weight: 700;
@@ -215,14 +215,14 @@ const css = `
   color: var(--ink);
   text-wrap: balance;
 }
-.hero__mark {
+.home-hero__mark {
   position: relative;
   white-space: nowrap;
   background-image: linear-gradient(transparent 62%, rgba(98, 174, 240, 0.35) 62%);
   padding: 0 2px;
 }
 
-.hero__lede {
+.home-hero__lede {
   margin: 24px 0 0;
   max-width: 34rem;
   font-size: 18px;
@@ -233,13 +233,13 @@ const css = `
 }
 
 /* Buttons */
-.hero__actions {
+.home-hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 36px;
 }
-.btn {
+.hh-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -251,28 +251,34 @@ const css = `
   text-decoration: none;
   transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
 }
-.btn--primary {
+.hh-btn--primary {
   background: var(--primary);
   color: #fff;
 }
-.btn--primary svg { transition: transform .15s ease; }
-.btn--primary:hover svg { transform: translateX(3px); }
-.btn--primary:active { background: var(--primary-active); }
-.btn--secondary {
+.hh-btn--primary svg { transition: transform .15s ease; }
+.hh-btn--primary:hover svg { transform: translateX(3px); }
+.hh-btn--primary:hover { background: var(--primary-active); color: #fff; }
+.hh-btn--primary:active { background: var(--primary-active); color: #fff; }
+.hh-btn--secondary {
   background: var(--canvas);
   color: var(--ink);
   box-shadow: var(--shadow-soft), 0 0 0 1px rgba(0,0,0,0.05);
 }
-.btn--secondary:hover { transform: translateY(-1px); }
+.hh-btn--secondary:hover {
+  background: var(--canvas);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+.hh-btn--secondary:active { background: var(--canvas-soft); color: var(--ink); }
 
 /* Utility buttons (social) */
-.hero__social {
+.home-hero__social {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 28px;
 }
-.btn-utility {
+.hh-utility {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -287,19 +293,19 @@ const css = `
   text-decoration: none;
   transition: border-color .15s ease, color .15s ease;
 }
-.btn-utility:hover {
+.hh-utility:hover {
   border-color: var(--ink-faint);
   color: var(--ink);
 }
 
-.btn:focus-visible,
-.btn-utility:focus-visible {
+.hh-btn:focus-visible,
+.hh-utility:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
 }
 
 /* Portrait + stickers */
-.hero__visual {
+.home-hero__visual {
   position: relative;
   padding: 24px;
 }
@@ -427,22 +433,22 @@ const css = `
 }
 @media (prefers-reduced-motion: reduce) {
   .reveal { animation: none; opacity: 1; transform: none; }
-  .badge__dot { animation: none; }
-  .btn, .btn svg, .btn-utility { transition: none; }
+  .hh-badge__dot { animation: none; }
+  .hh-btn, .hh-btn svg, .hh-utility { transition: none; }
 }
 
 /* Tablet */
 @media (max-width: 1023px) {
-  .hero__grid { grid-template-columns: 1fr; gap: 48px; }
-  .hero__visual { max-width: 440px; }
+  .home-hero__grid { grid-template-columns: 1fr; gap: 48px; }
+  .home-hero__visual { max-width: 440px; }
   .focus { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* Mobile */
 @media (max-width: 767px) {
-  .hero__inner { padding: 40px 16px 40px; }
-  .hero__actions .btn { flex: 1 1 100%; }
-  .hero__visual { padding: 16px; }
+  .home-hero__inner { padding: 40px 16px 40px; }
+  .home-hero__actions .hh-btn { flex: 1 1 100%; }
+  .home-hero__visual { padding: 16px; }
   .sticker--sky { width: 64px; height: 64px; border-radius: 16px; }
   .now-card { position: relative; margin-top: -40px; margin-left: 8px; max-width: none; }
   .focus { grid-template-columns: 1fr; margin-top: 48px; }
