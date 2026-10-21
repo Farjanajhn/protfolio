@@ -1,410 +1,369 @@
-// Projects.jsx — Fully Responsive
-// Editorial dark aesthetic — mobile-first, tablet & desktop layouts
-// Each project retains its unique color identity
+// Projects.jsx — minimal, same tokens and components as Main/About/Skills/Contact
+// Featured case study as a wide card, the other three in a row below.
+// Each whole card is one link, so the hit area is large and there are no nested links.
 
 import { Link } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import final   from "../assets/image/UX1st/happy2.png";
+import { useEffect, useRef } from "react";
+import final from "../assets/image/UX1st/happy2.png";
 import Mockup3 from "../assets/image/UX3RD/Mockup3.png";
-import hero2   from "../assets/image/UX2nd/hero2.png";
-import COVER   from "../assets/image/UX4TH/Artboard.png";
+import hero2 from "../assets/image/UX2nd/hero2.png";
+import COVER from "../assets/image/UX4TH/Artboard.png";
 
-/* ─── Noise grain ─── */
-const NoiseLayer = () => (
-  <svg aria-hidden style={{
-    position: "absolute", inset: 0, width: "100%", height: "100%",
-    pointerEvents: "none", zIndex: 1, opacity: 0.03, mixBlendMode: "overlay",
-  }}>
-    <filter id="pn">
-      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#pn)" />
-  </svg>
-);
-
-/* ─── Window width hook ─── */
-const useWindowWidth = () => {
-  const [w, setW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
-  useEffect(() => {
-    const fn = () => setW(window.innerWidth);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
-  }, []);
-  return w;
-};
-
-/* ─── Project data ─── */
-const uxProjects = [
+const PROJECTS = [
   {
     id: "ultra",
-    number: "01",
     title: "Ultra",
-    subtitle: "Public Transportation App Redesign",
-    description: "Master's thesis research redesign of Ultra — focusing on usability, inclusivity, and seamless commuting for international users in Umeå.",
+    subtitle: "Public transportation app redesign",
+    description:
+      "Master's thesis research and redesign of Ultra, focusing on usability, inclusivity and seamless commuting for international users in Umeå.",
     link: "/projects/four",
     image: COVER,
     tags: ["Thesis", "Mobile", "Usability"],
-    accent: "#3b82f6",
-    accentLight: "rgba(59,130,246,0.12)",
-    accentBorder: "rgba(59,130,246,0.25)",
-    accentText: "#93c5fd",
+    color: "var(--p-sky)",
   },
   {
     id: "mygov",
-    number: "02",
     title: "MyGov BD",
-    subtitle: "Government Services UX Redesign",
-    description: "Designing clearer navigation, consistent language switching, and better task feedback to reduce confusion in Bangladesh's digital government platform.",
+    subtitle: "Government services UX redesign",
+    description:
+      "Clearer navigation, consistent language switching and better task feedback to reduce confusion in Bangladesh's digital government platform.",
     link: "/projects/Third",
     image: Mockup3,
     tags: ["Accessibility", "Mobile", "Research"],
-    accent: "#10b981",
-    accentLight: "rgba(16,185,129,0.12)",
-    accentBorder: "rgba(52,211,153,0.25)",
-    accentText: "#6ee7b7",
+    color: "var(--p-green)",
   },
   {
     id: "trubble",
-    number: "03",
     title: "Trubble Buddy",
-    subtitle: "Co-designed Youth Mental Health Tool",
-    description: "A participatory design project — a wearable calming locket and personalizable app created with youth stakeholders for discreet anxiety support.",
+    subtitle: "Co-designed youth mental health tool",
+    description:
+      "A participatory design project: a wearable calming locket and personalizable app created with young people for discreet anxiety support.",
     link: "/projects/second",
     image: hero2,
-    tags: ["Co-design", "Wearable", "Mental Health"],
-    accent: "#8b5cf6",
-    accentLight: "rgba(139,92,246,0.12)",
-    accentBorder: "rgba(167,139,250,0.25)",
-    accentText: "#c4b5fd",
+    tags: ["Co-design", "Wearable", "Mental health"],
+    color: "var(--p-purple)",
   },
   {
     id: "blossom",
-    number: "04",
     title: "Blossom Buddy",
-    subtitle: "Tangible Self-Growth Companion",
-    description: "A hybrid system pairing a real plant with a digital twin — completing daily self-care tasks grants plant resources and unlocks meaningful rewards.",
+    subtitle: "Tangible self-growth companion",
+    description:
+      "A hybrid system pairing a real plant with a digital twin. Completing daily self-care tasks grants plant resources and unlocks rewards.",
     link: "/projects/first",
     image: final,
     tags: ["Tangible UX", "Gamification", "Wellbeing"],
-    accent: "#d97706",
-    accentLight: "rgba(217,119,6,0.12)",
-    accentBorder: "rgba(251,191,36,0.25)",
-    accentText: "#fcd34d",
+    color: "var(--p-orange)",
   },
 ];
 
-/* ─── Project card ─── */
-function ProjectCard({ project, index, isFeature, isMobile, isTablet }) {
-  const [hovered, setHovered] = useState(false);
-  const { number, title, subtitle, description, link, image, tags, accent, accentLight, accentBorder, accentText } = project;
+const Arrow = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
-  // On touch devices hover state is never sticky — fine
-  const cardPadding = isMobile ? "18px 18px 20px" : "26px 28px 28px";
-  const titleSize   = isFeature && !isMobile ? 26 : isMobile ? 18 : 20;
-  const imgRatio    = isFeature && !isMobile ? "16/7" : isMobile ? "16/9" : "16/10";
-
-  return (
-    <article
-      data-aos="fade-up"
-      data-aos-delay={isMobile ? 0 : index * 80}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        borderRadius: isMobile ? 20 : 24, overflow: "hidden",
-        border: `1px solid ${hovered ? accentBorder : "rgba(255,255,255,0.07)"}`,
-        background: hovered ? accentLight : "rgba(255,255,255,0.03)",
-        backdropFilter: "blur(12px)",
-        transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)",
-        transform: hovered ? "translateY(-5px)" : "none",
-        boxShadow: hovered
-          ? `0 20px 50px rgba(0,0,0,0.4), 0 0 0 1px ${accentBorder}`
-          : "0 4px 24px rgba(0,0,0,0.2)",
-        display: "flex", flexDirection: "column",
-      }}
-    >
-      {/* ── Image ── */}
-      <div style={{ position: "relative", overflow: "hidden", aspectRatio: imgRatio }}>
-        <img src={image} alt={title} style={{
-          width: "100%", height: "100%", objectFit: "cover",
-          transition: "transform 0.6s ease",
-          transform: hovered ? "scale(1.04)" : "scale(1)",
-        }} />
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to bottom, transparent 20%, rgba(8,12,16,0.85) 100%)",
-        }} />
-
-        {/* Number badge */}
-        <div style={{
-          position: "absolute", top: 12, left: 12,
-          fontFamily: "'DM Mono', monospace", fontSize: 10,
-          letterSpacing: "0.1em", color: accentText,
-          background: accentLight, border: `1px solid ${accentBorder}`,
-          padding: "3px 9px", borderRadius: 999,
-          backdropFilter: "blur(8px)",
-        }}>
-          {number}
-        </div>
-
-        {/* Tags — hide on mobile to reduce clutter */}
-        {!isMobile && (
-          <div style={{
-            position: "absolute", top: 12, right: 12,
-            display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end",
-          }}>
-            {tags.map(tag => (
-              <span key={tag} style={{
-                fontFamily: "'DM Mono', monospace", fontSize: 9,
-                letterSpacing: "0.08em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.7)",
-                background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.12)",
-                padding: "3px 8px", borderRadius: 999,
-                backdropFilter: "blur(8px)",
-              }}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Accent bottom line on hover */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 2,
-          background: `linear-gradient(to right, ${accent}, transparent)`,
-          opacity: hovered ? 1 : 0, transition: "opacity 0.3s",
-        }} />
-      </div>
-
-      {/* ── Content ── */}
-      <div style={{ padding: cardPadding, flex: 1, display: "flex", flexDirection: "column" }}>
-        <div style={{ marginBottom: 8 }}>
-          <div style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: titleSize, fontWeight: 800, color: "#f8fafc",
-            lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 4,
-          }}>
-            {title}
-          </div>
-          <div style={{
-            fontFamily: "'DM Mono', monospace", fontSize: 10,
-            color: accentText, letterSpacing: "0.08em", textTransform: "uppercase",
-          }}>
-            {subtitle}
-          </div>
-        </div>
-
-        <p style={{
-          fontFamily: "'Lato', sans-serif",
-          fontSize: isMobile ? 13 : 14, lineHeight: 1.7,
-          color: "rgba(255,255,255,0.6)",
-          marginBottom: isMobile ? 16 : 22, flex: 1,
-        }}>
-          {description}
-        </p>
-
-        {/* CTA */}
-        <Link to={link} style={{
-          display: "inline-flex", alignItems: "center", justifyContent: "space-between",
-          padding: isMobile ? "11px 16px" : "13px 20px", borderRadius: 12,
-          background: hovered ? accent : "rgba(255,255,255,0.05)",
-          border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.1)"}`,
-          color: hovered ? "#fff" : "rgba(255,255,255,0.7)",
-          fontFamily: "'Lato', sans-serif", fontWeight: 700,
-          fontSize: isMobile ? 12 : 13, letterSpacing: "0.04em",
-          textDecoration: "none",
-          transition: "all 0.3s",
-          boxShadow: hovered ? `0 8px 24px ${accentLight}` : "none",
-        }}>
-          <span>View Case Study</span>
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </Link>
-      </div>
-    </article>
-  );
-}
-
-/* ─── MAIN ─── */
-const Projects = () => {
-  const projects = useMemo(() => uxProjects, []);
-  const width    = useWindowWidth();
-  const isMobile = width < 768;
-  const isTablet = width >= 768 && width < 1024;
-
+/* Fades cards in once as they scroll into view */
+const useReveal = () => {
+  const ref = useRef(null);
   useEffect(() => {
-    AOS.init({ duration: 900, once: true, easing: "ease-out-quart" });
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap";
-    document.head.appendChild(link);
+    const root = ref.current;
+    if (!root) return;
+    const items = root.querySelectorAll(".p-reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      }),
+      { threshold: 0.1 }
+    );
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
+  return ref;
+};
 
-  const px = isMobile ? "20px" : isTablet ? "32px" : "40px";
-  const py = isMobile ? "80px" : "120px";
+const ProjectCard = ({ project, index, featured = false }) => {
+  const { title, subtitle, description, link, image, tags, color } = project;
+  return (
+    <li
+      className={`p-reveal ${featured ? "p-span-full" : "p-span-4"}`}
+      style={{ "--d": `${index * 60}ms` }}
+    >
+      <Link to={link} className={`p-card${featured ? " p-card--featured" : ""}`}>
+        <div className="p-card__media">
+          <img src={image} alt="" loading="lazy" decoding="async" />
+        </div>
 
-  /* Grid columns for the bottom 3 cards:
-     Mobile  → 1 col
-     Tablet  → 2 cols
-     Desktop → 3 cols              */
-  const subGridCols = isMobile ? "1fr" : isTablet ? "1fr 1fr" : "repeat(3, 1fr)";
+        <div className="p-card__body">
+          <div className="p-card__meta">
+            <span className="p-chip" style={{ background: color }} aria-hidden="true" />
+            <span className="p-num">0{index + 1}</span>
+            {featured && <span className="p-tag">Featured · Master's thesis</span>}
+          </div>
+
+          <h3 className="p-card__title">{title}</h3>
+          <p className="p-card__subtitle">{subtitle}</p>
+          <p className="p-card__text">{description}</p>
+
+          <div className="p-card__foot">
+            <ul className="p-chips" aria-label="Topics">
+              {tags.map((t) => <li key={t}>{t}</li>)}
+            </ul>
+            <span className="p-card__cta">
+              Read case study <Arrow />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </li>
+  );
+};
+
+const Projects = () => {
+  const ref = useReveal();
 
   return (
-    <section id="projects" style={{
-      position: "relative", minHeight: "100vh",
-      overflow: "hidden", background: "#080c10",
-      fontFamily: "'Lato', sans-serif",
-    }}>
-      <NoiseLayer />
+    <section id="projects" className="projects" aria-labelledby="projects-title" ref={ref}>
+      <style>{css}</style>
 
-      {/* Ambient glows */}
-      <div aria-hidden style={{ position: "absolute", top: -100, right: -100, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.05) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <div aria-hidden style={{ position: "absolute", bottom: -150, left: 100, width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.04) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+      <div className="projects__inner">
+        <header className="projects__header p-reveal">
+          <p className="p-badge">Case studies</p>
+          <h2 id="projects-title" className="projects__title">
+            Selected <span className="projects__mark">work</span>
+          </h2>
+          <p className="projects__intro">
+            UX case studies focused on user research, interaction design and
+            building clear, accessible experiences.
+          </p>
+        </header>
 
-      <div style={{
-        position: "relative", zIndex: 2,
-        maxWidth: 1200, margin: "0 auto",
-        padding: `${py} ${px}`,
-        boxSizing: "border-box",
-      }}>
-
-        {/* ── Section header ── */}
-        <div
-          data-aos="fade-up"
-          style={{
-            marginBottom: isMobile ? 36 : 64,
-            display: "flex",
-            alignItems: isMobile ? "flex-start" : "flex-end",
-            justifyContent: "space-between",
-            flexDirection: isMobile ? "column" : "row",
-            gap: isMobile ? 24 : 24,
-            flexWrap: "wrap",
-          }}
-        >
-          {/* Left: heading */}
-          <div>
-            <div style={{
-              display: "inline-flex", alignItems: "center",
-              padding: "3px 12px", borderRadius: 999,
-              border: "1px solid rgba(52,211,153,0.25)",
-              background: "rgba(16,185,129,0.07)",
-              color: "#6ee7b7", fontSize: 11,
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              fontFamily: "'DM Mono', monospace", marginBottom: 14,
-            }}>
-              Case Studies
-            </div>
-
-            <h2 style={{
-              margin: 0,
-              fontFamily: "'Playfair Display', serif",
-              fontSize: isMobile ? "clamp(32px, 10vw, 48px)" : "clamp(36px, 5vw, 64px)",
-              fontWeight: 900, lineHeight: 1.0,
-              letterSpacing: "-0.03em", color: "#f8fafc",
-            }}>
-              UX{" "}
-              <span style={{
-                background: "linear-gradient(135deg, #34d399 0%, #6ee7b7 100%)",
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                fontStyle: "italic",
-              }}>
-                Projects
-              </span>
-            </h2>
-
-            <p style={{
-              marginTop: 12, maxWidth: 480,
-              fontFamily: "'Lato', sans-serif",
-              fontSize: isMobile ? 14 : 16, lineHeight: 1.7,
-              color: "rgba(255,255,255,0.5)",
-            }}>
-              A selection of UX case studies focused on user research, interaction design,
-              and building clear, accessible experiences.
-            </p>
-          </div>
-
-          {/* Right: stats strip */}
-          <div style={{
-            display: "flex", gap: 0,
-            borderRadius: 14, overflow: "hidden",
-            border: "1px solid rgba(255,255,255,0.07)",
-            background: "rgba(255,255,255,0.03)",
-            backdropFilter: "blur(8px)",
-            height: "fit-content",
-            alignSelf: isMobile ? "flex-start" : "flex-end",
-          }}>
-            {[
-              { value: projects.length, label: "Projects" },
-              { value: "4",             label: "Methods"  },
-              { value: "2",             label: "Countries"},
-            ].map(({ value, label }, i) => (
-              <div key={label} style={{
-                padding: isMobile ? "10px 16px" : "14px 22px", textAlign: "center",
-                borderRight: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
-              }}>
-                <div style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: isMobile ? 20 : 24, fontWeight: 800, lineHeight: 1,
-                  background: "linear-gradient(135deg, #fff, #6ee7b7)",
-                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                }}>
-                  {value}
-                </div>
-                <div style={{
-                  marginTop: 3, color: "rgba(255,255,255,0.35)",
-                  fontSize: 9, fontFamily: "'DM Mono', monospace",
-                  letterSpacing: "0.08em", textTransform: "uppercase",
-                }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Featured card — full width
-            On mobile it's just a regular card (no wide aspect ratio advantage)
-        ── */}
-        <div style={{ marginBottom: isMobile ? 16 : 20 }}>
-          <ProjectCard
-            project={projects[0]}
-            index={0}
-            isFeature={!isMobile}
-            isMobile={isMobile}
-            isTablet={isTablet}
-          />
-        </div>
-
-        {/* ── Sub-grid: remaining 3 cards ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: subGridCols,
-          gap: isMobile ? 16 : 20,
-        }}>
-          {projects.slice(1).map((project, i) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={i + 1}
-              isFeature={false}
-              isMobile={isMobile}
-              isTablet={isTablet}
-            />
+        <ul className="projects__grid">
+          {PROJECTS.map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i} featured={i === 0} />
           ))}
-        </div>
-
-        {/* ── Bottom divider ── */}
-        <div style={{
-          marginTop: isMobile ? 48 : 80, height: 1,
-          background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
-        }} />
-
+        </ul>
       </div>
     </section>
   );
 };
 
 export default Projects;
+
+/* ───────────────────────────────────────────── */
+/* Same tokens as Main.jsx */
+const css = `
+.projects {
+  --p-primary: #0075de;
+  --p-ink: #000000;
+  --p-ink-2: #31302e;
+  --p-muted: #615d59;
+  --p-canvas: #ffffff;
+  --p-paper: #f6f5f4;
+  --p-line: #e6e6e6;
+  --p-sky: #62aef0;
+  --p-purple: #d6b6f6;
+  --p-orange: #dd5b00;
+  --p-green: #1aae39;
+  --p-shadow:
+    0 1px 1px rgba(0,0,0,0.03),
+    0 2px 4px rgba(0,0,0,0.03),
+    0 6px 12px rgba(0,0,0,0.035),
+    0 16px 32px rgba(0,0,0,0.04);
+
+  background: var(--p-paper);
+  color: var(--p-ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.projects *, .projects *::before, .projects *::after { box-sizing: border-box; }
+
+.projects__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px;
+}
+
+/* Header — same as the other sections */
+.projects__header { margin-bottom: 40px; }
+.p-badge {
+  display: inline-flex;
+  margin: 0 0 24px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--p-canvas);
+  border: 1px solid var(--p-line);
+  color: var(--p-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.43;
+}
+.projects__title {
+  margin: 0;
+  font-size: clamp(32px, 4.4vw, 48px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.033em;
+}
+.projects__mark {
+  background-image: linear-gradient(transparent 62%, rgba(98,174,240,0.35) 62%);
+  padding: 0 2px;
+}
+.projects__intro {
+  margin: 16px 0 0;
+  max-width: 34rem;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--p-muted);
+}
+
+/* Grid */
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.p-span-full { grid-column: 1 / -1; }
+.p-span-4 { grid-column: span 4; }
+
+/* Card — the whole card is one link */
+.p-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--p-canvas);
+  border: 1px solid var(--p-line);
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+}
+.p-card:hover { box-shadow: var(--p-shadow); transform: translateY(-3px); border-color: #dcd8d3; }
+.p-card:focus-visible { outline: 2px solid var(--p-primary); outline-offset: 3px; }
+
+.p-card__media {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--p-paper);
+  border-bottom: 1px solid var(--p-line);
+}
+.p-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.p-card:hover .p-card__media img { transform: scale(1.03); }
+
+.p-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+}
+.p-card__meta { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.p-chip { width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0; }
+.p-num { font-size: 13px; font-weight: 600; color: var(--p-muted); }
+.p-tag {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: rgba(0,117,222,0.08);
+  color: var(--p-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.p-card__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.p-card__subtitle { margin: 4px 0 12px; font-size: 15px; color: var(--p-ink-2); }
+.p-card__text { margin: 0 0 20px; font-size: 15px; line-height: 1.6; color: var(--p-muted); }
+
+.p-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 24px; padding: 0; list-style: none; }
+.p-chips li {
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: var(--p-paper);
+  border: 1px solid var(--p-line);
+  font-size: 13px;
+  color: var(--p-ink-2);
+}
+
+.p-card__foot { margin-top: auto; }
+.p-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--p-primary);
+}
+.p-card__cta svg { transition: transform .15s ease; }
+.p-card:hover .p-card__cta svg { transform: translateX(3px); }
+
+/* Featured — image left, text right (7 | 5) */
+.p-card--featured {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+.p-card--featured .p-card__media {
+  aspect-ratio: auto;
+  min-height: 360px;
+  border-bottom: 0;
+  border-right: 1px solid var(--p-line);
+}
+.p-card--featured .p-card__body { padding: 32px; }
+.p-card--featured .p-card__title { font-size: clamp(26px, 2.6vw, 32px); }
+.p-card--featured .p-card__text { font-size: 16px; }
+
+/* Motion */
+.p-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--d, 0ms);
+}
+.p-reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .p-reveal { opacity: 1; transform: none; transition: none; }
+  .p-card, .p-card__media img, .p-card__cta svg { transition: none; }
+  .p-card:hover, .p-card:hover .p-card__media img { transform: none; }
+}
+
+/* Tablet: featured stacks, others 2 per row */
+@media (max-width: 1023px) {
+  .p-span-4 { grid-column: span 6; }
+  .p-card--featured { display: flex; }
+  .p-card--featured .p-card__media {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--p-line);
+  }
+  .p-card--featured .p-card__body { padding: 24px; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .projects__inner { padding: 64px 16px; }
+  .projects__header { margin-bottom: 32px; }
+  .projects__intro { font-size: 16px; }
+  .projects__grid { grid-template-columns: 1fr; }
+  .p-span-4, .p-span-full { grid-column: 1 / -1; }
+  .p-tag { margin-left: 0; }
+  .p-card__meta { flex-wrap: wrap; }
+}
+`;

@@ -1,495 +1,455 @@
-// Contact.jsx — Redesign + Fully Responsive
-// Editorial dark aesthetic — consistent with Main/About/Projects/Skills system
-// EmailJS integration preserved exactly
+// Contact.jsx — minimal, same tokens and components as Main/About/Skills
+// Layout: 12-col grid, same 4 | 8 split as About and Skills
+// EmailJS integration unchanged (service, template, key and field names)
 
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaPaperPlane, FaCheckCircle, FaExclamationTriangle, FaGithub, FaLinkedin, FaDribbble } from "react-icons/fa";
 
-/* ─── Noise grain ─── */
-const NoiseLayer = () => (
-  <svg aria-hidden style={{
-    position: "absolute", inset: 0, width: "100%", height: "100%",
-    pointerEvents: "none", zIndex: 1, opacity: 0.03, mixBlendMode: "overlay",
-  }}>
-    <filter id="cn">
-      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#cn)" />
+const LINKS = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/farjanajhn/" },
+  { label: "GitHub", href: "https://github.com/Farjanajhn" },
+  { label: "X / Twitter", href: "https://twitter.com/farjanajhn12" },
+  { label: "Dribbble", href: "https://dribbble.com/farjanajhn" },
+];
+
+const ArrowUpRight = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M3.5 8.5l5-5M4 3.5h4.5V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-/* ─── Window width hook ─── */
-const useWindowWidth = () => {
-  const [w, setW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+const Arrow = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const Spinner = () => (
+  <svg className="c-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2.5" />
+    <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </svg>
+);
+
+/* Fades cards in once as they scroll into view */
+const useReveal = () => {
+  const ref = useRef(null);
   useEffect(() => {
-    const fn = () => setW(window.innerWidth);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
+    const root = ref.current;
+    if (!root) return;
+    const items = root.querySelectorAll(".c-reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      }),
+      { threshold: 0.15 }
+    );
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
-  return w;
+  return ref;
 };
 
-/* ─── Styled input ─── */
-const Field = ({ label, children }) => (
-  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-    <label style={{
-      fontFamily: "'DM Mono', monospace", fontSize: 10,
-      letterSpacing: "0.12em", textTransform: "uppercase",
-      color: "rgba(255,255,255,0.4)",
-    }}>
-      {label}
-    </label>
-    {children}
-  </div>
-);
-
-const inputStyle = {
-  width: "100%", boxSizing: "border-box",
-  padding: "13px 16px", borderRadius: 12,
-  border: "1px solid rgba(255,255,255,0.09)",
-  background: "rgba(255,255,255,0.04)",
-  color: "#f8fafc",
-  fontFamily: "'Lato', sans-serif", fontSize: 14,
-  outline: "none", backdropFilter: "blur(8px)",
-  transition: "border-color 0.2s, box-shadow 0.2s",
-};
-
-const InputEl = (props) => {
-  const [focused, setFocused] = useState(false);
-  return (
-    <input
-      {...props}
-      style={{
-        ...inputStyle,
-        borderColor: focused ? "rgba(52,211,153,0.4)" : "rgba(255,255,255,0.09)",
-        boxShadow: focused ? "0 0 0 3px rgba(16,185,129,0.1)" : "none",
-      }}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-    />
-  );
-};
-
-const TextareaEl = (props) => {
-  const [focused, setFocused] = useState(false);
-  return (
-    <textarea
-      {...props}
-      style={{
-        ...inputStyle,
-        minHeight: 140, resize: "vertical",
-        borderColor: focused ? "rgba(52,211,153,0.4)" : "rgba(255,255,255,0.09)",
-        boxShadow: focused ? "0 0 0 3px rgba(16,185,129,0.1)" : "none",
-      }}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-    />
-  );
-};
-
-/* ─── Info row item ─── */
-const InfoRow = ({ icon, label, value, href }) => (
-  <a
-    href={href || "#"}
-    target={href ? "_blank" : undefined}
-    rel="noreferrer"
-    style={{
-      display: "flex", alignItems: "flex-start", gap: 14,
-      textDecoration: "none", cursor: href ? "pointer" : "default",
-      padding: "14px 16px", borderRadius: 14,
-      border: "1px solid rgba(255,255,255,0.06)",
-      background: "rgba(255,255,255,0.03)",
-      transition: "border-color 0.2s, background 0.2s",
-    }}
-    onMouseEnter={e => { if (href) { e.currentTarget.style.borderColor = "rgba(52,211,153,0.2)"; e.currentTarget.style.background = "rgba(16,185,129,0.05)"; }}}
-    onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-  >
-    <div style={{
-      width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      background: "rgba(16,185,129,0.1)",
-      border: "1px solid rgba(52,211,153,0.2)",
-      fontSize: 16,
-    }}>
-      {icon}
-    </div>
-    <div>
-      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 3 }}>
-        {label}
-      </div>
-      <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.75)" }}>
-        {value}
-      </div>
-    </div>
-  </a>
-);
-
-/* ─── MAIN ─── */
 const Contact = () => {
-  const form       = useRef(null);
-  const [status, setStatus] = useState("idle");
-  const [toast, setToast]   = useState("");
-  const width      = useWindowWidth();
-  const isMobile   = width < 768;
-  const isTablet   = width >= 768 && width < 1024;
+  const ref = useReveal();
+  const form = useRef(null);
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [note, setNote] = useState("");
 
+  // Clear the status message after a few seconds
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap";
-    document.head.appendChild(link);
-  }, []);
-
-  useEffect(() => {
-    if (!toast) return;
-    const t = setTimeout(() => setToast(""), 4000);
+    if (!note) return;
+    const t = setTimeout(() => { setNote(""); setStatus("idle"); }, 5000);
     return () => clearTimeout(t);
-  }, [toast]);
+  }, [note]);
 
   const sendEmail = async (e) => {
     e.preventDefault();
     if (!form.current) return;
     try {
       setStatus("sending");
-      const result = await emailjs.sendForm(
+      setNote("");
+      await emailjs.sendForm(
         "service_bnz4abr",
         "template_gov2hhi",
         form.current,
         "eWJVylKLCzGa6yoo1"
       );
-      console.log("EmailJS success:", result.text);
       setStatus("success");
-      setToast("Message sent successfully!");
+      setNote("Thanks! Your message is on its way. I'll get back to you within 24–48 hours.");
       form.current.reset();
-      setTimeout(() => setStatus("idle"), 2000);
     } catch (error) {
       console.error("EmailJS error:", error?.text || error);
       setStatus("error");
-      setToast(error?.text || "Failed to send. Please try again.");
-      setTimeout(() => setStatus("idle"), 2500);
+      setNote("Something went wrong and your message wasn't sent. Please try again, or email me directly.");
     }
   };
 
-  const px = isMobile ? "20px" : isTablet ? "32px" : "40px";
-  const py = isMobile ? "80px" : "120px";
-
-  const socialLinks = [
-    { icon: FaGithub,   href: "https://github.com/Farjanajhn",        label: "GitHub" },
-    { icon: FaLinkedin, href: "https://www.linkedin.com/in/",         label: "LinkedIn" },
-    { icon: FaDribbble, href: "https://dribbble.com/farjanajhn",      label: "Dribbble" },
-  ];
+  const sending = status === "sending";
 
   return (
-    <section id="message" style={{
-      position: "relative", minHeight: "100vh",
-      overflow: "hidden", background: "#080c10",
-      fontFamily: "'Lato', sans-serif",
-    }}>
-      <NoiseLayer />
+    <section id="message" className="contact" aria-labelledby="contact-title" ref={ref}>
+      <style>{css}</style>
 
-      {/* Ambient glows */}
-      <div aria-hidden style={{ position: "absolute", top: -200, right: -100, width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <div aria-hidden style={{ position: "absolute", bottom: -150, left: -100, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.04) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-
-      <div style={{
-        position: "relative", zIndex: 2,
-        maxWidth: 1200, margin: "0 auto",
-        padding: `${py} ${px}`,
-        boxSizing: "border-box",
-      }}>
-
-        {/* ── Section heading ── */}
-        <div style={{ marginBottom: isMobile ? 36 : 60 }}>
-          <span style={{
-            display: "inline-flex", alignItems: "center",
-            padding: "3px 12px", borderRadius: 999,
-            border: "1px solid rgba(52,211,153,0.25)",
-            background: "rgba(16,185,129,0.07)",
-            color: "#6ee7b7", fontSize: 11,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-            fontFamily: "'DM Mono', monospace", marginBottom: 14,
-          }}>
-            Contact
-          </span>
-
-          <h2 style={{
-            margin: "0 0 14px",
-            fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? "clamp(30px, 9vw, 44px)" : "clamp(36px, 5vw, 60px)",
-            fontWeight: 900, lineHeight: 1.0,
-            letterSpacing: "-0.03em", color: "#f8fafc",
-          }}>
-            Let's build something{" "}
-            <span style={{
-              background: "linear-gradient(135deg, #34d399 0%, #6ee7b7 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              fontStyle: "italic",
-            }}>
-              amazing
-            </span>
+      <div className="contact__inner">
+        <header className="contact__header c-reveal">
+          <p className="c-badge">Contact</p>
+          <h2 id="contact-title" className="contact__title">
+            Let's work <span className="contact__mark">together</span>.
           </h2>
-          <p style={{
-            maxWidth: 480, margin: 0,
-            fontFamily: "'Lato', sans-serif",
-            fontSize: isMobile ? 14 : 16, lineHeight: 1.7,
-            color: "rgba(255,255,255,0.5)",
-          }}>
-            Send a message about a job opportunity, project, internship, or collaboration.
-            I'll get back to you as soon as possible.
+          <p className="contact__intro">
+            Send a message about a job, internship, project or collaboration.
+            I'll get back to you as soon as I can.
           </p>
-        </div>
+        </header>
 
-        {/* ── Main layout: sidebar + form ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : isTablet ? "1fr" : "320px 1fr",
-          gap: isMobile ? 24 : 28,
-          alignItems: "start",
-        }}>
+        <div className="contact__grid">
+          {/* ── Left: details ── */}
+          <div className="c-card c-card--side c-reveal">
+            <p className="c-status">
+              <span className="c-dot" aria-hidden="true" />
+              Open to UX/UI roles and internships
+            </p>
 
-          {/* ─── LEFT: Info sidebar ─── */}
-          {/* On mobile/tablet show above the form in a compact horizontal strip */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-
-            {/* Availability badge */}
-            <div style={{
-              borderRadius: 18, padding: "16px 18px",
-              border: "1px solid rgba(52,211,153,0.15)",
-              borderTop: "2px solid #10b981",
-              background: "rgba(16,185,129,0.04)",
-              backdropFilter: "blur(8px)",
-              display: "flex", alignItems: "center", gap: 12,
-            }}>
-              <div style={{
-                width: 9, height: 9, borderRadius: "50%", flexShrink: 0,
-                background: "#10b981", boxShadow: "0 0 10px rgba(16,185,129,0.8)",
-                animation: "contactPulse 2s infinite",
-              }} />
+            <dl className="c-facts">
               <div>
-                <div style={{ color: "#f8fafc", fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: 13 }}>
-                  Open to opportunities
-                </div>
-                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontFamily: "'DM Mono', monospace", letterSpacing: "0.06em" }}>
-                  Umeå, Sweden · Remote
-                </div>
+                <dt>Email</dt>
+                <dd><a className="c-link" href="mailto:farjanajhn12@gmail.com">farjanajhn12@gmail.com</a></dd>
               </div>
-            </div>
-
-            {/* Contact info rows */}
-            <InfoRow icon="📧" label="Email" value="farjanajhn12@gmail.com" href="mailto:farjanajhn12@gmail.com" />
-            <InfoRow icon="📍" label="Location" value="Umeå, Sweden" />
-            <InfoRow icon="🕐" label="Response time" value="Within 24–48 hours" />
-
-            {/* Social icons */}
-            <div style={{
-              borderRadius: 18, padding: "16px 18px",
-              border: "1px solid rgba(255,255,255,0.07)",
-              background: "rgba(255,255,255,0.03)",
-              backdropFilter: "blur(8px)",
-            }}>
-              <div style={{
-                fontFamily: "'DM Mono', monospace", fontSize: 10,
-                letterSpacing: "0.1em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.3)", marginBottom: 12,
-              }}>
-                Find me online
+              <div>
+                <dt>Location</dt>
+                <dd>Umeå, Sweden · open to remote</dd>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                {socialLinks.map(({ icon: Icon, href, label }) => (
-                  <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
-                    style={{
-                      width: 40, height: 40, borderRadius: 10,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      background: "rgba(255,255,255,0.04)",
-                      color: "rgba(255,255,255,0.5)", textDecoration: "none",
-                      transition: "all 0.2s",
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = "rgba(16,185,129,0.1)";
-                      e.currentTarget.style.borderColor = "rgba(52,211,153,0.3)";
-                      e.currentTarget.style.color = "#6ee7b7";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                      e.currentTarget.style.color = "rgba(255,255,255,0.5)";
-                      e.currentTarget.style.transform = "";
-                    }}
-                  >
-                    <Icon size={16} />
+              <div>
+                <dt>Response time</dt>
+                <dd>Within 24–48 hours</dd>
+              </div>
+            </dl>
+
+            <div className="c-side__foot">
+              <p className="c-eyebrow">Find me online</p>
+              <nav className="c-social" aria-label="Social profiles">
+                {LINKS.map(({ label, href }) => (
+                  <a key={label} href={href} target="_blank" rel="noreferrer" className="c-btn-utility">
+                    {label} <ArrowUpRight />
                   </a>
                 ))}
-              </div>
+              </nav>
             </div>
-
           </div>
 
-          {/* ─── RIGHT: Form ─── */}
-          <div style={{
-            borderRadius: 24, overflow: "hidden",
-            border: "1px solid rgba(255,255,255,0.07)",
-            borderTop: "2px solid rgba(52,211,153,0.4)",
-            background: "rgba(255,255,255,0.03)",
-            backdropFilter: "blur(12px)",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-          }}>
-            {/* Form header */}
-            <div style={{
-              padding: isMobile ? "22px 20px 16px" : "28px 32px 20px",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
-            }}>
-              <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: isMobile ? 18 : 22, fontWeight: 800, color: "#f8fafc",
-              }}>
-                Send a message
-              </div>
-              <div style={{
-                fontFamily: "'DM Mono', monospace", fontSize: 11,
-                color: "rgba(255,255,255,0.35)", letterSpacing: "0.08em", marginTop: 4,
-              }}>
-                All fields marked * are required
-              </div>
-            </div>
+          {/* ── Right: form ── */}
+          <div className="c-card c-card--form c-reveal" style={{ "--d": "60ms" }}>
+            <h3 className="c-form__title">Send a message</h3>
 
-            {/* Toast notification */}
-            {toast && (
-              <div style={{
-                margin: isMobile ? "16px 20px 0" : "20px 32px 0",
-                padding: "12px 16px", borderRadius: 12,
-                background: status === "success" ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
-                border: `1px solid ${status === "success" ? "rgba(52,211,153,0.25)" : "rgba(239,68,68,0.25)"}`,
-                display: "flex", alignItems: "center", gap: 10,
-              }}>
-                {status === "success"
-                  ? <FaCheckCircle size={14} color="#6ee7b7" />
-                  : <FaExclamationTriangle size={14} color="#fca5a5" />
-                }
-                <span style={{
-                  fontFamily: "'Lato', sans-serif", fontSize: 13,
-                  color: status === "success" ? "#6ee7b7" : "#fca5a5",
-                }}>
-                  {toast}
-                </span>
-              </div>
-            )}
-
-            {/* Form body */}
-            <form ref={form} onSubmit={sendEmail} style={{ padding: isMobile ? "20px 20px 24px" : "24px 32px 32px" }}>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: isMobile ? 16 : 18,
-                marginBottom: isMobile ? 16 : 18,
-              }}>
-                <Field label="Name *">
-                  <InputEl type="text" name="from_name" placeholder="Your name" required />
-                </Field>
-
-                <Field label="Phone">
-                  <InputEl type="text" name="phone" placeholder="+46 …" />
-                </Field>
-
-                <Field label="Email *">
-                  <InputEl type="email" name="reply_to" placeholder="your@email.com" required />
-                </Field>
-
-                <Field label="Subject *">
-                  <InputEl type="text" name="subject" placeholder="What's this about?" required />
-                </Field>
+            <form ref={form} onSubmit={sendEmail} className="c-form">
+              <div className="c-form__row">
+                <div className="c-field">
+                  <label htmlFor="c-name">Name</label>
+                  <input id="c-name" type="text" name="from_name" autoComplete="name" required />
+                </div>
+                <div className="c-field">
+                  <label htmlFor="c-email">Email</label>
+                  <input id="c-email" type="email" name="reply_to" autoComplete="email" required />
+                </div>
               </div>
 
-              <div style={{ marginBottom: isMobile ? 20 : 24 }}>
-                <Field label="Message *">
-                  <TextareaEl name="message" placeholder="Tell me about your idea, project, or opportunity…" required />
-                </Field>
+              <div className="c-form__row">
+                <div className="c-field">
+                  <label htmlFor="c-subject">Subject</label>
+                  <input id="c-subject" type="text" name="subject" placeholder="e.g. UX internship at …" required />
+                </div>
+                <div className="c-field">
+                  <label htmlFor="c-phone">Phone <span className="c-optional">(optional)</span></label>
+                  <input id="c-phone" type="tel" name="phone" autoComplete="tel" />
+                </div>
               </div>
 
-              {/* Submit button */}
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                style={{
-                  width: "100%", display: "flex", alignItems: "center",
-                  justifyContent: "center", gap: 10,
-                  padding: "14px 24px", borderRadius: 12,
-                  background: status === "sending"
-                    ? "rgba(255,255,255,0.06)"
-                    : "linear-gradient(135deg, #059669, #10b981)",
-                  border: status === "sending" ? "1px solid rgba(255,255,255,0.1)" : "none",
-                  color: status === "sending" ? "rgba(255,255,255,0.4)" : "#fff",
-                  fontFamily: "'Lato', sans-serif", fontWeight: 700,
-                  fontSize: 14, letterSpacing: "0.04em",
-                  cursor: status === "sending" ? "not-allowed" : "pointer",
-                  boxShadow: status === "sending" ? "none" : "0 8px 28px rgba(16,185,129,0.28)",
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                }}
-                onMouseEnter={e => {
-                  if (status !== "sending") {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.boxShadow = "0 12px 36px rgba(16,185,129,0.42)";
-                  }
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = "";
-                  e.currentTarget.style.boxShadow = status === "sending" ? "none" : "0 8px 28px rgba(16,185,129,0.28)";
-                }}
+              <div className="c-field">
+                <label htmlFor="c-message">Message</label>
+                <textarea id="c-message" name="message" rows={6} required />
+              </div>
+
+              <div
+                className={`c-note${note ? " is-visible" : ""} c-note--${status}`}
+                role="status"
+                aria-live="polite"
               >
-                {status === "sending" ? (
-                  <>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ animation: "contactSpin 1s linear infinite" }}>
-                      <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
-                      <path d="M12 2a10 10 0 0 1 10 10" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                    Sending…
-                  </>
-                ) : (
-                  <>
-                    <FaPaperPlane size={13} />
-                    Send Message
-                  </>
-                )}
-              </button>
+                {note}
+              </div>
 
-              {/* Privacy note */}
-              <p style={{
-                marginTop: 14, textAlign: "center",
-                fontFamily: "'DM Mono', monospace", fontSize: 10,
-                color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em",
-              }}>
-                Your message goes directly to my inbox. No spam, ever.
-              </p>
+              <div className="c-form__foot">
+                <p className="c-privacy">Your message goes straight to my inbox. No spam, ever.</p>
+                <button type="submit" className="c-btn" disabled={sending}>
+                  {sending ? <><Spinner /> Sending…</> : <>Send message <Arrow /></>}
+                </button>
+              </div>
             </form>
           </div>
         </div>
-
-        {/* ── Bottom divider ── */}
-        <div style={{
-          marginTop: isMobile ? 20 : 40, height: 1,
-          background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
-        }} />
-
       </div>
-
-      <style>{`
-        @keyframes contactPulse {
-          0%, 100% { box-shadow: 0 0 8px rgba(16,185,129,0.8); }
-          50%       { box-shadow: 0 0 18px rgba(16,185,129,0.3); }
-        }
-        @keyframes contactSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        input::placeholder, textarea::placeholder {
-          color: rgba(255,255,255,0.25);
-        }
-      `}</style>
     </section>
   );
 };
 
 export default Contact;
+
+/* ───────────────────────────────────────────── */
+/* Same tokens as Main.jsx */
+const css = `
+.contact {
+  --c-primary: #0075de;
+  --c-primary-active: #005bab;
+  --c-ink: #000000;
+  --c-ink-2: #31302e;
+  --c-muted: #615d59;
+  --c-faint: #a39e98;
+  --c-canvas: #ffffff;
+  --c-paper: #f6f5f4;
+  --c-line: #e6e6e6;
+  --c-green: #1aae39;
+  --c-red: #c4320a;
+
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.contact *, .contact *::before, .contact *::after { box-sizing: border-box; }
+
+.contact__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 120px;
+}
+
+/* Header — same as About and Skills */
+.contact__header { margin-bottom: 40px; }
+.c-badge {
+  display: inline-flex;
+  margin: 0 0 24px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--c-canvas);
+  border: 1px solid var(--c-line);
+  color: var(--c-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.43;
+}
+.contact__title {
+  margin: 0;
+  font-size: clamp(32px, 4.4vw, 48px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.033em;
+}
+.contact__mark {
+  background-image: linear-gradient(transparent 62%, rgba(98,174,240,0.35) 62%);
+  padding: 0 2px;
+}
+.contact__intro {
+  margin: 16px 0 0;
+  max-width: 34rem;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--c-muted);
+}
+
+/* Grid — 4 | 8 */
+.contact__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+.c-card--side { grid-column: span 4; display: flex; flex-direction: column; }
+.c-card--form { grid-column: span 8; }
+
+/* Cards */
+.c-card {
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--c-canvas);
+  border: 1px solid var(--c-line);
+}
+.c-eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+/* Details */
+.c-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.c-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-green);
+  animation: c-ping 2.4s ease-out infinite;
+}
+.c-facts { margin: 0; }
+.c-facts > div { padding: 12px 0; border-top: 1px solid var(--c-line); }
+.c-facts dt {
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.c-facts dd { margin: 0; font-size: 15px; color: var(--c-ink-2); overflow-wrap: anywhere; }
+.c-link { color: var(--c-primary); text-decoration: none; border-bottom: 1px solid transparent; }
+.c-link:hover { border-color: var(--c-primary); }
+
+.c-side__foot {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--c-line);
+}
+.c-facts { margin-bottom: 24px; }
+.c-social { display: flex; flex-wrap: wrap; gap: 8px; }
+.c-btn-utility {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--c-canvas);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink-2);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color .15s ease, color .15s ease;
+}
+.c-btn-utility:hover { border-color: var(--c-faint); color: var(--c-ink); }
+
+/* Form */
+.c-card--form, .c-card--side { padding: 32px; }
+.c-form__title { margin: 0 0 24px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.c-form { display: flex; flex-direction: column; gap: 18px; }
+.c-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.c-field { display: flex; flex-direction: column; gap: 6px; }
+.c-field label { font-size: 14px; font-weight: 500; color: var(--c-ink-2); }
+.c-optional { font-weight: 400; color: var(--c-muted); }
+.c-field input,
+.c-field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--c-line);
+  background: var(--c-canvas);
+  color: var(--c-ink);
+  font: 400 16px/1.5 'Inter', system-ui, sans-serif;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.c-field textarea { min-height: 144px; resize: vertical; }
+.c-field input::placeholder, .c-field textarea::placeholder { color: var(--c-faint); }
+.c-field input:hover, .c-field textarea:hover { border-color: #cfcac4; }
+.c-field input:focus, .c-field textarea:focus {
+  outline: none;
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px rgba(0,117,222,0.15);
+}
+
+.c-note {
+  display: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.c-note.is-visible { display: block; }
+.c-note--success { background: rgba(26,174,57,0.08); color: #137a2a; border: 1px solid rgba(26,174,57,0.25); }
+.c-note--error { background: rgba(196,50,10,0.06); color: var(--c-red); border: 1px solid rgba(196,50,10,0.25); }
+
+.c-form__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 6px;
+}
+.c-privacy { margin: 0; font-size: 14px; color: var(--c-muted); }
+
+/* Primary button — same as the hero */
+.c-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--c-primary);
+  color: #fff;
+  font: 500 16px/1.5 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+.c-btn:hover:not(:disabled) { background: var(--c-primary-active); }
+.c-btn:disabled { opacity: 0.7; cursor: progress; }
+.c-btn:focus-visible, .c-btn-utility:focus-visible, .c-link:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 3px;
+}
+.c-spin { animation: c-rotate 1s linear infinite; }
+
+/* Motion */
+.c-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--d, 0ms);
+}
+.c-reveal.is-in { opacity: 1; transform: none; }
+@keyframes c-ping {
+  0%   { box-shadow: 0 0 0 0 rgba(26,174,57,0.35); }
+  70%  { box-shadow: 0 0 0 7px rgba(26,174,57,0); }
+  100% { box-shadow: 0 0 0 0 rgba(26,174,57,0); }
+}
+@keyframes c-rotate { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .c-reveal { opacity: 1; transform: none; transition: none; }
+  .c-dot, .c-spin { animation: none; }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .c-card--side, .c-card--form { grid-column: 1 / -1; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .contact__inner { padding: 32px 16px 80px; }
+  .contact__header { margin-bottom: 32px; }
+  .contact__intro { font-size: 16px; }
+  .contact__grid { grid-template-columns: 1fr; }
+  .c-card--form, .c-card--side { padding: 24px; }
+  .c-form__row { grid-template-columns: 1fr; }
+  .c-form__foot { flex-direction: column-reverse; align-items: stretch; }
+  .c-privacy { text-align: center; }
+  .c-btn { width: 100%; }
+}
+`;

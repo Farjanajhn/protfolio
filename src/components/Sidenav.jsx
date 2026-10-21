@@ -1,184 +1,339 @@
-// Sidenav.jsx — MATCHES your dark + framed + glass style
-// Mobile: slide-in panel (glass). Desktop: floating glass icon rail.
-// No extra libs needed.
+// Sidenav.jsx — matches the hero's warm-minimal style
+// Desktop: floating pill bar at the top with text labels (no overlap with content)
+// Mobile: menu button top-right, light slide-in panel
+// Same tokens as Main.jsx and About.jsx; react-icons only for the menu/close icons
 
-import { useEffect, useState } from "react";
-import {
-  FaBars,
-  FaBookOpen,
-  FaEnvelope,
-  FaGripHorizontal,
-  FaHome,
-  FaInfo,
-  FaTimes,
-} from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
-const items = [
-  { href: "#main", label: "Home", Icon: FaHome },
-  { href: "#about", label: "About", Icon: FaInfo },
-  { href: "#skills", label: "Experience & Design process ", Icon: FaBookOpen },
-  { href: "#projects", label: "Projects", Icon: FaGripHorizontal },
-  { href: "#message", label: "Contact", Icon: FaEnvelope },
+const ITEMS = [
+  { href: "#main", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Experience" },
+  { href: "#projects", label: "Projects" },
+  { href: "#message", label: "Contact" },
 ];
 
 const Sidenav = () => {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("#main");
+  const closeBtn = useRef(null);
+  const menuBtn = useRef(null);
 
-  const toggle = () => setOpen((v) => !v);
-  const close = () => setOpen(false);
+  const close = () => {
+    setOpen(false);
+    menuBtn.current?.focus();
+  };
 
-  // Close on ESC
+  // Esc closes the panel; lock page scroll while it's open
   useEffect(() => {
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") close();
+    const onKey = (e) => e.key === "Escape" && open && close();
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open) closeBtn.current?.focus();
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [open]);
 
-  // Active section highlighting (simple + smooth)
+  // Highlight the section currently in view
   useEffect(() => {
-    const ids = items.map((i) => i.href.replace("#", ""));
-    const els = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
-
+    const els = ITEMS.map((i) => document.getElementById(i.href.slice(1))).filter(Boolean);
     const io = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target?.id) setActive(`#${visible.target.id}`);
+        if (visible) setActive(`#${visible.target.id}`);
       },
-      { root: null, threshold: [0.3, 0.5, 0.7] }
+      { rootMargin: "-30% 0px -50% 0px", threshold: [0, 0.25, 0.5] }
     );
-
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
 
   return (
-    <div className="fixed inset-x-0 top-0 z-[99] pointer-events-none">
-      {/* Mobile toggle button */}
-      <div className="pointer-events-auto">
-        <button
-          onClick={toggle}
-          aria-label="Open navigation"
-          className="md:hidden absolute right-4 top-4 inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/10 p-3 text-white shadow-lg backdrop-blur-md hover:bg-white/15 transition"
-        >
-          <FaBars />
-        </button>
-      </div>
+    <>
+      <style>{css}</style>
 
-      {/* Mobile overlay + panel */}
-      {open && (
-        <div className="pointer-events-auto fixed inset-0 z-[100]">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={close}
-            aria-hidden
-          />
-
-          {/* Slide panel */}
-          <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm border-l border-white/10 bg-[#0b0f14]/90 backdrop-blur-xl shadow-2xl">
-            <div className="flex items-center justify-between p-5">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                <p className="text-sm font-semibold text-white">Navigation</p>
-              </div>
-              <button
-                onClick={close}
-                aria-label="Close navigation"
-                className="rounded-xl border border-white/15 bg-white/10 p-2 text-white hover:bg-white/15 transition"
+      {/* ── Desktop: floating pill bar ── */}
+      <nav className="nav-bar" aria-label="Main">
+        <a href="#main" className="nav-bar__brand">Farjana</a>
+        <ul className="nav-bar__list">
+          {ITEMS.slice(1).map(({ href, label }) => (
+            <li key={href}>
+              <a
+                href={href}
+                className={`nav-bar__link${active === href ? " is-active" : ""}`}
+                aria-current={active === href ? "true" : undefined}
               >
-                <FaTimes />
-              </button>
-            </div>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-            <div className="px-5 pb-6">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Sections
-              </p>
+      {/* ── Mobile: menu button ── */}
+      <button
+        ref={menuBtn}
+        type="button"
+        className="nav-toggle"
+        onClick={() => setOpen(true)}
+        aria-label="Open menu"
+        aria-expanded={open}
+        aria-controls="nav-panel"
+      >
+        <FaBars size={16} />
+      </button>
 
-              <div className="mt-4 space-y-3">
-                {items.map(({ href, label, Icon }) => {
-                  const isActive = active === href;
-                  return (
-                    <a
-                      key={href}
-                      href={href}
-                      onClick={close}
-                      className={`flex items-center gap-3 rounded-2xl border px-4 py-3 transition ${
-                        isActive
-                          ? "border-emerald-300/40 bg-emerald-300/10 text-white"
-                          : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
-                      }`}
-                    >
-                      <span
-                        className={`grid h-10 w-10 place-items-center rounded-xl ${
-                          isActive
-                            ? "bg-emerald-400 text-black"
-                            : "bg-white/10 text-white"
-                        }`}
-                      >
-                        <Icon />
-                      </span>
-                      <span className="font-medium">{label}</span>
-                      <span className="ml-auto text-white/40">→</span>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
+      {/* ── Mobile: panel ── */}
+      <div className={`nav-sheet${open ? " is-open" : ""}`}>
+        <div className="nav-sheet__backdrop" onClick={close} />
+        <div
+          id="nav-panel"
+          className="nav-sheet__panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
+          <div className="nav-sheet__head">
+            <span className="nav-sheet__brand">Farjana</span>
+            <button ref={closeBtn} type="button" className="nav-sheet__close" onClick={close} aria-label="Close menu">
+              <FaTimes size={16} />
+            </button>
           </div>
-        </div>
-      )}
 
-      {/* Desktop floating rail */}
-      <div className="hidden md:block pointer-events-auto fixed left-6 top-1/2 -translate-y-1/2 z-[90]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-md">
-          <div className="flex flex-col gap-2">
-            {items.map(({ href, label, Icon }) => {
-              const isActive = active === href;
-              return (
+          <p className="nav-sheet__eyebrow">Sections</p>
+          <ul className="nav-sheet__list">
+            {ITEMS.map(({ href, label }) => (
+              <li key={href}>
                 <a
-                  key={href}
                   href={href}
-                  aria-label={label}
-                  title={label}
-                  className={`group relative grid h-12 w-12 place-items-center rounded-2xl border transition ${
-                    isActive
-                      ? "border-emerald-300/40 bg-emerald-300/10"
-                      : "border-white/10 bg-white/5 hover:bg-white/10"
-                  }`}
+                  onClick={() => setOpen(false)}
+                  className={`nav-sheet__link${active === href ? " is-active" : ""}`}
+                  aria-current={active === href ? "true" : undefined}
                 >
-                  <span
-                    className={`transition ${
-                      isActive ? "text-emerald-300" : "text-white/80"
-                    }`}
-                  >
-                    <Icon size={18} />
-                  </span>
-
-                  {/* Tooltip */}
-                  <span className="pointer-events-none absolute left-14 whitespace-nowrap rounded-xl border border-white/10 bg-[#0b0f14]/90 px-3 py-2 text-xs text-white/80 opacity-0 shadow-lg backdrop-blur-md transition group-hover:opacity-100">
-                    {label}
-                  </span>
+                  {label}
+                  <span aria-hidden="true">→</span>
                 </a>
-              );
-            })}
-          </div>
+              </li>
+            ))}
+          </ul>
+
+          <p className="nav-sheet__status">
+            <span className="nav-dot" aria-hidden="true" />
+            Open to UX/UI roles · Umeå, Sweden
+          </p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Sidenav;
 
+/* ───────────────────────────────────────────── */
+/* Same tokens as Main.jsx */
+const css = `
+:root {
+  --n-primary: #0075de;
+  --n-ink: #000000;
+  --n-ink-2: #31302e;
+  --n-muted: #615d59;
+  --n-canvas: #ffffff;
+  --n-paper: #f6f5f4;
+  --n-line: #e6e6e6;
+  --n-green: #1aae39;
+  --n-shadow:
+    0 1px 1px rgba(0,0,0,0.03),
+    0 2px 4px rgba(0,0,0,0.03),
+    0 6px 12px rgba(0,0,0,0.035),
+    0 16px 32px rgba(0,0,0,0.04);
+}
+.nav-bar, .nav-bar *, .nav-toggle, .nav-sheet, .nav-sheet * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 80px; }
 
-/*<a href="#resume" className='rounded-full shadow-lg bg-gray-100 shadow-gray-400 m-2 p-4 cursor-pointer hover:scale-110 ease-in duration-300'>
-<FaIdBadge/>
-</a> */
+/* Desktop bar */
+.nav-bar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  z-index: 90;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 20px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid var(--n-line);
+  box-shadow: var(--n-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+.nav-bar__brand {
+  margin-right: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--n-ink);
+  text-decoration: none;
+}
+.nav-bar__list {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-bar__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n-muted);
+  text-decoration: none;
+  transition: color .15s ease, background-color .15s ease;
+}
+.nav-bar__link:hover { color: var(--n-ink); background: var(--n-paper); }
+.nav-bar__link.is-active { color: var(--n-primary); background: rgba(0,117,222,0.08); }
+
+/* Mobile toggle */
+.nav-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 90;
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: var(--n-canvas);
+  border: 1px solid var(--n-line);
+  box-shadow: var(--n-shadow);
+  color: var(--n-ink);
+  cursor: pointer;
+}
+
+/* Mobile sheet */
+.nav-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  visibility: hidden;
+  transition: visibility 0s linear .3s;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+.nav-sheet.is-open { visibility: visible; transition-delay: 0s; }
+.nav-sheet__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20,20,19,0.35);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.nav-sheet.is-open .nav-sheet__backdrop { opacity: 1; }
+.nav-sheet__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(85%, 360px);
+  height: 100%;
+  padding: 16px 20px 24px;
+  background: var(--n-paper);
+  border-left: 1px solid var(--n-line);
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.nav-sheet.is-open .nav-sheet__panel { transform: none; }
+.nav-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+.nav-sheet__brand { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--n-ink); }
+.nav-sheet__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: var(--n-canvas);
+  border: 1px solid var(--n-line);
+  color: var(--n-ink);
+  cursor: pointer;
+}
+.nav-sheet__eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--n-muted);
+}
+.nav-sheet__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-sheet__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: var(--n-canvas);
+  border: 1px solid var(--n-line);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--n-ink-2);
+  text-decoration: none;
+}
+.nav-sheet__link span { color: var(--n-muted); }
+.nav-sheet__link.is-active { border-color: var(--n-primary); color: var(--n-primary); }
+.nav-sheet__link.is-active span { color: var(--n-primary); }
+.nav-sheet__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: auto 0 0;
+  font-size: 14px;
+  color: var(--n-muted);
+}
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--n-green); }
+
+/* Focus */
+.nav-bar a:focus-visible,
+.nav-toggle:focus-visible,
+.nav-sheet__close:focus-visible,
+.nav-sheet__link:focus-visible {
+  outline: 2px solid var(--n-primary);
+  outline-offset: 2px;
+}
+
+/* Switch to the menu button below 768px */
+@media (max-width: 767px) {
+  .nav-bar { display: none; }
+  .nav-toggle { display: grid; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .nav-sheet__panel, .nav-sheet__backdrop, .nav-bar__link { transition: none; }
+}
+`;

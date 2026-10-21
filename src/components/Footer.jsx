@@ -1,271 +1,214 @@
-// Footer.jsx — Redesign + Fully Responsive
-// Editorial dark aesthetic — consistent with portfolio system
+// Footer.jsx — minimal, same tokens as Main/About/Skills/Projects/Contact
+// Layout: 12-col grid — identity (6) | navigate (3) | connect (3)
 
-import { useEffect, useState } from "react";
-import { FaDribbble, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
-
-/* ─── Window width hook ─── */
-const useWindowWidth = () => {
-  const [w, setW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
-  useEffect(() => {
-    const fn = () => setW(window.innerWidth);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
-  }, []);
-  return w;
-};
-
-const socialLinks = [
-  { icon: FaGithub,   href: "https://github.com/Farjanajhn",              label: "GitHub" },
-  { icon: FaLinkedin, href: "https://www.linkedin.com/in/farjanajhn/",    label: "LinkedIn" },
-  { icon: FaTwitter,  href: "https://twitter.com/farjanajhn12",           label: "Twitter" },
-  { icon: FaDribbble, href: "https://dribbble.com/farjanajhn",            label: "Dribbble" },
-];
-
-const services = [
-  "UX Research & Usability Testing",
-  "UI / Interaction Design",
-  "Prototyping & Design Systems",
-  "Frontend Development (React)",
-];
-
-const navLinks = [
-  { label: "Home",     href: "#main" },
-  { label: "About",    href: "#about" },
+const NAV = [
+  { label: "Home", href: "#main" },
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#skills" },
   { label: "Projects", href: "#projects" },
-  { label: "Skills",   href: "#skills" },
-  { label: "Contact",  href: "#message" },
+  { label: "Contact", href: "#message" },
 ];
 
-const Footer = () => {
-  const width    = useWindowWidth();
-  const isMobile = width < 768;
-  const isTablet = width >= 768 && width < 1024;
+const LINKS = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/farjanajhn/" },
+  { label: "GitHub", href: "https://github.com/Farjanajhn" },
+  { label: "X / Twitter", href: "https://twitter.com/farjanajhn12" },
+  { label: "Dribbble", href: "https://dribbble.com/farjanajhn" },
+];
 
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap";
-    document.head.appendChild(link);
-  }, []);
+const ArrowUpRight = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M3.5 8.5l5-5M4 3.5h4.5V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
-  const px = isMobile ? "20px" : isTablet ? "32px" : "40px";
+const ArrowUp = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M8 13V3M4 7l4-4 4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
-  return (
-    <footer style={{
-      position: "relative",
-      background: "#060a0e",
-      overflow: "hidden",
-      fontFamily: "'Lato', sans-serif",
-    }}>
+const Footer = () => (
+  <footer className="site-footer">
+    <style>{css}</style>
 
-      {/* Ambient glows */}
-      <div aria-hidden style={{ position: "absolute", bottom: -100, left: -100, width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div aria-hidden style={{ position: "absolute", top: -80, right: -80, width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.03) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-      {/* Top gradient line */}
-   
-
-
-      {/* ── Main footer grid ── */}
-      <div style={{
-        maxWidth: 1200, margin: "0 auto",
-        padding: isMobile ? "36px 20px 28px" : `44px ${px} 32px`,
-      }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : isTablet ? "1fr 1fr" : "2fr 1fr 1fr 1fr",
-          gap: isMobile ? 36 : 32,
-        }}>
-
-          {/* ── Col 1: Identity ── */}
-          <div>
-            {/* Name + title */}
-            <div style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: isMobile ? 20 : 22, fontWeight: 800,
-              color: "#f8fafc", letterSpacing: "-0.02em", marginBottom: 4,
-            }}>
-              Farjana Jahan Sathi
-            </div>
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 11,
-              color: "#6ee7b7", letterSpacing: "0.1em",
-              textTransform: "uppercase", marginBottom: 14,
-            }}>
-              Junior UX Designer
-            </div>
-
-            <p style={{
-              fontSize: 13, lineHeight: 1.75,
-              color: "rgba(255,255,255,0.45)", maxWidth: 280, margin: "0 0 18px",
-            }}>
-              Designing accessible, human-centered digital experiences — from
-              research to polished interfaces.
-            </p>
-
-            {/* Location badge */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "5px 12px", borderRadius: 999,
-              border: "1px solid rgba(255,255,255,0.08)",
-              background: "rgba(255,255,255,0.03)",
-            }}>
-              <span style={{ fontSize: 13 }}>🇸🇪</span>
-              <span style={{
-                fontFamily: "'DM Mono', monospace", fontSize: 10,
-                color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em",
-              }}>
-                Umeå, Sweden
-              </span>
-            </div>
-          </div>
-
-          {/* ── Col 2: What I Do ── */}
-          <div>
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 10,
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.3)", marginBottom: 18,
-            }}>
-              What I Do
-            </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {services.map(s => (
-                <li key={s} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                  <div style={{
-                    width: 4, height: 4, borderRadius: "50%", flexShrink: 0,
-                    background: "linear-gradient(135deg, #059669, #34d399)",
-                    marginTop: 7,
-                  }} />
-                  <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, transition: "color 0.2s", cursor: "default" }}
-                    onMouseEnter={e => e.currentTarget.style.color = "#6ee7b7"}
-                    onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.55)"}
-                  >
-                    {s}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* ── Col 3: Navigation ── */}
-          <div>
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 10,
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.3)", marginBottom: 18,
-            }}>
-              Navigate
-            </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {navLinks.map(({ label, href }) => (
-                <li key={label}>
-                  <a href={href} style={{
-                    fontSize: 13, color: "rgba(255,255,255,0.55)",
-                    textDecoration: "none", transition: "color 0.2s",
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                  }}
-                    onMouseEnter={e => e.currentTarget.style.color = "#6ee7b7"}
-                    onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.55)"}
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* ── Col 4: Connect ── */}
-          <div>
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 10,
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.3)", marginBottom: 18,
-            }}>
-              Connect
-            </div>
-
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
-              {socialLinks.map(({ icon: Icon, href, label }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer"
-                  aria-label={label}
-                  style={{
-                    width: 40, height: 40, borderRadius: 10,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    background: "rgba(255,255,255,0.04)",
-                    color: "rgba(255,255,255,0.5)", textDecoration: "none",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = "rgba(16,185,129,0.1)";
-                    e.currentTarget.style.borderColor = "rgba(52,211,153,0.3)";
-                    e.currentTarget.style.color = "#6ee7b7";
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                    e.currentTarget.style.color = "rgba(255,255,255,0.5)";
-                    e.currentTarget.style.transform = "";
-                  }}
-                >
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
-
-            <a href="mailto:farjanajhn12@gmail.com" style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "9px 14px", borderRadius: 10,
-              border: "1px solid rgba(255,255,255,0.07)",
-              background: "rgba(255,255,255,0.03)",
-              textDecoration: "none", transition: "all 0.2s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(52,211,153,0.2)"; e.currentTarget.style.background = "rgba(16,185,129,0.05)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-            >
-              <span style={{ fontSize: 14 }}>📧</span>
-              <span style={{
-                fontFamily: "'DM Mono', monospace", fontSize: 11,
-                color: "rgba(255,255,255,0.45)", letterSpacing: "0.04em",
-              }}>
-                farjanajhn12@gmail.com
-              </span>
-            </a>
-          </div>
-
+    <div className="site-footer__inner">
+      <div className="site-footer__grid">
+        {/* Identity */}
+        <div className="site-footer__id">
+          <p className="site-footer__name">Farjana Jahan Sathi</p>
+          <p className="site-footer__role">UX/UI Designer · Umeå, Sweden</p>
+          <p className="site-footer__line">
+            Designing accessible, human-centered digital experiences, from research
+            to polished interfaces.
+          </p>
+          <a className="site-footer__email" href="mailto:farjanajhn12@gmail.com">
+            farjanajhn12@gmail.com
+          </a>
         </div>
 
-        {/* ── Bottom bar ── */}
-        <div style={{
-          marginTop: 40, paddingTop: 20,
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          alignItems: isMobile ? "flex-start" : "center",
-          justifyContent: "space-between",
-          gap: isMobile ? 10 : 0,
-        }}>
-          <span style={{
-            fontFamily: "'DM Mono', monospace", fontSize: 11,
-            color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em",
-          }}>
-            © {new Date().getFullYear()} Farjana Jahan Sathi. All rights reserved.
-          </span>
+        {/* Navigate */}
+        <nav className="site-footer__col" aria-label="Footer">
+          <p className="site-footer__eyebrow">Navigate</p>
+          <ul className="site-footer__list">
+            {NAV.map(({ label, href }) => (
+              <li key={label}><a href={href}>{label}</a></li>
+            ))}
+          </ul>
+        </nav>
 
-          <span style={{
-            fontFamily: "'DM Mono', monospace", fontSize: 11,
-            color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em",
-          }}>
-            Designed & built with ♥ using React
-          </span>
+        {/* Connect */}
+        <div className="site-footer__col">
+          <p className="site-footer__eyebrow">Connect</p>
+          <ul className="site-footer__list">
+            {LINKS.map(({ label, href }) => (
+              <li key={label}>
+                <a href={href} target="_blank" rel="noreferrer">
+                  {label} <ArrowUpRight />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
-    </footer>
-  );
-};
+      <div className="site-footer__bar">
+        <p>© {new Date().getFullYear()} Farjana Jahan Sathi. Designed and built in React.</p>
+        <a href="#main" className="site-footer__top">
+          Back to top <ArrowUp />
+        </a>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;
+
+/* ───────────────────────────────────────────── */
+/* Same tokens as Main.jsx */
+const css = `
+.site-footer {
+  --sf-primary: #0075de;
+  --sf-ink: #000000;
+  --sf-ink-2: #31302e;
+  --sf-muted: #615d59;
+  --sf-paper: #f6f5f4;
+  --sf-line: #e6e6e6;
+
+  background: var(--sf-paper);
+  color: var(--sf-ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.site-footer *, .site-footer *::before, .site-footer *::after { box-sizing: border-box; }
+
+.site-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px 16px;
+  padding-top: 56px;
+  border-top: 1px solid var(--sf-line);
+}
+.site-footer__id { grid-column: span 6; }
+.site-footer__col { grid-column: span 3; }
+
+/* Identity */
+.site-footer__name { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+.site-footer__role { margin: 4px 0 12px; font-size: 14px; color: var(--sf-muted); }
+.site-footer__line {
+  margin: 0 0 16px;
+  max-width: 26rem;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--sf-ink-2);
+}
+.site-footer__email {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--sf-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.site-footer__email:hover { border-color: var(--sf-primary); }
+
+/* Columns */
+.site-footer__eyebrow {
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--sf-muted);
+}
+.site-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.site-footer__list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  color: var(--sf-ink-2);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.site-footer__list a:hover { color: var(--sf-primary); }
+
+/* Bottom bar */
+.site-footer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--sf-line);
+}
+.site-footer__bar p { margin: 0; font-size: 14px; color: var(--sf-muted); }
+.site-footer__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sf-ink-2);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.site-footer__top:hover { color: var(--sf-primary); }
+
+.site-footer a:focus-visible {
+  outline: 2px solid var(--sf-primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer__list a, .site-footer__top { transition: none; }
+}
+
+/* Tablet: identity full width, two columns below */
+@media (max-width: 1023px) {
+  .site-footer__id { grid-column: 1 / -1; }
+  .site-footer__col { grid-column: span 6; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .site-footer__inner { padding: 0 16px 28px; }
+  .site-footer__grid { padding-top: 48px; }
+  .site-footer__bar { flex-direction: column; align-items: flex-start; }
+}
+`;

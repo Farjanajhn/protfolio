@@ -1,479 +1,433 @@
-// Skills.jsx — Experience + Design Process — Redesign + Fully Responsive
-// Editorial dark aesthetic — consistent with Main/About/Projects system
+// Skills.jsx — Experience + Design process
+// Minimal, same tokens and components as Main.jsx and About.jsx
+// Layout: 12-col grid. Experience card uses the same 4 | 8 split as About.
 
-import { useEffect, useState } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { useEffect, useRef } from "react";
 
-/* ─── Noise grain ─── */
-const NoiseLayer = () => (
-  <svg aria-hidden style={{
-    position: "absolute", inset: 0, width: "100%", height: "100%",
-    pointerEvents: "none", zIndex: 1, opacity: 0.03, mixBlendMode: "overlay",
-  }}>
-    <filter id="sn">
-      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#sn)" />
-  </svg>
-);
+const EXPERIENCE = [
+  {
+    role: "UX/UI Designer",
+    type: "Internship",
+    current: true,
+    company: "Intraction",
+    location: "Stockholm, Sweden · Remote",
+    dates: "Sep 2026 – Present",
+    summary:
+      "Improving a digital platform that uses interactive, game-based activities and data-driven insights to help teams collaborate and communicate better.",
+    bullets: [
+      "Design and refine interfaces that are intuitive, accessible and engaging.",
+      "Improve user journeys across game sessions, dashboards and post-session experiences so they're smoother and easier to navigate.",
+      "Explore clear ways to visualize team performance, behavioural insights and feedback.",
+      "Contribute to redesigning key parts of the platform, including dashboards, upcoming activities, loading screens and website pages.",
+      "Build wireframes, high-fidelity designs and interactive prototypes in Figma, iterating with the developer and CPO based on feedback.",
+      "Run QA on the product, catching functional and usability issues and reporting them to the team.",
+    ],
+    tools: ["Figma", "Interaction Design", "Prototyping", "Data Visualization", "User Research", "QA Testing", "Cross-functional Collaboration"],
+  },
+  {
+    role: "Software Tester",
+    type: "Internship",
+    company: "Vitec Software Group",
+    location: "Umeå, Sweden",
+    dates: "Nov 2021 – Mar 2022",
+    bullets: [
+      "Ran functional and regression testing in Azure DevOps (TFS) to improve application performance and reliability.",
+      "Validated data with SQL queries to ensure data integrity and smooth system integration.",
+      "Worked with developers and product owners in agile sprints to improve usability and user experience.",
+      "Supported release documentation and took part in sprint retrospectives to streamline QA workflows.",
+    ],
+    tools: ["Azure DevOps", "TFS", "SQL", "Agile / Scrum", "QA Documentation"],
+  },
+];
 
-/* ─── Window width hook ─── */
-const useWindowWidth = () => {
-  const [w, setW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+const PROCESS = [
+  {
+    title: "Research",
+    color: "var(--s-sky)",
+    desc: "Understand users, goals, constraints and context through interviews, surveys and mixed-method studies.",
+    methods: ["User interviews", "Surveys", "Competitive analysis", "MAXQDA"],
+  },
+  {
+    title: "Ideation",
+    color: "var(--s-purple)",
+    desc: "Explore solutions, map user flows and prioritize ideas by user value and technical feasibility.",
+    methods: ["User flows", "Journey maps", "MoSCoW", "Affinity mapping"],
+  },
+  {
+    title: "Prototyping",
+    color: "var(--s-orange)",
+    desc: "Turn concepts into wireframes and high-fidelity interfaces using design systems in Figma.",
+    methods: ["Lo-fi wireframes", "Hi-fi prototypes", "Design systems", "Figma"],
+  },
+  {
+    title: "Testing",
+    color: "var(--s-green)",
+    desc: "Evaluate usability, accessibility and interaction quality through moderated testing and fast iteration.",
+    methods: ["Usability testing", "Think-aloud", "WCAG checks", "Iteration"],
+  },
+];
+
+/* Fades cards in once as they scroll into view */
+const useReveal = () => {
+  const ref = useRef(null);
   useEffect(() => {
-    const fn = () => setW(window.innerWidth);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
+    const root = ref.current;
+    if (!root) return;
+    const items = root.querySelectorAll(".s-reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      }),
+      { threshold: 0.15 }
+    );
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
-  return w;
+  return ref;
 };
 
-/* ─── Tag pill ─── */
-const Tag = ({ children }) => (
-  <span style={{
-    display: "inline-flex", alignItems: "center",
-    padding: "3px 12px", borderRadius: 999,
-    border: "1px solid rgba(52,211,153,0.25)",
-    background: "rgba(16,185,129,0.07)",
-    color: "#6ee7b7", fontSize: 11,
-    letterSpacing: "0.12em", textTransform: "uppercase",
-    fontFamily: "'DM Mono', monospace",
-  }}>
-    {children}
-  </span>
-);
-
-/* ─── Process step descriptions ─── */
-const processSteps = [
-  {
-    number: "01",
-    title: "Research",
-    icon: "🔍",
-    color: "#3b82f6",
-    colorLight: "rgba(59,130,246,0.1)",
-    colorBorder: "rgba(59,130,246,0.2)",
-    colorText: "#93c5fd",
-    desc: "Understand users, goals, constraints, and context through qualitative interviews, surveys, and mixed-method studies.",
-    methods: ["User Interviews", "Surveys", "Competitive Analysis", "MAXQDA"],
-  },
-  {
-    number: "02",
-    title: "Ideation",
-    icon: "💡",
-    color: "#8b5cf6",
-    colorLight: "rgba(139,92,246,0.1)",
-    colorBorder: "rgba(167,139,250,0.2)",
-    colorText: "#c4b5fd",
-    desc: "Explore solution spaces, map user flows, and prioritize ideas based on user value and technical feasibility.",
-    methods: ["User Flows", "Journey Maps", "MoSCoW", "Affinity Mapping"],
-  },
-  {
-    number: "03",
-    title: "Prototyping",
-    icon: "⚡",
-    color: "#10b981",
-    colorLight: "rgba(16,185,129,0.1)",
-    colorBorder: "rgba(52,211,153,0.2)",
-    colorText: "#6ee7b7",
-    desc: "Translate concepts into wireframes and high-fidelity interfaces using design systems in Figma.",
-    methods: ["Lo-fi Wireframes", "Hi-fi Prototypes", "Design Systems", "Figma"],
-  },
-  {
-    number: "04",
-    title: "Testing",
-    icon: "✅",
-    color: "#d97706",
-    colorLight: "rgba(217,119,6,0.1)",
-    colorBorder: "rgba(251,191,36,0.2)",
-    colorText: "#fcd34d",
-    desc: "Evaluate usability, accessibility, and interaction quality through moderated testing and rapid iteration.",
-    methods: ["Usability Testing", "Think-Aloud", "WCAG Checks", "Iteration"],
-  },
-];
-
-/* ─── Experience bullets ─── */
-const bullets = [
-  "Conducted functional and regression testing using Azure DevOps (TFS) to improve application performance and reliability.",
-  "Executed SQL-based validation to ensure data integrity and smooth system integration.",
-  "Collaborated with developers and product owners in agile sprints to enhance usability and user experience.",
-  "Supported release documentation and participated in sprint retrospectives to streamline QA workflows.",
-];
-
-/* ─── Process Card ─── */
-function ProcessCard({ step, isMobile, index }) {
-  const [hovered, setHovered] = useState(false);
-  const { number, title, icon, color, colorLight, colorBorder, colorText, desc, methods } = step;
-
-  return (
-    <div
-      data-aos="fade-up"
-      data-aos-delay={isMobile ? 0 : index * 80}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        borderRadius: 20, padding: isMobile ? "20px 18px" : "24px 22px",
-        border: `1px solid ${hovered ? colorBorder : "rgba(255,255,255,0.07)"}`,
-        borderTop: `2px solid ${hovered ? color : "rgba(255,255,255,0.1)"}`,
-        background: hovered ? colorLight : "rgba(255,255,255,0.03)",
-        backdropFilter: "blur(8px)",
-        transition: "all 0.3s ease",
-        transform: hovered ? "translateY(-4px)" : "none",
-        cursor: "default",
-        display: "flex", flexDirection: "column", gap: 14,
-      }}
-    >
-      {/* Step number + icon */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{
-          fontFamily: "'DM Mono', monospace", fontSize: 11,
-          color: colorText, letterSpacing: "0.12em",
-          background: colorLight, border: `1px solid ${colorBorder}`,
-          padding: "3px 10px", borderRadius: 999,
-        }}>
-          {number}
-        </span>
-        <span style={{ fontSize: 22 }}>{icon}</span>
-      </div>
-
-      {/* Title */}
-      <div style={{
-        fontFamily: "'Playfair Display', serif",
-        fontSize: isMobile ? 18 : 20, fontWeight: 800,
-        color: "#f8fafc", letterSpacing: "-0.02em",
-      }}>
-        {title}
-      </div>
-
-      {/* Description */}
-      <p style={{
-        fontFamily: "'Lato', sans-serif",
-        fontSize: 13, lineHeight: 1.7,
-        color: "rgba(255,255,255,0.55)", margin: 0, flex: 1,
-      }}>
-        {desc}
-      </p>
-
-      {/* Method tags */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {methods.map(m => (
-          <span key={m} style={{
-            fontFamily: "'DM Mono', monospace", fontSize: 10,
-            color: hovered ? colorText : "rgba(255,255,255,0.4)",
-            background: hovered ? colorLight : "rgba(255,255,255,0.04)",
-            border: `1px solid ${hovered ? colorBorder : "rgba(255,255,255,0.08)"}`,
-            padding: "3px 9px", borderRadius: 999,
-            transition: "all 0.3s",
-            letterSpacing: "0.06em",
-          }}>
-            {m}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─── MAIN ─── */
 const Skills = () => {
-  const width    = useWindowWidth();
-  const isMobile = width < 768;
-  const isTablet = width >= 768 && width < 1024;
-
-  useEffect(() => {
-    AOS.init({ duration: 900, once: true, easing: "ease-out-quart" });
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap";
-    document.head.appendChild(link);
-  }, []);
-
-  const px = isMobile ? "20px" : isTablet ? "32px" : "40px";
-  const py = isMobile ? "80px" : "120px";
-
-  const processGridCols = isMobile ? "1fr" : isTablet ? "1fr 1fr" : "repeat(4, 1fr)";
+  const ref = useReveal();
 
   return (
-    <section id="skills" style={{
-      position: "relative", minHeight: "100vh",
-      overflow: "hidden", background: "#080c10",
-      fontFamily: "'Lato', sans-serif",
-    }}>
-      <NoiseLayer />
+    <section id="skills" className="skills" aria-labelledby="skills-title" ref={ref}>
+      <style>{css}</style>
 
-      {/* Ambient glows */}
-      <div aria-hidden style={{ position: "absolute", top: -200, left: -100, width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <div aria-hidden style={{ position: "absolute", bottom: -150, right: -100, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.05) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-
-      <div style={{
-        position: "relative", zIndex: 2,
-        maxWidth: 1200, margin: "0 auto",
-        padding: `${py} ${px}`,
-        boxSizing: "border-box",
-      }}>
-   <div style={{ height: 1, background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)" }} />
-        {/* ═══════════════════════════════════════
-            EXPERIENCE SECTION
-        ═══════════════════════════════════════ */}
-        <div data-aos="fade-up" style={{ marginBottom: isMobile ? 64 : 100 }}>
-
-          {/* Section heading */}
-          <Tag>Experience</Tag>
-          <h2 style={{
-            marginTop: 14, marginBottom: 0,
-            fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? "clamp(30px, 9vw, 44px)" : "clamp(36px, 5vw, 60px)",
-            fontWeight: 900, lineHeight: 1.0,
-            letterSpacing: "-0.03em", color: "#f8fafc",
-          }}>
-            Professional{" "}
-            <span style={{
-              background: "linear-gradient(135deg, #34d399 0%, #6ee7b7 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              fontStyle: "italic",
-            }}>
-              Experience
-            </span>
+      <div className="skills__inner">
+        {/* ── Experience ── */}
+        <header className="skills__header s-reveal">
+          <p className="s-badge">Experience</p>
+          <h2 id="skills-title" className="skills__title">
+            Professional <span className="skills__mark">experience</span>
           </h2>
-          <p style={{
-            marginTop: 14, maxWidth: 500,
-            fontFamily: "'Lato', sans-serif",
-            fontSize: isMobile ? 14 : 16, lineHeight: 1.7,
-            color: "rgba(255,255,255,0.5)",
-          }}>
-            Practical experience in software testing, agile collaboration,
-            and supporting usability-focused product development.
+          <p className="skills__intro">
+            UX/UI design and QA on a live product today, backed by hands-on
+            experience in software testing and agile teams.
           </p>
+        </header>
 
-          {/* Experience card */}
-          <div
-            data-aos="fade-up"
-            data-aos-delay="100"
-            style={{
-              marginTop: isMobile ? 28 : 40,
-              borderRadius: 22, overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderTop: "2px solid #10b981",
-              background: "rgba(255,255,255,0.03)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            {/* Card header */}
-            <div style={{
-              padding: isMobile ? "22px 20px 18px" : "28px 32px 22px",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              alignItems: isMobile ? "flex-start" : "center",
-              justifyContent: "space-between",
-              gap: isMobile ? 12 : 0,
-            }}>
-              <div>
-                <div style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: isMobile ? 18 : 22, fontWeight: 800,
-                  color: "#f8fafc", marginBottom: 4,
-                }}>
-                  Software Tester
-                  <span style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 11, fontWeight: 400,
-                    color: "#6ee7b7",
-                    background: "rgba(16,185,129,0.08)",
-                    border: "1px solid rgba(52,211,153,0.2)",
-                    padding: "2px 10px", borderRadius: 999,
-                    marginLeft: 10, verticalAlign: "middle",
-                    letterSpacing: "0.08em",
-                  }}>
-                    Intern
-                  </span>
-                </div>
-                <div style={{
-                  fontFamily: "'DM Mono', monospace", fontSize: 12,
-                  color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em",
-                }}>
-                  Vitec Software Group · Umeå, Sweden
-                </div>
-              </div>
-
-              {/* Date badge */}
-              <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "8px 16px", borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.03)",
-                backdropFilter: "blur(8px)",
-                flexShrink: 0,
-              }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#6ee7b7", flexShrink: 0 }} />
-                <span style={{
-                  fontFamily: "'DM Mono', monospace", fontSize: 11,
-                  color: "rgba(255,255,255,0.5)", letterSpacing: "0.08em",
-                  whiteSpace: "nowrap",
-                }}>
-                  Nov 2021 – Mar 2022
-                </span>
-              </div>
-            </div>
-
-            {/* Bullet list */}
-            <div style={{ padding: isMobile ? "18px 20px 22px" : "24px 32px 28px" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 12 : 14 }}>
-                {bullets.map((text, i) => (
-                  <div
-                    key={i}
-                    data-aos="fade-up"
-                    data-aos-delay={i * 60}
-                    style={{ display: "flex", gap: 14, alignItems: "flex-start" }}
-                  >
-                    <div style={{
-                      width: 6, height: 6, borderRadius: "50%",
-                      background: "linear-gradient(135deg, #059669, #34d399)",
-                      marginTop: 7, flexShrink: 0,
-                      boxShadow: "0 0 6px rgba(52,211,153,0.5)",
-                    }} />
-                    <p style={{
-                      fontFamily: "'Lato', sans-serif",
-                      fontSize: isMobile ? 13 : 14, lineHeight: 1.75,
-                      color: "rgba(255,255,255,0.65)", margin: 0,
-                    }}>
-                      {text}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Skills used row */}
-              <div style={{
-                marginTop: 22, paddingTop: 18,
-                borderTop: "1px solid rgba(255,255,255,0.06)",
-                display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center",
-              }}>
-                <span style={{
-                  fontFamily: "'DM Mono', monospace", fontSize: 10,
-                  color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em",
-                  textTransform: "uppercase", marginRight: 4,
-                }}>
-                  Tools used
-                </span>
-                {["Azure DevOps", "TFS", "SQL", "Agile / Scrum", "QA Documentation"].map(tool => (
-                  <span key={tool} style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 10,
-                    color: "rgba(255,255,255,0.5)",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    padding: "3px 10px", borderRadius: 999,
-                    letterSpacing: "0.06em",
-                  }}>
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Divider ── */}
-        <div style={{
-          marginBottom: isMobile ? 64 : 100,
-          height: 1,
-          background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
-        }} />
-
-        {/* ═══════════════════════════════════════
-            DESIGN PROCESS SECTION
-        ═══════════════════════════════════════ */}
-        <div>
-          {/* Section heading */}
-          <div data-aos="fade-up" style={{ marginBottom: isMobile ? 32 : 48 }}>
-            <Tag>Methodology</Tag>
-            <h2 style={{
-              marginTop: 14, marginBottom: 0,
-              fontFamily: "'Playfair Display', serif",
-              fontSize: isMobile ? "clamp(30px, 9vw, 44px)" : "clamp(36px, 5vw, 60px)",
-              fontWeight: 900, lineHeight: 1.0,
-              letterSpacing: "-0.03em", color: "#f8fafc",
-            }}>
-              Structured{" "}
-              <span style={{
-                background: "linear-gradient(135deg, #34d399 0%, #6ee7b7 100%)",
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                fontStyle: "italic",
-              }}>
-                Design Process
-              </span>
-            </h2>
-            <p style={{
-              marginTop: 14, maxWidth: 560,
-              fontFamily: "'Lato', sans-serif",
-              fontSize: isMobile ? 14 : 16, lineHeight: 1.7,
-              color: "rgba(255,255,255,0.5)",
-            }}>
-              A repeatable UX workflow grounded in Human-Computer Interaction,
-              ensuring usability, accessibility, and user-validated decisions at every stage.
-            </p>
-          </div>
-
-          {/* Process flow line — desktop only */}
-          {!isMobile && (
-            <div style={{
-              position: "relative", marginBottom: 28,
-              height: 2,
-              background: "linear-gradient(to right, #3b82f6, #8b5cf6, #10b981, #d97706)",
-              borderRadius: 2, opacity: 0.35,
-            }} />
-          )}
-
-          {/* Process cards grid */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: processGridCols,
-            gap: isMobile ? 14 : 16,
-          }}>
-            {processSteps.map((step, i) => (
-              <ProcessCard key={step.title} step={step} isMobile={isMobile} index={i} />
-            ))}
-          </div>
-
-          {/* Flow arrow legend — desktop only */}
-          {!isMobile && (
-            <div
-              data-aos="fade-up"
-              style={{
-                marginTop: 28,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                gap: 12,
-              }}
-            >
-              {processSteps.map((step, i) => (
-                <div key={step.title} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 11,
-                    color: step.colorText, letterSpacing: "0.08em",
-                  }}>
-                    {step.title}
-                  </span>
-                  {i < processSteps.length - 1 && (
-                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
-                      <path d="M0 6h16M12 1l5 5-5 5" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+        <ol className="skills__jobs">
+          {EXPERIENCE.map((job) => (
+            <li key={job.company + job.role} className="s-card s-job s-reveal">
+              <div className="s-job__meta">
+                <div className="s-job__tags">
+                  {job.current && (
+                    <span className="s-tag s-tag--current">
+                      <span className="s-dot" aria-hidden="true" />
+                      Current
+                    </span>
                   )}
+                  <span className="s-tag">{job.type}</span>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <h3 className="s-job__role">{job.role}</h3>
+                <p className="s-job__company">{job.company}</p>
+                <p className="s-job__detail">{job.location}</p>
+                <p className="s-job__detail">{job.dates}</p>
+              </div>
 
-        {/* ── Bottom divider ── */}
-        <div style={{
-          marginTop: isMobile ? 64 : 90, height: 1,
-          background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)",
-        }} />
+              <div className="s-job__body">
+                {job.summary && <p className="s-job__summary">{job.summary}</p>}
+                <ul className="s-job__bullets">
+                  {job.bullets.map((b) => <li key={b}>{b}</li>)}
+                </ul>
+                <div className="s-job__tools">
+                  <span className="s-eyebrow s-eyebrow--inline">Skills &amp; tools</span>
+                  <ul className="s-chips">
+                    {job.tools.map((t) => <li key={t}>{t}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
 
+        {/* ── Design process ── */}
+        <header className="skills__header skills__header--second s-reveal">
+          <p className="s-badge">Design process</p>
+          <h2 className="skills__title">
+            A structured, <span className="skills__mark">repeatable</span> process.
+          </h2>
+          <p className="skills__intro">
+            A UX workflow grounded in Human–Computer Interaction, with usability,
+            accessibility and user-validated decisions at every stage.
+          </p>
+        </header>
+
+        <ol className="skills__process">
+          {PROCESS.map(({ title, color, desc, methods }, i) => (
+            <li key={title} className="s-card s-reveal" style={{ "--d": `${i * 60}ms` }}>
+              <div className="s-step__head">
+                <span className="s-chip" style={{ background: color }} aria-hidden="true" />
+                <span className="s-step__num">0{i + 1}</span>
+              </div>
+              <h3 className="s-card-title">{title}</h3>
+              <p className="s-card-text">{desc}</p>
+              <ul className="s-chips s-chips--small s-foot">
+                {methods.map((m) => <li key={m}>{m}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
 };
 
 export default Skills;
+
+/* ───────────────────────────────────────────── */
+/* Same tokens as Main.jsx */
+const css = `
+.skills {
+  --s-primary: #0075de;
+  --s-ink: #000000;
+  --s-ink-2: #31302e;
+  --s-muted: #615d59;
+  --s-canvas: #ffffff;
+  --s-paper: #f6f5f4;
+  --s-line: #e6e6e6;
+  --s-sky: #62aef0;
+  --s-purple: #d6b6f6;
+  --s-orange: #dd5b00;
+  --s-green: #1aae39;
+
+  background: var(--s-paper);
+  color: var(--s-ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.skills *, .skills *::before, .skills *::after { box-sizing: border-box; }
+
+.skills__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px;
+}
+
+/* Section headers — same as About */
+.skills__header { margin-bottom: 40px; }
+.skills__header--second { margin-top: 96px; }
+.s-badge {
+  display: inline-flex;
+  margin: 0 0 24px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--s-canvas);
+  border: 1px solid var(--s-line);
+  color: var(--s-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.43;
+}
+.skills__title {
+  margin: 0;
+  max-width: 16em;
+  font-size: clamp(32px, 4.4vw, 48px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.033em;
+  text-wrap: balance;
+}
+.skills__mark {
+  background-image: linear-gradient(transparent 62%, rgba(98,174,240,0.35) 62%);
+  padding: 0 2px;
+}
+.skills__intro {
+  margin: 16px 0 0;
+  max-width: 34rem;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--s-muted);
+}
+
+/* Cards */
+.s-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--s-canvas);
+  border: 1px solid var(--s-line);
+}
+.s-card > .s-foot { margin-top: auto; }
+.s-eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--s-muted);
+}
+.s-eyebrow--inline { margin: 0 8px 0 0; }
+.s-card-title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.s-card-text {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--s-muted);
+}
+
+/* Chips — same as About's tools */
+.s-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.s-chips li {
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--s-paper);
+  border: 1px solid var(--s-line);
+  font-size: 14px;
+  color: var(--s-ink-2);
+}
+.s-chips--small { gap: 6px; }
+.s-chips--small li { padding: 3px 10px; font-size: 13px; }
+
+.s-job__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.s-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: rgba(0,117,222,0.08);
+  color: var(--s-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.s-tag--current { background: rgba(26,174,57,0.10); color: #137a2a; }
+.s-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--s-green);
+  animation: s-ping 2.4s ease-out infinite;
+}
+@keyframes s-ping {
+  0%   { box-shadow: 0 0 0 0 rgba(26,174,57,0.35); }
+  70%  { box-shadow: 0 0 0 6px rgba(26,174,57,0); }
+  100% { box-shadow: 0 0 0 0 rgba(26,174,57,0); }
+}
+
+/* Experience — 4 | 8 split, same as About */
+.skills__jobs { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.s-job {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  padding: 0;
+}
+.s-job__meta {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-right: 1px solid var(--s-line);
+}
+.s-job__role { margin: 0 0 4px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.s-job__company { margin: 0 0 12px; font-size: 15px; color: var(--s-ink-2); }
+.s-job__detail { margin: 0; font-size: 14px; line-height: 1.6; color: var(--s-muted); }
+.s-job__body {
+  grid-column: span 8;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 24px 8px;
+}
+.s-job__summary {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--s-ink);
+}
+.s-job__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+.s-job__bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--s-ink-2);
+}
+.s-job__bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--s-sky);
+}
+.s-job__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--s-line);
+}
+
+/* Process — same card as the hero's focus cards */
+.skills__process {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.s-step__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.s-chip { display: block; width: 28px; height: 28px; border-radius: 8px; }
+.s-step__num { font-size: 13px; font-weight: 600; color: var(--s-muted); }
+
+/* Motion */
+.s-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--d, 0ms);
+}
+.s-reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .s-reveal { opacity: 1; transform: none; transition: none; }
+  .s-dot { animation: none; }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .skills__process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .skills__inner { padding: 64px 16px; }
+  .skills__header { margin-bottom: 32px; }
+  .skills__header--second { margin-top: 64px; }
+  .skills__intro { font-size: 16px; }
+  .s-job { display: flex; flex-direction: column; gap: 0; }
+  .s-job__meta { border-right: 0; border-bottom: 1px solid var(--s-line); padding-bottom: 20px; }
+  .s-job__body { padding: 20px 24px 24px; }
+  .skills__process { grid-template-columns: 1fr; }
+}
+`;

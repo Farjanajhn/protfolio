@@ -1,416 +1,450 @@
-// Main.jsx — Hero Section Redesign
-// Editorial dark aesthetic — bold typographic hero, cinematic depth
-// Consistent with the portfolio's case study visual language
+// Main.jsx — Hero
+// Style: warm minimalism (inspired by the "Notion" DESIGN.md in awesome-claude-design)
+// - Warm paper canvas, near-black Inter type, one confident blue for actions
+// - White cards with hairline borders, soft layered shadows, pill CTAs
+// - Playful "sticker" accents carry personality while the layout stays quiet
+// - Single <h1>, AA contrast, visible focus, reduced-motion support
 
-import { FaDribbble, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
-import { TypeAnimation } from "react-type-animation";
-import { useEffect, useState } from "react";
 import main from "./../assets/image/img11.png";
+import main2 from "./../assets/image/myImage.jpg";
 
-/* ─── Noise grain overlay ─── */
-const NoiseLayer = () => (
-  <svg aria-hidden style={{
-    position: "fixed", inset: 0, width: "100%", height: "100%",
-    pointerEvents: "none", zIndex: 1,
-    opacity: 0.04, mixBlendMode: "overlay",
-  }}>
-    <filter id="hn">
-      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#hn)" />
+const LINKS = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/farjanajhn/" },
+  { label: "GitHub", href: "https://github.com/Farjanajhn" },
+  { label: "X / Twitter", href: "https://twitter.com/farjanajhn12" },
+  { label: "Dribbble", href: "https://dribbble.com/farjanajhn" },
+];
+
+const FOCUS = [
+  { title: "User research", text: "Interviews, usability tests, synthesis", color: "var(--sky)" },
+  { title: "Interaction design", text: "Flows, wireframes, information architecture", color: "var(--purple)" },
+  { title: "Prototyping", text: "Figma prototypes you can click and test", color: "var(--orange)" },
+  { title: "Accessibility", text: "Inclusive, WCAG-minded interfaces", color: "var(--green)" },
+];
+
+const Arrow = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-/* ─── Animated counter for stats ─── */
-const Counter = ({ value, suffix = "" }) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let start = 0;
-    const num = parseInt(value);
-    const step = Math.ceil(num / 50);
-    const delay = 800;
-    const timer = setTimeout(() => {
-      const id = setInterval(() => {
-        start += step;
-        if (start >= num) { setCount(num); clearInterval(id); }
-        else setCount(start);
-      }, 25);
-    }, delay);
-    return () => clearTimeout(timer);
-  }, [value]);
-  return <>{count}{suffix}</>;
-};
+const ArrowUpRight = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M3.5 8.5l5-5M4 3.5h4.5V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
-const Main = () => {
-  const [mounted, setMounted] = useState(false);
+const Main = () => (
+  <section id="main" className="hero" aria-labelledby="hero-title">
+    <style>{css}</style>
 
-  useEffect(() => {
-    // Load fonts
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap";
-    document.head.appendChild(link);
-
-    // Stagger mount animation
-    const t = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(t);
-  }, []);
-
-  const socialLinks = [
-    { icon: FaGithub,   href: "https://github.com/Farjanajhn",            label: "GitHub" },
-    { icon: FaLinkedin, href: "https://www.linkedin.com/in/",             label: "LinkedIn" },
-    { icon: FaTwitter,  href: "https://twitter.com/farjanajhn12",         label: "Twitter" },
-    { icon: FaDribbble, href: "https://dribbble.com/farjanajhn",          label: "Dribbble" },
-  ];
-
-  const stats = [
-    { value: "4", suffix: "+", label: "Case studies" },
-    { value: "8", suffix: " wk", label: "Avg. project" },
-    { value: "2", suffix: "", label: "Countries" },
-  ];
-
-  return (
-    <section id="main" style={{
-      position: "relative", minHeight: "100vh",
-      overflow: "hidden", background: "#080c10",
-      fontFamily: "'Lato', sans-serif",
-    }}>
-
-      <NoiseLayer />
-
-      {/* ── Portrait photo — right side ── */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 0,
-        display: "flex", justifyContent: "flex-end",
-      }}>
-        <img
-          src={main}
-          alt="Farjana — UX Designer"
-          style={{
-            height: "100%", width: "65%",
-            objectFit: "cover", objectPosition: "center top",
-            transform: "scaleX(-1)",
-            maskImage: "linear-gradient(to left, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 85%)",
-            WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 85%)",
-          }}
-        />
-      </div>
-
-      {/* ── Gradient overlays ── */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 1,
-        background: "linear-gradient(105deg, #080c10 38%, rgba(8,12,16,0.85) 58%, transparent 80%)",
-      }} />
-
-      {/* ── Ambient glows ── */}
-      <div aria-hidden style={{
-        position: "absolute", top: -180, left: -120,
-        width: 600, height: 600, borderRadius: "50%", zIndex: 1,
-        background: "radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
-      <div aria-hidden style={{
-        position: "absolute", bottom: -200, left: 200,
-        width: 500, height: 500, borderRadius: "50%", zIndex: 1,
-        background: "radial-gradient(circle, rgba(0,80,200,0.06) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
-
-      {/* ── Decorative vertical rule ── */}
-      <div style={{
-        position: "absolute", left: "calc(50% - 1px)", top: 0, bottom: 0,
-        width: 1, zIndex: 2, opacity: 0.06,
-        background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.4) 70%, transparent)",
-        pointerEvents: "none",
-      }} />
-
-      {/* ── Main content ── */}
-      <div style={{
-        position: "relative", zIndex: 3,
-        maxWidth: 1280, margin: "0 auto",
-        minHeight: "100vh", padding: "0 40px",
-        display: "flex", alignItems: "center",
-      }}>
-        <div style={{
-          width: "100%", maxWidth: 680,
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? "none" : "translateY(24px)",
-          transition: "opacity 0.9s ease, transform 0.9s ease",
-        }}>
-
-          {/* ── Location + status ── */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32, flexWrap: "wrap" }}>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "6px 14px", borderRadius: 999,
-              border: "1px solid rgba(16,185,129,0.3)",
-              background: "rgba(16,185,129,0.08)",
-            }}>
-              <div style={{
-                width: 7, height: 7, borderRadius: "50%",
-                background: "#10b981",
-                boxShadow: "0 0 8px rgba(16,185,129,0.8)",
-                animation: "pulse 2s infinite",
-              }} />
-              <span style={{ color: "#6ee7b7", fontSize: 11, fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                Available · Umeå, Sweden
-              </span>
-            </div>
-            {["UX · UI · Product", "Research · Prototyping"].map(tag => (
-              <span key={tag} style={{
-                padding: "5px 12px", borderRadius: 999,
-                border: "1px solid rgba(255,255,255,0.1)",
-                background: "rgba(255,255,255,0.04)",
-                color: "rgba(255,255,255,0.55)", fontSize: 11,
-                fontFamily: "'DM Mono', monospace", letterSpacing: "0.08em",
-              }}>
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* ── Giant editorial headline ── */}
-          <h1 style={{
-            margin: "0 0 8px",
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 900, lineHeight: 1.0,
-            letterSpacing: "-0.03em",
-            fontSize: "clamp(52px, 7vw, 96px)",
-            color: "#f8fafc",
-          }}>
-            Hey,
-          </h1>
-          <h1 style={{
-            margin: "0 0 4px",
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 900, lineHeight: 1.0,
-            letterSpacing: "-0.03em",
-            fontSize: "clamp(52px, 7vw, 96px)",
-            color: "#f8fafc",
-          }}>
-            I'm{" "}
-            <span style={{
-              background: "linear-gradient(135deg, #34d399 0%, #6ee7b7 60%, #a7f3d0 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              fontStyle: "italic",
-            }}>
-              Farjana
-            </span>
-          </h1>
-
-          {/* ── Animated role line ── */}
-          <div style={{
-            marginTop: 24, marginBottom: 28,
-            display: "flex", alignItems: "center", gap: 14,
-            flexWrap: "wrap",
-          }}>
-            <div style={{
-              width: 32, height: 2,
-              background: "linear-gradient(to right, #10b981, transparent)",
-              flexShrink: 0,
-            }} />
-            <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, fontFamily: "'Lato', sans-serif" }}>
-              A passionate
-            </span>
-            <span style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(18px, 2.5vw, 26px)",
-              fontWeight: 700, color: "#fff",
-              minWidth: 260, display: "inline-block",
-            }}>
-              <TypeAnimation
-                sequence={[
-                  "UX Designer",        1400,
-                  "UI Designer",        1400,
-                  "Product Designer",   1400,
-                  "MERN Developer",     1400,
-                  "HCI Enthusiast",     1400,
-                  "Problem Solver",     1400,
-                ]}
-                wrapper="span"
-                speed={52}
-                repeat={Infinity}
-              />
-            </span>
-          </div>
-
-          {/* ── Bio ── */}
-          <p style={{
-            margin: "0 0 36px",
-            color: "rgba(255,255,255,0.6)",
-            fontSize: 16, lineHeight: 1.8, maxWidth: 520,
-            fontFamily: "'Lato', sans-serif",
-          }}>
-            I design clear, accessible digital experiences — from research and wireframes
-            to polished interfaces. Currently based in Umeå, open to UX/UI roles, internships,
-            and creative collaborations.
+    <div className="hero__inner">
+      <div className="hero__grid">
+        {/* ── Copy ── */}
+        <div className="hero__copy">
+          <p className="badge reveal" style={{ "--d": "0ms" }}>
+            <span className="badge__dot" aria-hidden="true" />
+            Open to UX/UI roles · Umeå, Sweden
           </p>
 
-          {/* ── Stats row ── */}
-          <div style={{
-            display: "flex", gap: 0,
-            marginBottom: 40,
-            borderRadius: 16, overflow: "hidden",
-            border: "1px solid rgba(255,255,255,0.07)",
-            background: "rgba(255,255,255,0.03)",
-            backdropFilter: "blur(8px)",
-            width: "fit-content",
-          }}>
-            {stats.map(({ value, suffix, label }, i) => (
-              <div key={label} style={{
-                padding: "16px 28px",
-                borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.07)" : "none",
-                textAlign: "center",
-              }}>
-                <div style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: 28, fontWeight: 800, lineHeight: 1,
-                  background: "linear-gradient(135deg, #fff, #6ee7b7)",
-                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                }}>
-                  <Counter value={value} suffix={suffix} />
-                </div>
-                <div style={{
-                  marginTop: 4, color: "rgba(255,255,255,0.4)",
-                  fontSize: 11, fontFamily: "'DM Mono', monospace",
-                  letterSpacing: "0.08em", textTransform: "uppercase",
-                }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
+          <p className="eyebrow reveal" style={{ "--d": "60ms" }}>
+            Farjana — UX/UI Designer
+          </p>
 
-          {/* ── CTA buttons ── */}
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 36 }}>
-            <a href="#projects" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 28px", borderRadius: 12,
-              background: "linear-gradient(135deg, #059669, #10b981)",
-              color: "#fff", fontFamily: "'Lato', sans-serif",
-              fontWeight: 700, fontSize: 14, letterSpacing: "0.04em",
-              textDecoration: "none",
-              boxShadow: "0 8px 28px rgba(16,185,129,0.3)",
-              transition: "transform 0.2s, box-shadow 0.2s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(16,185,129,0.45)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 8px 28px rgba(16,185,129,0.3)"; }}
-            >
-              View Projects
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+          <h1 id="hero-title" className="hero__title reveal" style={{ "--d": "120ms" }}>
+            I design products that feel{" "}
+            <span className="hero__mark">obvious</span> to use.
+          </h1>
+
+          <p className="hero__lede reveal" style={{ "--d": "200ms" }}>
+            From research and wireframes to polished, accessible interfaces. I turn
+            messy problems into clear flows, then test them with real people.
+          </p>
+
+          <div className="hero__actions reveal" style={{ "--d": "280ms" }}>
+            <a href="#projects" className="btn btn--primary">
+              See selected work <Arrow />
             </a>
-
-            <a href="#message" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 28px", borderRadius: 12,
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              color: "rgba(255,255,255,0.85)", fontFamily: "'Lato', sans-serif",
-              fontWeight: 700, fontSize: 14, letterSpacing: "0.04em",
-              textDecoration: "none",
-              backdropFilter: "blur(8px)",
-              transition: "background 0.2s, border-color 0.2s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.09)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.22)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}
-            >
-              Contact Me
+            <a href="#message" className="btn btn--secondary">
+              Get in touch
             </a>
           </div>
 
-          {/* ── Divider ── */}
-          <div style={{
-            height: 1, marginBottom: 28,
-            background: "linear-gradient(to right, rgba(255,255,255,0.08), transparent)",
-            maxWidth: 400,
-          }} />
-
-          {/* ── Social icons ── */}
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{
-              color: "rgba(255,255,255,0.3)", fontSize: 11,
-              fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
-              textTransform: "uppercase", marginRight: 8,
-            }}>
-              Find me
-            </span>
-            {socialLinks.map(({ icon: Icon, href, label }) => (
-              <a key={label} href={href} target="_blank" rel="noreferrer"
-                aria-label={label}
-                style={{
-                  width: 40, height: 40, borderRadius: 10,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.04)",
-                  color: "rgba(255,255,255,0.5)",
-                  textDecoration: "none",
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = "rgba(16,185,129,0.1)";
-                  e.currentTarget.style.borderColor = "rgba(52,211,153,0.3)";
-                  e.currentTarget.style.color = "#6ee7b7";
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
-                  e.currentTarget.style.transform = "";
-                }}
-              >
-                <Icon size={17} />
+          <nav className="hero__social reveal" style={{ "--d": "340ms" }} aria-label="Social profiles">
+            {LINKS.map(({ label, href }) => (
+              <a key={label} href={href} target="_blank" rel="noreferrer" className="btn-utility">
+                {label} <ArrowUpRight />
               </a>
             ))}
-          </div>
+          </nav>
+        </div>
 
+        {/* ── Portrait card ── */}
+        <div className="hero__visual reveal" style={{ "--d": "160ms" }}>
+          <span className="sticker sticker--sky" aria-hidden="true" />
+          <span className="sticker sticker--pink" aria-hidden="true" />
+          <span className="sticker sticker--orange" aria-hidden="true" />
+
+          <figure className="portrait">
+            <img src={main2} alt="Portrait of Farjana" loading="eager" decoding="async" />
+          </figure>
+
+          <div className="now-card">
+            <span className="eyebrow eyebrow--small">Currently</span>
+            <p>UX/UI design intern at Intraction, redesigning their homepage</p>
+          </div>
         </div>
       </div>
 
-      {/* ── Scroll indicator ── */}
-      <div style={{
-        position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)",
-        zIndex: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-        opacity: 0.4,
-      }}>
-        <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", letterSpacing: "0.14em", color: "#fff", textTransform: "uppercase" }}>
-          Scroll
-        </span>
-        <div style={{
-          width: 1, height: 40,
-          background: "linear-gradient(to bottom, rgba(255,255,255,0.6), transparent)",
-          animation: "scrollLine 2s ease-in-out infinite",
-        }} />
-      </div>
-
-      {/* ── Corner decoration ── */}
-      <div style={{
-        position: "absolute", top: 48, right: 48, zIndex: 4,
-        display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6,
-        opacity: 0.3,
-      }}>
-        <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.5)" }} />
-        <div style={{ width: 20, height: 1, background: "rgba(255,255,255,0.3)" }} />
-        <div style={{ width: 60, height: 1, background: "rgba(255,255,255,0.2)" }} />
-      </div>
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(16,185,129,0.8); }
-          50% { opacity: 0.6; box-shadow: 0 0 16px rgba(16,185,129,0.4); }
-        }
-        @keyframes scrollLine {
-          0% { transform: scaleY(0); transform-origin: top; }
-          50% { transform: scaleY(1); transform-origin: top; }
-          51% { transform: scaleY(1); transform-origin: bottom; }
-          100% { transform: scaleY(0); transform-origin: bottom; }
-        }
-      `}</style>
-    </section>
-  );
-};
+      {/* ── Focus cards ── */}
+      <ul className="focus reveal" style={{ "--d": "420ms" }} aria-label="What I do">
+        {FOCUS.map(({ title, text, color }) => (
+          <li key={title} className="focus__card">
+            <span className="focus__chip" style={{ background: color }} aria-hidden="true" />
+            <h2 className="focus__title">{title}</h2>
+            <p className="focus__text">{text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+);
 
 export default Main;
+
+/* ───────────────────────────────────────────── */
+/* Styles — for faster loading, move the @import into index.html <head> */
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.hero {
+  /* Color tokens */
+  --primary: #0075de;
+  --primary-active: #005bab;
+  --ink: #000000;
+  --ink-secondary: #31302e;
+  --ink-muted: #615d59;
+  --ink-faint: #a39e98;
+  --canvas: #ffffff;
+  --canvas-soft: #f6f5f4;
+  --hairline: #e6e6e6;
+
+  /* Sticker accents (decorative only) */
+  --sky: #62aef0;
+  --purple: #d6b6f6;
+  --pink: #ff64c8;
+  --orange: #dd5b00;
+  --teal: #2a9d99;
+  --green: #1aae39;
+
+  /* Elevation: many near-transparent stops, never a hard shadow */
+  --shadow-soft:
+    0 1px 1px rgba(0,0,0,0.03),
+    0 2px 4px rgba(0,0,0,0.03),
+    0 6px 12px rgba(0,0,0,0.035),
+    0 16px 32px rgba(0,0,0,0.04);
+
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background: var(--canvas-soft);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+.hero__inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px 56px;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 64px;
+  align-items: center;
+}
+
+/* Badge pill */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.43;
+}
+.badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: hero-ping 2.4s ease-out infinite;
+}
+
+/* Eyebrow */
+.eyebrow {
+  display: block;
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.eyebrow--small { margin: 0 0 4px; }
+
+/* Headline */
+.hero__title {
+  margin: 0;
+  font-size: clamp(40px, 5.6vw, 64px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.033em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.hero__mark {
+  position: relative;
+  white-space: nowrap;
+  background-image: linear-gradient(transparent 62%, rgba(98, 174, 240, 0.35) 62%);
+  padding: 0 2px;
+}
+
+.hero__lede {
+  margin: 24px 0 0;
+  max-width: 34rem;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+/* Buttons */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 9999px;
+  font: 500 16px/1.5 'Inter', system-ui, sans-serif;
+  text-decoration: none;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+.btn--primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn--primary svg { transition: transform .15s ease; }
+.btn--primary:hover svg { transform: translateX(3px); }
+.btn--primary:active { background: var(--primary-active); }
+.btn--secondary {
+  background: var(--canvas);
+  color: var(--ink);
+  box-shadow: var(--shadow-soft), 0 0 0 1px rgba(0,0,0,0.05);
+}
+.btn--secondary:hover { transform: translateY(-1px); }
+
+/* Utility buttons (social) */
+.hero__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+.btn-utility {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  color: var(--ink-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color .15s ease, color .15s ease;
+}
+.btn-utility:hover {
+  border-color: var(--ink-faint);
+  color: var(--ink);
+}
+
+.btn:focus-visible,
+.btn-utility:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* Portrait + stickers */
+.hero__visual {
+  position: relative;
+  padding: 24px;
+}
+.portrait {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-soft);
+}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.sticker {
+  position: absolute;
+  z-index: 0;
+  display: block;
+}
+.sticker--sky {
+  top: 0;
+  right: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  background: var(--sky);
+  transform: rotate(12deg);
+}
+.sticker--pink {
+  bottom: 72px;
+  left: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--pink);
+}
+.sticker--orange {
+  top: 38%;
+  right: -4px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--orange);
+  transform: rotate(-14deg);
+  box-shadow: var(--shadow-soft);
+}
+
+.now-card {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+  max-width: 280px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-soft);
+}
+.now-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-secondary);
+}
+
+/* Focus cards */
+.focus {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 64px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.focus__card {
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+}
+.focus__chip {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.focus__title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.focus__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--ink-muted);
+}
+
+/* Entrance + motion */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: hero-in .7s cubic-bezier(.2, .7, .2, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes hero-in { to { opacity: 1; transform: none; } }
+@keyframes hero-ping {
+  0%   { box-shadow: 0 0 0 0 rgba(26, 174, 57, 0.35); }
+  70%  { box-shadow: 0 0 0 7px rgba(26, 174, 57, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(26, 174, 57, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; opacity: 1; transform: none; }
+  .badge__dot { animation: none; }
+  .btn, .btn svg, .btn-utility { transition: none; }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .hero__grid { grid-template-columns: 1fr; gap: 48px; }
+  .hero__visual { max-width: 440px; }
+  .focus { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .hero__inner { padding: 40px 16px 40px; }
+  .hero__actions .btn { flex: 1 1 100%; }
+  .hero__visual { padding: 16px; }
+  .sticker--sky { width: 64px; height: 64px; border-radius: 16px; }
+  .now-card { position: relative; margin-top: -40px; margin-left: 8px; max-width: none; }
+  .focus { grid-template-columns: 1fr; margin-top: 48px; }
+}
+`;

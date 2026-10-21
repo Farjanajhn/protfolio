@@ -1,422 +1,447 @@
-// About.jsx — Fully Responsive
-// Editorial dark aesthetic — mobile-first, tablet & desktop layouts
+// About.jsx — minimal, same tokens and components as the hero (Main.jsx)
+// Rows (12-col grid, cards in a row share height):
+//   1. identity (4) | bio (8)
+//   2. four competency cards (3 each), same style as the hero's focus cards
+//   3. thesis (4) | tools (8)
+//   4. availability + resume (12)
 
-import { useEffect, useState } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { FaDownload } from "react-icons/fa";
-import img from "./../assets/image/myImage.png";
+import { useEffect, useRef } from "react";
 
-/* ─── Noise grain ─── */
-const NoiseLayer = () => (
-  <svg aria-hidden style={{
-    position: "absolute", inset: 0, width: "100%", height: "100%",
-    pointerEvents: "none", zIndex: 1, opacity: 0.03, mixBlendMode: "overlay",
-  }}>
-    <filter id="an">
-      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#an)" />
+const COMPETENCIES = [
+  { title: "UX & Product Design", desc: "Wireframing, interaction flows, design systems, UI polish", color: "var(--a-sky)" },
+  { title: "User Research", desc: "Interviews, surveys, usability testing, mixed methods", color: "var(--a-purple)" },
+  { title: "Prototyping", desc: "Lo-fi sketches through hi-fi Figma prototypes", color: "var(--a-orange)" },
+  { title: "Front-End Awareness", desc: "React, Tailwind, dev handoff, accessibility (WCAG)", color: "var(--a-green)" },
+];
+
+const TOOLS = [
+  "Figma", "Miro", "Wireframing", "Prototyping", "Design Systems",
+  "Information Architecture", "Usability Testing", "Journey Mapping",
+  "MAXQDA", "Mixed-Methods Research", "Accessibility (WCAG)",
+  "React", "Tailwind CSS", "VS Code", "GitHub",
+];
+
+const LANGUAGES = [
+  { lang: "Bengali", level: "Native" },
+  { lang: "English", level: "Fluent" },
+  { lang: "Swedish", level: "Professional" },
+];
+
+const Arrow = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path d="M8 2.5v8M4.5 7.5 8 11l3.5-3.5M3 13.5h10" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-/* ─── Window width hook ─── */
-const useWindowWidth = () => {
-  const [w, setW] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+const ArrowUpRight = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M3.5 8.5l5-5M4 3.5h4.5V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/* Fades cards in once as they scroll into view */
+const useReveal = () => {
+  const ref = useRef(null);
   useEffect(() => {
-    const fn = () => setW(window.innerWidth);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
+    const root = ref.current;
+    if (!root) return;
+    const items = root.querySelectorAll(".a-reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      }),
+      { threshold: 0.15 }
+    );
+    items.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
-  return w;
+  return ref;
 };
 
-const Tag = ({ children }) => (
-  <span style={{
-    display: "inline-flex", alignItems: "center",
-    padding: "3px 12px", borderRadius: 999,
-    border: "1px solid rgba(52,211,153,0.25)",
-    background: "rgba(16,185,129,0.07)",
-    color: "#6ee7b7", fontSize: 11,
-    letterSpacing: "0.1em", textTransform: "uppercase",
-    fontFamily: "'DM Mono', monospace", fontWeight: 500,
-  }}>
-    {children}
-  </span>
-);
-
-const SkillChip = ({ label, delay }) => (
-  <span
-    data-aos="fade-up"
-    data-aos-delay={delay}
-    style={{
-      display: "inline-flex", alignItems: "center",
-      padding: "6px 13px", borderRadius: 999,
-      border: "1px solid rgba(255,255,255,0.09)",
-      background: "rgba(255,255,255,0.04)",
-      color: "rgba(255,255,255,0.75)", fontSize: 13,
-      fontFamily: "'Lato', sans-serif",
-      backdropFilter: "blur(6px)",
-      transition: "border-color 0.2s, color 0.2s, background 0.2s",
-      cursor: "default",
-    }}
-    onMouseEnter={e => {
-      e.currentTarget.style.borderColor = "rgba(52,211,153,0.3)";
-      e.currentTarget.style.color = "#a7f3d0";
-      e.currentTarget.style.background = "rgba(16,185,129,0.08)";
-    }}
-    onMouseLeave={e => {
-      e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)";
-      e.currentTarget.style.color = "rgba(255,255,255,0.75)";
-      e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-    }}
-  >
-    {label}
-  </span>
-);
-
 const About = () => {
-  const width = useWindowWidth();
-  const isMobile = width < 768;
-  const isTablet = width >= 768 && width < 1024;
-  const isDesktop = width >= 1024;
-
-  useEffect(() => {
-    AOS.init({ duration: 900, once: true, easing: "ease-out-quart" });
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap";
-    document.head.appendChild(link);
-  }, []);
-
-  const competencies = [
-    { icon: "🎨", title: "UX & Product Design", desc: "Wireframing, interaction flows, design systems, UI polish" },
-    { icon: "🔬", title: "User Research",        desc: "Interviews, surveys, usability testing, mixed methods" },
-    { icon: "⚡", title: "Prototyping",          desc: "Lo-fi sketches through hi-fi Figma prototypes" },
-    { icon: "💻", title: "Front-End Awareness",  desc: "React, Tailwind, dev handoff, accessibility (WCAG)" },
-  ];
-
-  const tools = [
-    "Figma", "Miro", "MAXQDA", "VS Code", "GitHub",
-    "React", "Tailwind CSS", "Usability Testing",
-    "Journey Mapping", "Information Architecture",
-    "Accessibility (WCAG)", "Design Systems",
-    "Wireframing", "Prototyping", "Mixed-Methods Research",
-  ];
-
-  const languages = [
-    { lang: "English", level: "Fluent",       pct: 95 },
-    { lang: "Swedish", level: "Professional", pct: 65 },
-    { lang: "Bengali", level: "Native",       pct: 100 },
-  ];
-
-  const base = { fontFamily: "'Lato', sans-serif", color: "rgba(255,255,255,0.72)", fontSize: isMobile ? 14 : 15, lineHeight: 1.8 };
-  const px   = isMobile ? "20px" : isTablet ? "32px" : "40px";
-  const py   = isMobile ? "80px" : "120px";
+  const ref = useReveal();
 
   return (
-    <section id="about" style={{
-      position: "relative", minHeight: "100vh",
-      overflow: "hidden", background: "#080c10",
-      fontFamily: "'Lato', sans-serif",
-    }}>
-      <NoiseLayer />
+    <section id="about" className="about" aria-labelledby="about-title" ref={ref}>
+      <style>{css}</style>
 
-      {/* Ambient glows */}
-      <div aria-hidden style={{ position: "absolute", top: -200, right: -100, width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-      <div aria-hidden style={{ position: "absolute", bottom: -200, left: -150, width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,80,180,0.05) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-
-      <div style={{
-        position: "relative", zIndex: 2,
-        maxWidth: 1200, margin: "0 auto",
-        padding: `${py} ${px}`,
-        boxSizing: "border-box",
-      }}>
-   <div style={{ height: 1, background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)" }} />
-        {/* ── Section header ── */}
-        <div data-aos="fade-up" style={{ marginBottom: isMobile ? 40 : 64 }}>
-          <Tag>About me</Tag>
-          <h2 style={{
-            marginTop: 14, marginBottom: 0,
-            fontFamily: "'Playfair Display', serif",
-            fontSize: isMobile ? "clamp(32px, 10vw, 48px)" : "clamp(36px, 5vw, 64px)",
-            fontWeight: 900, lineHeight: 1.05,
-            letterSpacing: "-0.03em", color: "#f8fafc",
-          }}>
-            Designed for{" "}
-            <span style={{
-              background: "linear-gradient(135deg, #34d399 0%, #6ee7b7 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              fontStyle: "italic",
-            }}>
-              people
-            </span>
-            {isMobile ? " " : ",\n"}
-            {!isMobile && <br />}
-            built for{" "}
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>impact.</span>
+      <div className="about__inner">
+        <header className="about__header a-reveal">
+          <p className="a-badge">About me</p>
+          <h2 id="about-title" className="about__title">
+            Designed for <span className="about__mark">people</span>, built for impact.
           </h2>
-        </div>
+        </header>
 
-        {/* ── Main layout ──
-            Mobile  → single column, stacked
-            Tablet  → 2 cols equal
-            Desktop → 360px left + 1fr right
-        ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : isTablet ? "1fr 1fr" : "360px 1fr",
-          gap: isMobile ? 24 : 28,
-          alignItems: "start",
-        }}>
+        <div className="about__grid">
+          {/* Row 1 */}
+          <div className="a-card a-reveal span-4">
+            <h3 className="about__name">Farjana Jahan Sathi</h3>
+            <p className="about__role"> UX/UI Designer · Umeå, Sweden</p>
 
-          {/* ─────────────────── LEFT COLUMN ─────────────────── */}
-          <div data-aos="fade-right" style={{ display: "flex", flexDirection: "column", gap: isMobile ? 16 : 16 }}>
-
-            {/* Photo — smaller on mobile */}
-            <div style={{
-              borderRadius: 24, overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.08)",
-              background: "linear-gradient(160deg, rgba(16,185,129,0.08) 0%, rgba(255,255,255,0.03) 100%)",
-              padding: 3,
-              boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-              /* on mobile cap the photo height so it doesn't dominate */
-              maxHeight: isMobile ? 300 : "none",
-            }}>
-              <div style={{ borderRadius: 22, overflow: "hidden" }}>
-                <img src={img} alt="Farjana Jahan Sathi" style={{
-                  width: "100%",
-                  aspectRatio: isMobile ? "3/2" : "4/5",
-                  objectFit: "cover",
-                  objectPosition: "center top",
-                  display: "block",
-                }} />
-              </div>
-            </div>
-
-            {/* Identity card */}
-            <div style={{
-              borderRadius: 20, padding: isMobile ? "18px 20px" : "22px 24px",
-              border: "1px solid rgba(255,255,255,0.07)",
-              background: "rgba(255,255,255,0.03)",
-              backdropFilter: "blur(8px)",
-            }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 18 : 22, fontWeight: 800, color: "#f8fafc", marginBottom: 4 }}>
-                Farjana Jahan Sathi
-              </div>
-              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontFamily: "'DM Mono', monospace", letterSpacing: "0.06em", marginBottom: 16 }}>
-                Junior UX Designer · Umeå, Sweden
-              </div>
-
-              {/* Language bars */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {languages.map(({ lang, level, pct }) => (
-                  <div key={lang}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-                      <span style={{ fontSize: 13, color: "#fff", fontFamily: "'Lato', sans-serif" }}>{lang}</span>
-                      <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "'DM Mono', monospace" }}>{level}</span>
-                    </div>
-                    <div style={{ height: 3, borderRadius: 2, background: "rgba(255,255,255,0.08)" }}>
-                      <div data-aos="slide-right" style={{
-                        height: "100%", width: `${pct}%`, borderRadius: 2,
-                        background: "linear-gradient(to right, #059669, #34d399)",
-                        transition: "width 1s ease",
-                      }} />
-                    </div>
-                  </div>
+            <div className="a-foot">
+              <p className="a-eyebrow">Languages</p>
+              <ul className="about__langs">
+                {LANGUAGES.map(({ lang, level }) => (
+                  <li key={lang}>
+                    <span>{lang}</span>
+                    <span className="a-muted">{level}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-
-            {/* Thesis card */}
-            <div style={{
-              borderRadius: 20, padding: isMobile ? "16px 18px" : "20px 22px",
-              border: "1px solid rgba(52,211,153,0.15)",
-              borderTop: "2px solid #10b981",
-              background: "rgba(16,185,129,0.04)",
-              backdropFilter: "blur(8px)",
-            }}>
-              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#6ee7b7", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
-                🎓 Master's Thesis
-              </div>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: "#f8fafc", lineHeight: 1.45, marginBottom: 6 }}>
-                Evaluating the International Usability of ULTRA
-              </div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", fontFamily: "'DM Mono', monospace", marginBottom: 12 }}>
-                Umeå University · 2023–2025
-              </div>
-              <a
-                href="https://umu.diva-portal.org/smash/record.jsf?pid=diva2%3A1977119&dswid=2404"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 6,
-                  fontSize: 12, color: "#6ee7b7", textDecoration: "none",
-                  fontFamily: "'DM Mono', monospace",
-                  borderBottom: "1px solid rgba(110,231,183,0.3)", paddingBottom: 1,
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = "#a7f3d0"}
-                onMouseLeave={e => e.currentTarget.style.color = "#6ee7b7"}
-              >
-                View full thesis →
-              </a>
-            </div>
-
-            {/* Download resume */}
-            <a
-              href="/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
-              download="Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                padding: isMobile ? "13px 20px" : "14px 24px",
-                borderRadius: 14,
-                background: "linear-gradient(135deg, #059669, #10b981)",
-                color: "#fff", fontFamily: "'Lato', sans-serif",
-                fontWeight: 700, fontSize: 14, letterSpacing: "0.04em",
-                textDecoration: "none",
-                boxShadow: "0 8px 28px rgba(16,185,129,0.28)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(16,185,129,0.42)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 8px 28px rgba(16,185,129,0.28)"; }}
-            >
-              <FaDownload size={14} />
-              Download Resume
-            </a>
-
           </div>
 
-          {/* ─────────────────── RIGHT COLUMN ─────────────────── */}
-          <div data-aos={isMobile ? "fade-up" : "fade-left"} style={{ display: "flex", flexDirection: "column", gap: isMobile ? 20 : 28 }}>
+          <div className="a-card a-reveal span-8" style={{ "--d": "60ms" }}>
+            <p className="a-eyebrow">Who I am</p>
+            <p className="about__lead">
+              I'm a Junior UX Designer with a Master's in Human–Computer Interaction
+              &amp; User Experience from Umeå University.
+            </p>
+            <p className="about__body">
+              I specialize in user-centered problem solving, qualitative research,
+              usability testing and interaction design, with a focus on making complex
+              systems feel simple and inclusive.
+            </p>
+            <p className="about__interests a-foot">
+              <span className="a-eyebrow a-eyebrow--inline">Interests</span>
+              SaaS UX · Inclusive design · Human–AI interaction
+            </p>
+          </div>
 
-            {/* Bio */}
-            <div style={{
-              borderRadius: 22,
-              padding: isMobile ? "22px 20px" : "32px 34px",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderTop: "2px solid #10b981",
-              background: "rgba(255,255,255,0.03)",
-              backdropFilter: "blur(8px)",
-            }}>
-              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#6ee7b7", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 18 }}>
-                Who I am
-              </div>
-              <p style={{ ...base, fontSize: isMobile ? 15 : 16, marginBottom: 14 }}>
-                I'm <strong style={{ color: "#fff" }}>Farjana</strong>, a Junior UX Designer with a Master's in
-                Human–Computer Interaction & User Experience from Umeå University.
-              </p>
-              <p style={{ ...base, marginBottom: 14 }}>
-                I specialize in user-centered problem solving, qualitative research, usability testing,
-                and interaction design — with a focus on making complex systems feel simple and inclusive.
-              </p>
-              <p style={{ ...base, color: "#6ee7b7", fontStyle: "italic" }}>
-                Interests: SaaS UX · Inclusive design · Human–AI interaction
-              </p>
+          {/* Row 2 */}
+          {COMPETENCIES.map(({ title, desc, color }, i) => (
+            <div key={title} className="a-card a-reveal span-3" style={{ "--d": `${i * 60}ms` }}>
+              <span className="a-chip" style={{ background: color }} aria-hidden="true" />
+              <h4 className="a-card-title">{title}</h4>
+              <p className="a-card-text">{desc}</p>
             </div>
+          ))}
 
-            {/* Competency grid — 2 cols on tablet/desktop, 1 col on mobile */}
-            <div>
-              <div style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: isMobile ? 18 : 22,
-                fontWeight: 800, color: "#f8fafc", marginBottom: 16,
-              }}>
-                Core Competencies
-              </div>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: isMobile ? 12 : 14,
-              }}>
-                {competencies.map(({ icon, title, desc }, i) => (
-                  <div
-                    key={title}
-                    data-aos="fade-up"
-                    data-aos-delay={i * 70}
-                    style={{
-                      borderRadius: 18,
-                      padding: isMobile ? "18px 18px" : "22px 24px",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                      background: "rgba(255,255,255,0.03)",
-                      backdropFilter: "blur(8px)",
-                      transition: "border-color 0.2s, transform 0.2s",
-                      cursor: "default",
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(52,211,153,0.2)"; e.currentTarget.style.transform = "translateY(-3px)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; e.currentTarget.style.transform = ""; }}
-                  >
-                    <div style={{ fontSize: 22, marginBottom: 8 }}>{icon}</div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: "#f8fafc", marginBottom: 5 }}>{title}</div>
-                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{desc}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Row 3 */}
+          <div className="a-card a-reveal span-4">
+            <p className="a-eyebrow">Master's thesis</p>
+            <h3 className="about__thesis">Evaluating the International Usability of ULTRA</h3>
+            <p className="a-card-text">Umeå University · 2023–2025</p>
+            <a
+              className="a-btn-utility a-foot"
+              href="https://umu.diva-portal.org/smash/record.jsf?pid=diva2%3A1977119&dswid=2404"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read the thesis <ArrowUpRight />
+            </a>
+          </div>
 
-            {/* Tools & skills */}
-            <div style={{
-              borderRadius: 22,
-              padding: isMobile ? "22px 20px" : "28px 30px",
-              border: "1px solid rgba(255,255,255,0.07)",
-              background: "rgba(255,255,255,0.02)",
-              backdropFilter: "blur(8px)",
-            }}>
-              <div style={{
-                display: "flex", alignItems: "center",
-                justifyContent: "space-between", marginBottom: 18,
-                flexWrap: "wrap", gap: 10,
-              }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? 17 : 20, fontWeight: 800, color: "#f8fafc" }}>
-                  Tools & Skills
-                </div>
-                <Tag>{tools.length} total</Tag>
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {tools.map((t, i) => (
-                  <SkillChip key={t} label={t} delay={i * 30} />
-                ))}
-              </div>
-            </div>
+          <div className="a-card a-reveal span-8" style={{ "--d": "60ms" }}>
+            <p className="a-eyebrow">Tools &amp; skills</p>
+            <ul className="about__tools">
+              {TOOLS.map((t) => <li key={t}>{t}</li>)}
+            </ul>
+          </div>
 
-            {/* Availability strip */}
-            <div style={{
-              borderRadius: 18,
-              padding: isMobile ? "16px 18px" : "18px 24px",
-              border: "1px solid rgba(52,211,153,0.15)",
-              background: "rgba(16,185,129,0.04)",
-              display: "flex", alignItems: "center", gap: 14,
-              backdropFilter: "blur(8px)",
-              flexWrap: "wrap",
-            }}>
-              <div style={{
-                width: 10, height: 10, borderRadius: "50%", flexShrink: 0,
-                background: "#10b981",
-                boxShadow: "0 0 10px rgba(16,185,129,0.8)",
-                animation: "aboutPulse 2s infinite",
-              }} />
-              <div>
-                <div style={{ color: "#f8fafc", fontFamily: "'Lato', sans-serif", fontWeight: 700, fontSize: isMobile ? 13 : 14 }}>
-                  Open to opportunities
-                </div>
-                <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, fontFamily: "'DM Mono', monospace", letterSpacing: "0.06em" }}>
-                  UX/UI roles · Internships · Collaborations · Remote or Umeå
-                </div>
-              </div>
-            </div>
-
+          {/* Row 4 */}
+          <div className="about__bar a-reveal span-12">
+            <p className="about__status">
+              <span className="a-dot" aria-hidden="true" />
+              Open to UX/UI roles, internships and collaborations · Remote or Umeå
+            </p>
+            <a
+              className="a-btn"
+              href="/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
+              download="Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf"
+            >
+              Download resume <Arrow />
+            </a>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes aboutPulse {
-          0%, 100% { box-shadow: 0 0 8px rgba(16,185,129,0.8); }
-          50%       { box-shadow: 0 0 18px rgba(16,185,129,0.3); }
-        }
-      `}</style>
     </section>
   );
 };
 
 export default About;
+
+/* ───────────────────────────────────────────── */
+/* Same tokens as Main.jsx */
+const css = `
+.about {
+  --a-primary: #0075de;
+  --a-primary-active: #005bab;
+  --a-ink: #000000;
+  --a-ink-2: #31302e;
+  --a-muted: #615d59;
+  --a-faint: #a39e98;
+  --a-canvas: #ffffff;
+  --a-paper: #f6f5f4;
+  --a-line: #e6e6e6;
+  --a-sky: #62aef0;
+  --a-purple: #d6b6f6;
+  --a-orange: #dd5b00;
+  --a-green: #1aae39;
+
+  background: var(--a-paper);
+  color: var(--a-ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.about *, .about *::before, .about *::after { box-sizing: border-box; }
+
+.about__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px;
+}
+
+/* Header — same badge + headline treatment as the hero */
+.about__header { margin-bottom: 48px; }
+.a-badge {
+  display: inline-flex;
+  margin: 0 0 24px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--a-canvas);
+  border: 1px solid var(--a-line);
+  color: var(--a-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.43;
+}
+.about__title {
+  margin: 0;
+  max-width: 14em;
+  font-size: clamp(32px, 4.4vw, 48px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.033em;
+  text-wrap: balance;
+}
+.about__mark {
+  background-image: linear-gradient(transparent 62%, rgba(98,174,240,0.35) 62%);
+  padding: 0 2px;
+}
+
+/* Grid */
+.about__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+.span-3  { grid-column: span 3; }
+.span-4  { grid-column: span 4; }
+.span-8  { grid-column: span 8; }
+.span-12 { grid-column: 1 / -1; }
+
+/* Cards — identical to the hero's focus cards */
+.a-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--a-canvas);
+  border: 1px solid var(--a-line);
+}
+.a-foot { margin-top: auto; }
+.a-chip {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.a-card-title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.a-card-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--a-muted);
+}
+.a-muted { color: var(--a-muted); }
+
+.a-eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0.125px;
+  text-transform: uppercase;
+  color: var(--a-muted);
+}
+.a-eyebrow--inline { margin: 0 8px 0 0; }
+
+/* Identity */
+.about__name { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.about__role { margin: 4px 0 24px; font-size: 14px; color: var(--a-muted); }
+.about__langs { margin: 0; padding: 0; list-style: none; }
+.about__langs li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid var(--a-line);
+  font-size: 15px;
+}
+
+/* Bio */
+.about__lead {
+  margin: 0 0 12px;
+  max-width: 38rem;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--a-ink-2);
+}
+.about__body {
+  margin: 0 0 24px;
+  max-width: 38rem;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--a-muted);
+}
+.about__interests {
+  margin-bottom: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--a-line);
+  font-size: 15px;
+  color: var(--a-ink-2);
+}
+
+/* Thesis */
+.about__thesis {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+/* Tools */
+.about__tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.about__tools li {
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--a-paper);
+  border: 1px solid var(--a-line);
+  font-size: 14px;
+  color: var(--a-ink-2);
+}
+
+/* Buttons — same as the hero */
+.a-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 9999px;
+  background: var(--a-primary);
+  color: #fff;
+  font: 500 16px/1.5 'Inter', system-ui, sans-serif;
+  text-decoration: none;
+  transition: background-color .15s ease;
+}
+.a-btn:hover { background: var(--a-primary-active); }
+.a-btn-utility {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  margin-top: auto;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--a-canvas);
+  border: 1px solid var(--a-line);
+  color: var(--a-ink-2);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color .15s ease, color .15s ease;
+}
+.a-btn-utility:hover { border-color: var(--a-faint); color: var(--a-ink); }
+.about__thesis + .a-card-text { margin-bottom: 20px; }
+.a-btn:focus-visible, .a-btn-utility:focus-visible {
+  outline: 2px solid var(--a-primary);
+  outline-offset: 3px;
+}
+
+/* Availability + resume */
+.about__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 16px 16px 16px 24px;
+  border-radius: 9999px;
+  background: var(--a-canvas);
+  border: 1px solid var(--a-line);
+}
+.about__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 15px;
+  color: var(--a-ink-2);
+}
+.a-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--a-green);
+  animation: about-ping 2.4s ease-out infinite;
+}
+
+/* Motion */
+.a-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--d, 0ms);
+}
+.a-reveal.is-in { opacity: 1; transform: none; }
+@keyframes about-ping {
+  0%   { box-shadow: 0 0 0 0 rgba(26,174,57,0.35); }
+  70%  { box-shadow: 0 0 0 7px rgba(26,174,57,0); }
+  100% { box-shadow: 0 0 0 0 rgba(26,174,57,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .a-reveal { opacity: 1; transform: none; transition: none; }
+  .a-dot { animation: none; }
+  .a-btn, .a-btn-utility { transition: none; }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .span-4, .span-8 { grid-column: 1 / -1; }
+  .span-3 { grid-column: span 6; }
+  .about__role { margin-bottom: 20px; }
+  .about__langs { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; }
+  .a-foot { margin-top: 0; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .about__inner { padding: 64px 16px; }
+  .about__header { margin-bottom: 32px; }
+  .about__grid { grid-template-columns: 1fr; }
+  .span-3, .span-4, .span-8, .span-12 { grid-column: 1 / -1; }
+  .about__langs { display: block; }
+  .about__bar { flex-direction: column; align-items: stretch; padding: 20px; border-radius: 12px; }
+  .about__status { align-items: flex-start; }
+  .a-dot { margin-top: 7px; }
+  .a-btn { width: 100%; }
+}
+`;
