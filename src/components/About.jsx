@@ -99,7 +99,7 @@ const About = () => {
           <div className="a-card a-reveal span-8" style={{ "--d": "60ms" }}>
             <p className="a-eyebrow">Who I am</p>
             <p className="about__lead">
-              I'm a Junior UX Designer with a Master's in Human–Computer Interaction
+              I'm a UX/UI Designer with a Master's in Human–Computer Interaction
               &amp; User Experience from Umeå University.
             </p>
             <p className="about__body">
