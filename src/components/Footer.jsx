@@ -12,7 +12,6 @@ const NAV = [
 const LINKS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/farjanajhn/" },
   { label: "GitHub", href: "https://github.com/Farjanajhn" },
-  { label: "X / Twitter", href: "https://twitter.com/farjanajhn12" },
   { label: "Dribbble", href: "https://dribbble.com/farjanajhn" },
 ];
 
