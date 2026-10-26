@@ -6,7 +6,7 @@
 // - Single <h1>, AA contrast, visible focus, reduced-motion support
 // - Class names are prefixed (home-hero / hh-) so daisyUI's .hero/.btn/.badge can't override them
 
-import main2 from "./../assets/image/headshot";
+import main2 from "./../assets/image/myImage.jpg";
 
 const LINKS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/farjanajhn/" },
