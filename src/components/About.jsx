@@ -11,11 +11,11 @@ const COMPETENCIES = [
   { title: "UX & Product Design", desc: "Wireframing, interaction flows, design systems, UI polish", color: "var(--a-sky)" },
   { title: "User Research", desc: "Interviews, surveys, usability testing, mixed methods", color: "var(--a-purple)" },
   { title: "Prototyping", desc: "Lo-fi sketches through hi-fi Figma prototypes", color: "var(--a-orange)" },
-  { title: "Front-End Awareness", desc: "React, Tailwind, dev handoff, accessibility (WCAG)", color: "var(--a-green)" },
+  { title: "Front-End Development", desc: "React, Tailwind, dev handoff, accessibility (WCAG)", color: "var(--a-green)" },
 ];
 
 const TOOLS = [
-  "Figma", "Miro", "Wireframing", "Prototyping", "Design Systems",
+  "Figma", "Wireframing", "Prototyping", "Design Systems",
   "Information Architecture", "Usability Testing", "Journey Mapping",
   "MAXQDA", "Mixed-Methods Research", "Accessibility (WCAG)",
   "React", "Tailwind CSS", "VS Code", "GitHub",
