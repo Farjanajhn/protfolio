@@ -194,7 +194,7 @@ const css = `
 .about__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 96px 24px;
+  padding: 64px 24px;
 }
 
 /* Header — same badge + headline treatment as the hero */
@@ -275,13 +275,13 @@ const css = `
   line-height: 1.33;
   letter-spacing: 0.125px;
   text-transform: uppercase;
-  color: var(--a-muted);
+  color: var(--a-ink-2);
 }
 .a-eyebrow--inline { margin: 0 8px 0 0; }
 
 /* Identity */
 .about__name { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
-.about__role { margin: 4px 0 24px; font-size: 14px; color: var(--a-muted); }
+.about__role { margin: 4px 0 24px; font-size: 14px; color: var(--a-ink-2); }
 .about__langs { margin: 0; padding: 0; list-style: none; }
 .about__langs li {
   display: flex;
@@ -297,7 +297,7 @@ const css = `
   max-width: 38rem;
   font-size: 18px;
   line-height: 1.6;
-  color: var(--a-ink-2);
+  color: var(--a-muted);
 }
 .about__body {
   margin: 0 0 24px;
@@ -311,7 +311,7 @@ const css = `
   padding-top: 16px;
   border-top: 1px solid var(--a-line);
   font-size: 15px;
-  color: var(--a-ink-2);
+  color: var(--a-muted);
 }
 
 /* Thesis */
@@ -393,7 +393,7 @@ const css = `
   gap: 10px;
   margin: 0;
   font-size: 15px;
-  color: var(--a-ink-2);
+  color: var(--a-muted);
 }
 .a-dot {
   flex-shrink: 0;
@@ -434,7 +434,7 @@ const css = `
 
 /* Mobile */
 @media (max-width: 767px) {
-  .about__inner { padding: 64px 16px; }
+  .about__inner { padding: 48px 16px; }
   .about__header { margin-bottom: 32px; }
   .about__grid { grid-template-columns: 1fr; }
   .span-3, .span-4, .span-8, .span-12 { grid-column: 1 / -1; }

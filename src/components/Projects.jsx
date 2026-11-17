@@ -196,7 +196,7 @@ const css = `
 .projects__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 96px 24px;
+  padding: 64px 24px;
 }
 
 /* Header — same as the other sections */
@@ -370,7 +370,7 @@ const css = `
 
 /* Mobile */
 @media (max-width: 767px) {
-  .projects__inner { padding: 64px 16px; }
+  .projects__inner { padding: 48px 16px; }
   .projects__header { margin-bottom: 32px; }
   .projects__intro { font-size: 16px; }
   .projects__grid { grid-template-columns: 1fr; }

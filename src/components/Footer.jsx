@@ -111,7 +111,7 @@ const css = `
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 32px 16px;
-  padding-top: 56px;
+  padding-top: 48px;
   border-top: 1px solid var(--sf-line);
 }
 .site-footer__id { grid-column: span 6; }
@@ -119,13 +119,13 @@ const css = `
 
 /* Identity */
 .site-footer__name { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
-.site-footer__role { margin: 4px 0 12px; font-size: 14px; color: var(--sf-muted); }
+.site-footer__role { margin: 4px 0 12px; font-size: 14px; color: var(--sf-ink-2); }
 .site-footer__line {
   margin: 0 0 16px;
   max-width: 26rem;
   font-size: 15px;
   line-height: 1.6;
-  color: var(--sf-ink-2);
+  color: var(--sf-muted);
 }
 .site-footer__email {
   font-size: 15px;
@@ -144,7 +144,7 @@ const css = `
   line-height: 1.33;
   letter-spacing: 0.125px;
   text-transform: uppercase;
-  color: var(--sf-muted);
+  color: var(--sf-ink-2);
 }
 .site-footer__list {
   display: flex;

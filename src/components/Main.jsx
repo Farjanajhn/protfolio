@@ -109,9 +109,9 @@ const css = `
 
 .home-hero {
   /* Tokens — the site's blue accent, warm neutrals around the portrait */
-  --ink: #1c1b19;
-  --ink-secondary: #3b3935;
-  --ink-muted: #6b675f;
+  --ink: #000000;
+  --ink-secondary: #31302e;
+  --ink-muted: #615d59;
   --canvas: #ffffff;
   --paper: #f6f5f4;
   --hairline: #e4e0d8;
@@ -120,7 +120,6 @@ const css = `
   --live: #1aae39;
 
   position: relative;
-  min-height: 100svh;
   display: flex;
   align-items: center;
   background: var(--paper);
@@ -133,7 +132,7 @@ const css = `
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 120px 24px 72px;
+  padding: 112px 24px 64px;
 }
 
 /* Text and portrait share the same top and bottom line */
@@ -279,13 +278,13 @@ const css = `
   font-size: 13px;
   color: var(--ink-muted);
 }
-.portrait__caption span:first-child { color: var(--ink); font-weight: 500; }
+.portrait__caption span:first-child { color: var(--ink-secondary); font-weight: 500; }
 
 /* What I do — one quiet row, hairlines instead of boxes */
 .focus {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 96px 0 0;
+  margin: 64px 0 0;
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--hairline);
@@ -347,7 +346,7 @@ const css = `
   .home-hero__actions .hh-btn { flex: 1 1 100%; }
   .home-hero__visual { max-width: none; }
   .portrait__caption { flex-direction: column; gap: 2px; }
-  .focus { grid-template-columns: 1fr; margin-top: 64px; }
+  .focus { grid-template-columns: 1fr; margin-top: 48px; }
   .focus__item, .focus__item + .focus__item { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--hairline); }
 }
 `;

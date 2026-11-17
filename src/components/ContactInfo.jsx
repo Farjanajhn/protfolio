@@ -55,7 +55,7 @@ const css = `
   line-height: 1.33;
   letter-spacing: 0.125px;
   text-transform: uppercase;
-  color: var(--ci-muted);
+  color: var(--ci-ink-2);
 }
 .ci__list { margin: 0; }
 .ci__list > div {

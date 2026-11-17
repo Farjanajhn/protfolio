@@ -205,7 +205,7 @@ const css = `
 .skills__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 96px 24px;
+  padding: 64px 24px;
 }
 
 /* Section headers — same as About */
@@ -261,7 +261,7 @@ const css = `
   line-height: 1.33;
   letter-spacing: 0.125px;
   text-transform: uppercase;
-  color: var(--s-muted);
+  color: var(--s-ink-2);
 }
 .s-eyebrow--inline { margin: 0 8px 0 0; }
 .s-card-title {
@@ -346,7 +346,7 @@ const css = `
   margin: 0 0 16px;
   font-size: 16px;
   line-height: 1.6;
-  color: var(--s-ink);
+  color: var(--s-muted);
 }
 .s-job__bullets {
   display: flex;
@@ -361,7 +361,7 @@ const css = `
   padding-left: 18px;
   font-size: 15px;
   line-height: 1.6;
-  color: var(--s-ink-2);
+  color: var(--s-muted);
 }
 .s-job__bullets li::before {
   content: "";
@@ -421,7 +421,7 @@ const css = `
 
 /* Mobile */
 @media (max-width: 767px) {
-  .skills__inner { padding: 64px 16px; }
+  .skills__inner { padding: 48px 16px; }
   .skills__header { margin-bottom: 32px; }
   .skills__header--second { margin-top: 64px; }
   .skills__intro { font-size: 16px; }

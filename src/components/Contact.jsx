@@ -223,7 +223,7 @@ const css = `
 .contact__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 48px 24px 120px;
+  padding: 64px 24px;
 }
 
 /* Header — same as About and Skills */
@@ -283,7 +283,7 @@ const css = `
   line-height: 1.33;
   letter-spacing: 0.125px;
   text-transform: uppercase;
-  color: var(--c-muted);
+  color: var(--c-ink-2);
 }
 
 /* Details */
@@ -441,7 +441,7 @@ const css = `
 
 /* Mobile */
 @media (max-width: 767px) {
-  .contact__inner { padding: 32px 16px 80px; }
+  .contact__inner { padding: 48px 16px; }
   .contact__header { margin-bottom: 32px; }
   .contact__intro { font-size: 16px; }
   .contact__grid { grid-template-columns: 1fr; }
