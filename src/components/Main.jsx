@@ -1,7 +1,6 @@
 // Main.jsx — Hero
 // Style: quiet, warm minimalism built around the portrait.
-// - Palette taken from the photo: warm paper canvas, near-black warm ink,
-//   one sage accent (from the plants) used only for emphasis
+// - Warm paper canvas and near-black ink around the photo; the site's blue stays the one accent
 // - Two typefaces with clear jobs: Inter for everything, Instrument Serif italic for one accent word
 // - Text column and portrait share one top and bottom line on desktop
 // - Single <h1>, AA contrast, visible focus, reduced-motion support
@@ -109,14 +108,15 @@ const css = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap');
 
 .home-hero {
-  /* Tokens — taken from the portrait: warm wall, cream knit, green plants */
+  /* Tokens — the site's blue accent, warm neutrals around the portrait */
   --ink: #1c1b19;
   --ink-secondary: #3b3935;
   --ink-muted: #6b675f;
   --canvas: #ffffff;
   --paper: #f6f5f4;
   --hairline: #e4e0d8;
-  --sage: #4c6a4f;
+  --primary: #0075de;
+  --primary-active: #005bab;
   --live: #1aae39;
 
   position: relative;
@@ -184,7 +184,7 @@ const css = `
   font-weight: 400;
   font-size: 1.1em;
   letter-spacing: -0.01em;
-  color: var(--sage);
+  color: var(--primary);
 }
 
 .home-hero__lede {
@@ -216,9 +216,9 @@ const css = `
   text-decoration: none;
   transition: background-color .2s ease, color .2s ease, border-color .2s ease;
 }
-.hh-btn--primary { background: var(--ink); color: #fff; }
+.hh-btn--primary { background: var(--primary); color: #fff; }
 .hh-btn--primary svg { transition: transform .2s ease; }
-.hh-btn--primary:hover { background: var(--sage); color: #fff; }
+.hh-btn--primary:hover { background: var(--primary-active); color: #fff; }
 .hh-btn--primary:hover svg { transform: translateX(3px); }
 .hh-btn--ghost { color: var(--ink); border: 1px solid var(--hairline); background: transparent; }
 .hh-btn--ghost:hover { border-color: var(--ink); color: var(--ink); background: transparent; }
@@ -244,7 +244,7 @@ const css = `
 
 .hh-btn:focus-visible,
 .hh-link:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--primary);
   outline-offset: 3px;
 }
 
@@ -298,7 +298,7 @@ const css = `
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: var(--sage);
+  color: var(--primary);
 }
 .focus__title {
   margin: 0 0 4px;
