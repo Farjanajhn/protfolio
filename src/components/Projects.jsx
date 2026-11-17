@@ -8,6 +8,7 @@ import final from "../assets/image/UX1st/happy2.png";
 import Mockup3 from "../assets/image/UX3RD/Mockup3.png";
 import hero2 from "../assets/image/UX2nd/hero2.png";
 import COVER from "../assets/image/UX4TH/Artboard.png";
+import MERIDIAN from "../assets/image/UX5TH/card-cover.jpg";
 
 const PROJECTS = [
   {
@@ -20,6 +21,17 @@ const PROJECTS = [
     image: COVER,
     tags: ["Thesis", "Mobile", "Usability"],
     color: "var(--p-sky)",
+  },
+  {
+    id: "meridian",
+    title: "Meridian",
+    subtitle: "Recipe website redesign + design system",
+    description:
+      "An audit and redesign of my own recipe site: from a Bootstrap template to an editorial homepage with clear paths by cuisine, chef or dish, built on Figma variables and components.",
+    link: "/projects/meridian",
+    image: MERIDIAN,
+    tags: ["Web redesign", "Design system", "UI"],
+    color: "#8a6a3e",
   },
   {
     id: "mygov",
@@ -230,7 +242,7 @@ const css = `
   list-style: none;
 }
 .p-span-full { grid-column: 1 / -1; }
-.p-span-4 { grid-column: span 4; }
+.p-span-4 { grid-column: span 6; }
 
 /* Card — the whole card is one link */
 .p-card {
