@@ -5,6 +5,7 @@
 // with Tailwind/daisyUI or the other pages. Accent = Meridian's bronze.
 
 import { pfFonts, pfCaseStudy } from "../theme/playful";
+import { useFillFrames } from "../theme/fillFrames";
 import { useEffect, useState } from "react";
 
 import BEFORE_FULL from "../assets/image/UX5TH/before-full.jpg";
@@ -506,6 +507,7 @@ const Compare = () => {
 
 /* ─── Page ─── */
 const MeridianCaseStudy = () => {
+  useFillFrames();
   const [active, setActive] = useState("overview");
   const [progress, setProgress] = useState(0);
 
@@ -1096,9 +1098,9 @@ const MeridianCaseStudy = () => {
         {/* ── End of page ── */}
         <nav className="cs-end" aria-label="More case studies">
           <a href="/" className="cs-btn-secondary"><ArrowLeft /> Back to portfolio</a>
-          <a href="/projects/four" className="cs-next">
+          <a href="/projects/Third" className="cs-next">
             <span className="cs-eyebrow">Next case study</span>
-            <span className="cs-next__title">Ultra <ArrowRight /></span>
+            <span className="cs-next__title">MyGov BD <ArrowRight /></span>
           </a>
         </nav>
       </main>

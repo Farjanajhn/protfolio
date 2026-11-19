@@ -67,8 +67,12 @@ export const pfCaseStudy = `
 .cs .cs-eyebrow{font-family:"Caveat",cursive;font-size:22px;font-weight:600;letter-spacing:0;text-transform:none;color:#0075de}
 .cs .cs-meta{background:#fff;border:1.5px solid #000;border-radius:20px;box-shadow:5px 5px 0 #000;padding:18px 24px}
 .cs .cs-card,.cs .cs-subcard,.cs .cs-swatch{background:#fff;border:1.5px solid #000;border-radius:20px;box-shadow:5px 5px 0 #000}
-.cs .cs-fig__frame{border:1.5px solid #000;border-radius:18px;box-shadow:5px 5px 0 #000;background:#fff}
+.cs .cs-fig__frame{border:1.5px solid #000;border-radius:18px;box-shadow:5px 5px 0 #000;background:#fff;padding:0;overflow:hidden}
+.cs .cs-fig__frame img{border-radius:0;width:auto;max-width:100%}
 .cs .cs-card .cs-fig__frame{box-shadow:none}
+.cs .cs-toc{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent);padding-right:32px}
+.cs .cs-toc a{padding:0 10px;font-size:13px}
+@media (min-width:1280px){.cs .cs-toc{-webkit-mask-image:none;mask-image:none;padding-right:0}}
 .cs .cs-quote{border-left:4px solid #0075de;font-family:"Fredoka","Inter",sans-serif;font-weight:600;color:#000}
 .cs .cs-chip{border:1.5px solid #000}
 .cs .cs-numbered li::before{color:#0075de}

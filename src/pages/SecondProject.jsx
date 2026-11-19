@@ -4,6 +4,7 @@
 // All class names use the "cs-" prefix so they never clash with Tailwind/daisyUI.
 
 import { pfFonts, pfCaseStudy } from "../theme/playful";
+import { useFillFrames } from "../theme/fillFrames";
 import { useEffect, useState } from "react";
 
 import bby2 from "../assets/image/bby2.png";
@@ -110,6 +111,7 @@ const ArrowRight = () => (
 
 /* ─── Page ─── */
 const SecondProject = () => {
+  useFillFrames();
   const [active, setActive] = useState("overview");
   const [progress, setProgress] = useState(0);
 
@@ -382,9 +384,9 @@ const SecondProject = () => {
         {/* ── End of page ── */}
         <nav className="cs-end" aria-label="More case studies">
           <a href="/" className="cs-btn-secondary"><ArrowLeft /> Back to portfolio</a>
-          <a href="/projects/Third" className="cs-next">
+          <a href="/projects/first" className="cs-next">
             <span className="cs-eyebrow">Next case study</span>
-            <span className="cs-next__title">MyGov BD <ArrowRight /></span>
+            <span className="cs-next__title">Blossom Buddy <ArrowRight /></span>
           </a>
         </nav>
       </main>
