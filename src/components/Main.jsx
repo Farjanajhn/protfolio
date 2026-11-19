@@ -1,7 +1,7 @@
 // Main.jsx — Hero (playful theme)
 // Draggable skill stickers + portrait polaroid, hand-drawn underline, cursor blob.
 // Also injects the shared playful base styles for the homepage.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import portrait from "./../assets/image/farjana-portrait.jpg";
 import { pfBase } from "../theme/playful";
 
@@ -13,6 +13,16 @@ const PenIcon = () => (
     <path d="M12 13.7v7.8" stroke="#000" strokeWidth="1.4" />
   </svg>
 );
+
+/* Shows Figma's official logo if public/figma-logo.svg exists; otherwise the pen icon */
+const ToolLogo = () => {
+  const [ok, setOk] = useState(true);
+  return ok ? (
+    <img className="pf-sticker__logo pf-sticker__logo--img" src="/figma-logo.svg" alt="" draggable="false" onError={() => setOk(false)} />
+  ) : (
+    <PenIcon />
+  );
+};
 
 const STICKERS = [
   { label: "🔍 User research", cls: "s3" },
@@ -78,7 +88,7 @@ const Main = () => {
           </div>
           <span className="pf-drag-hint" aria-hidden="true">↑ drag us around</span>
           {STICKERS.map(({ label, cls, icon }) => (
-            <div key={cls} className={`pf-sticker ${cls}`} data-drag aria-hidden="true">{icon === "pen" && <PenIcon />}{label}</div>
+            <div key={cls} className={`pf-sticker ${cls}`} data-drag aria-hidden="true">{icon === "pen" && <ToolLogo />}{label}</div>
           ))}
 
           <p className="pf-hello">hej, I'm Farjana!</p>
@@ -124,6 +134,7 @@ const css = `
 @keyframes pf-ping{0%{box-shadow:0 0 0 0 rgba(26,174,57,.35)}70%{box-shadow:0 0 0 7px rgba(26,174,57,0)}100%{box-shadow:0 0 0 0 rgba(26,174,57,0)}}
 .pf-sticker{position:absolute;z-index:5;white-space:nowrap;cursor:grab;user-select:none;touch-action:none;font:600 15px var(--pf-sans);padding:10px 16px;border-radius:14px;border:1.5px solid #000;box-shadow:3px 3px 0 #000;background:#fff;color:#000;transition:box-shadow .15s}
 .pf-sticker__logo{width:17px;height:17px;margin-right:7px;vertical-align:-3px}
+.pf-sticker__logo--img{display:inline-block;width:auto;height:18px;pointer-events:none}
 .pf-sticker:active{cursor:grabbing;box-shadow:6px 6px 0 #000}
 .pf-photo{padding:8px;border-radius:22px}
 .pf-photo img{width:150px;height:176px;object-fit:cover;object-position:center 25%;border-radius:15px;pointer-events:none}
