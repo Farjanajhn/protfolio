@@ -19,7 +19,7 @@ const Footer = () => (
       <div className="pf-foot__card pf-box">
         <div className="pf-foot__me">
           <p className="pf-foot__name">Farjana Jahan Sathi</p>
-          <p>UX/UI Designer · Umeå, Sweden. Designing accessible, human-centered digital experiences, from research to polished interfaces.</p>
+          <p>UX/UI Designer · Remote or Sweden. Designing accessible, human-centered digital experiences, from research to polished interfaces.</p>
           <a className="pf-foot__mail" href="mailto:farjanajhn12@gmail.com">farjanajhn12@gmail.com</a>
         </div>
         <nav aria-label="Footer">
@@ -32,7 +32,7 @@ const Footer = () => (
         </div>
       </div>
       <div className="pf-foot__bar">
-        <p>© {new Date().getFullYear()} Farjana Jahan Sathi · made with ☕ in Umeå</p>
+        <p>© {new Date().getFullYear()} Farjana Jahan Sathi · made with ☕ in Sweden</p>
         <a href="#main">Back to top ↑</a>
       </div>
     </div>

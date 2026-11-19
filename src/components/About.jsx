@@ -84,7 +84,7 @@ const About = () => {
         </div>
 
         <div className="pf-resume pf-box pf-rv">
-          <p><span className="pf-dot" aria-hidden="true" />Open to UX/UI roles, internships and collaborations · Remote or Umeå</p>
+          <p><span className="pf-dot" aria-hidden="true" />Open to UX/UI roles, internships and collaborations · Remote or Sweden</p>
           <a className="pf-btn pf-btn--blue" href="/Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf" download="Farjana_Jahan_Sathi_Junior_UX_Designer_CV.pdf">
             Download resume ↓
           </a>

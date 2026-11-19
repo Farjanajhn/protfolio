@@ -66,7 +66,7 @@ const Contact = () => {
             <p className="pf-cinfo__status"><span className="pf-dot" aria-hidden="true" />Open to UX/UI roles and internships</p>
             <dl>
               <div><dt>Email</dt><dd><a href="mailto:farjanajhn12@gmail.com">farjanajhn12@gmail.com</a></dd></div>
-              <div><dt>Location</dt><dd>Umeå, Sweden · open to remote</dd></div>
+              <div><dt>Location</dt><dd>Remote or anywhere in Sweden</dd></div>
               <div><dt>Response time</dt><dd>Within 24–48 hours</dd></div>
             </dl>
             <div className="pf-cinfo__links">

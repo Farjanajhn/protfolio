@@ -19,7 +19,7 @@ const ContactInfo = () => (
         </div>
         <div>
           <dt>Location</dt>
-          <dd>Umeå, Sweden</dd>
+          <dd>Remote or Sweden</dd>
         </div>
       </dl>
     </div>

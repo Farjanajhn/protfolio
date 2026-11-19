@@ -83,14 +83,14 @@ const Main = () => {
             </span>
           </h1>
           <p className="pf-hero__lede">
-            UX/UI designer in Umeå with a master's in HCI. From research and wireframes to polished,
+            UX/UI designer in Sweden with a master's in HCI. From research and wireframes to polished,
             accessible interfaces, I turn messy problems into clear flows, then test them with real people.
           </p>
           <div className="pf-btns pf-hero__btns">
             <a className="pf-btn pf-btn--blue" href="#projects">See my work →</a>
             <a className="pf-btn" href="#message">Get in touch</a>
           </div>
-          <p className="pf-hero__status"><span className="pf-dot" aria-hidden="true" />Open to UX/UI roles · Umeå, Sweden</p>
+          <p className="pf-hero__status"><span className="pf-dot" aria-hidden="true" />Open to UX/UI roles · Remote or Sweden</p>
         </div>
       </div>
     </section>
