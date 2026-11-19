@@ -5,12 +5,21 @@ import { useEffect, useRef } from "react";
 import portrait from "./../assets/image/farjana-portrait.jpg";
 import { pfBase } from "../theme/playful";
 
+/* Original pen-tool icon (vector anchor + bezier) for the "Figma expert" sticker */
+const PenIcon = () => (
+  <svg className="pf-sticker__logo" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 2.5l6.5 9-6.5 10-6.5-10z" fill="#0075de" stroke="#000" strokeWidth="1.6" strokeLinejoin="round" />
+    <circle cx="12" cy="11.5" r="2.2" fill="#fff" stroke="#000" strokeWidth="1.4" />
+    <path d="M12 13.7v7.8" stroke="#000" strokeWidth="1.4" />
+  </svg>
+);
+
 const STICKERS = [
   { label: "🔍 User research", cls: "s3" },
   { label: "✨ AI design workflow", cls: "s7" },
-  { label: "✏️ Figma expert", cls: "s2" },
+  { label: "Figma expert", cls: "s2", icon: "pen" },
   { label: "🧩 Design systems", cls: "s6" },
-  { label: "🎓 MSc HCI", cls: "s5" },
+  { label: "🎓 MSc HCI & UX", cls: "s5" },
   { label: "♿ Accessibility first", cls: "s4" },
 ];
 
@@ -68,8 +77,8 @@ const Main = () => {
             <span>that's me!</span>
           </div>
           <span className="pf-drag-hint" aria-hidden="true">↑ drag us around</span>
-          {STICKERS.map(({ label, cls }) => (
-            <div key={cls} className={`pf-sticker ${cls}`} data-drag aria-hidden="true">{label}</div>
+          {STICKERS.map(({ label, cls, icon }) => (
+            <div key={cls} className={`pf-sticker ${cls}`} data-drag aria-hidden="true">{icon === "pen" && <PenIcon />}{label}</div>
           ))}
 
           <p className="pf-hello">hej, I'm Farjana!</p>
@@ -83,7 +92,7 @@ const Main = () => {
             </span>
           </h1>
           <p className="pf-hero__lede">
-            UX/UI designer in Sweden with a master's in HCI. From research and wireframes to polished,
+            UX/UI designer in Sweden with a master's in HCI & UX. From research and wireframes to polished,
             accessible interfaces, I turn messy problems into clear flows, then test them with real people.
           </p>
           <div className="pf-btns pf-hero__btns">
@@ -114,6 +123,7 @@ const css = `
 .pf-dot{width:8px;height:8px;border-radius:50%;background:#1aae39;animation:pf-ping 2.4s ease-out infinite}
 @keyframes pf-ping{0%{box-shadow:0 0 0 0 rgba(26,174,57,.35)}70%{box-shadow:0 0 0 7px rgba(26,174,57,0)}100%{box-shadow:0 0 0 0 rgba(26,174,57,0)}}
 .pf-sticker{position:absolute;z-index:5;white-space:nowrap;cursor:grab;user-select:none;touch-action:none;font:600 15px var(--pf-sans);padding:10px 16px;border-radius:14px;border:1.5px solid #000;box-shadow:3px 3px 0 #000;background:#fff;color:#000;transition:box-shadow .15s}
+.pf-sticker__logo{width:17px;height:17px;margin-right:7px;vertical-align:-3px}
 .pf-sticker:active{cursor:grabbing;box-shadow:6px 6px 0 #000}
 .pf-photo{padding:8px;border-radius:22px}
 .pf-photo img{width:150px;height:176px;object-fit:cover;object-position:center 25%;border-radius:15px;pointer-events:none}
