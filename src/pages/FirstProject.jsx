@@ -3,6 +3,7 @@
 // Layout: sticky section heading (4 cols) | content (8 cols). Stacks on mobile.
 // All class names use the "cs-" prefix so they never clash with Tailwind/daisyUI.
 
+import { pfFonts, pfCaseStudy } from "../theme/playful";
 import { useEffect, useState } from "react";
 
 import ideation from "../assets/image/ideation.jpg";
@@ -186,7 +187,7 @@ const FirstProject = () => {
 
   return (
     <div className="cs">
-      <style>{css}</style>
+      <style>{pfFonts + css + pfCaseStudy}</style>
 
       {/* ── Top bar: back link + section links + progress ── */}
       <header className="cs-bar">

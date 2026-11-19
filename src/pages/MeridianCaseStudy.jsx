@@ -1,9 +1,10 @@
-// MeridianCaseStudy.jsx — Meridian: redesigning the first website I built (2022 → 2026)
+// MeridianCaseStudy.jsx — Meridian: redesigning the first website I built (2023 → 2026)
 // Same template, tokens and components as the other case studies (FourthProject.jsx):
 // sticky top bar with TOC + progress, sticky section heading (4 cols) | content (8 cols).
 // Shared classes use the "cs-" prefix; Meridian-only pieces use "mcs-" so nothing clashes
 // with Tailwind/daisyUI or the other pages. Accent = Meridian's bronze.
 
+import { pfFonts, pfCaseStudy } from "../theme/playful";
 import { useEffect, useState } from "react";
 
 import BEFORE_FULL from "../assets/image/UX5TH/before-full.jpg";
@@ -38,7 +39,7 @@ import DISH_BUTTER from "../assets/image/UX5TH/dish-butter.jpg";
 import DISH_GRILL from "../assets/image/UX5TH/dish-grill.jpg";
 
 /* ─── Content ─── */
-// Paste the address of the live 2022 site here (e.g. "https://the-chefs-table.netlify.app").
+// Paste the address of the live 2023 site here (e.g. "https://the-chefs-table.netlify.app").
 // While it's empty, the "Visit the live site" button is hidden.
 const LIVE_URL = "https://the-chefs-table.web.app";
 
@@ -62,8 +63,8 @@ const TOC = [
 ];
 
 const META = [
-  { label: "My role", value: "Built it in 2022 as a developer; redesigned it in 2026 as a UX/UI designer" },
-  { label: "Timeline", value: "Original site 2022 · Redesign 2026" },
+  { label: "My role", value: "Built it in 2023 as a developer; redesigned it in 2026 as a UX/UI designer" },
+  { label: "Timeline", value: "Original site 2023 · Redesign 2026" },
   { label: "Scope", value: "Audit, personas, IA, wireframes, hi-fi, prototype, design system" },
   { label: "Tools", value: "Figma (variables, components), React" },
 ];
@@ -341,8 +342,8 @@ const Concept = ({ label, title, text, picked, children }) => (
 const DesktopPair = ({ large = false }) => (
   <div className={`mcs-desks${large ? " mcs-desks--lg" : ""}`}>
     <figure>
-      <span className="mcs-tag">2022 · Before</span>
-      <img src={DESK_BEFORE} alt="The 2022 homepage on a desktop screen" />
+      <span className="mcs-tag">2023 · Before</span>
+      <img src={DESK_BEFORE} alt="The 2023 homepage on a desktop screen" />
     </figure>
     <span className="mcs-desks__arrow" aria-hidden="true">→</span>
     <figure>
@@ -537,7 +538,7 @@ const MeridianCaseStudy = () => {
 
   return (
     <div className="cs">
-      <style>{css}</style>
+      <style>{pfFonts + css + pfCaseStudy}</style>
 
       {/* ── Top bar ── */}
       <header className="cs-bar">
@@ -566,14 +567,14 @@ const MeridianCaseStudy = () => {
             <span className="cs-badge">Case study</span>
             <span className="cs-pill">Website redesign</span>
             <span className="cs-pill">Design system</span>
-            <span className="cs-pill">2022 → 2026</span>
+            <span className="cs-pill">2023 → 2026</span>
           </div>
           <h1 className="cs-hero__title">
             <span className="cs-mark">Meridian</span>
           </h1>
-          <p className="cs-hero__sub">Redesigning the first website I ever built, four years and one UX degree later</p>
+          <p className="cs-hero__sub">Redesigning the first website I ever built, three years and one UX degree later</p>
           <p className="cs-hero__lead">
-            In 2022 I built a recipe website in React with no idea what UX was. In 2026 I came back
+            In 2023 I built a recipe website in React with no idea what UX was. In 2026 I came back
             to it as a designer. This is the story of what I found, who I designed for, and how
             <strong> six chefs from six cities</strong> turned a template into an editorial homepage
             with a <strong>design system</strong> behind it.
@@ -599,9 +600,9 @@ const MeridianCaseStudy = () => {
         </div>
 
         {/* ═════ Prologue ═════ */}
-        <Section id="prologue" kicker="Prologue · 2022" title="The site I built before I knew UX">
+        <Section id="prologue" kicker="Prologue · 2023" title="The site I built before I knew UX">
           <p className="cs-text">
-            I built the first version of this site in 2022 while learning React. I was proud that it
+            I built the first version of this site in 2023 while learning React. I was proud that it
             worked: a navbar, a hero, chef cards, social links, an FAQ. I made design choices the way
             most developers do at the start, by accepting whatever the framework gave me.
           </p>
@@ -627,11 +628,11 @@ const MeridianCaseStudy = () => {
         {/* ═════ Chapter 1: Looking back ═════ */}
         <Section id="problem" kicker="Chapter 1 · Looking back" title="Auditing my own work">
           <p className="cs-text">
-            I went through the 2022 homepage section by section and asked one question of each:
+            I went through the 2023 homepage section by section and asked one question of each:
             <strong> what is this here to do?</strong> Most of the answers were “nothing yet”.
           </p>
           <div className="mcs-audit">
-            <Figure src={BEFORE_FULL} alt="The original 2022 homepage" caption="The 2022 homepage: Bootstrap defaults, everything centred." size="lg" />
+            <Figure src={BEFORE_FULL} alt="The original 2023 homepage" caption="The 2023 homepage: Bootstrap defaults, everything centred." size="lg" />
             <ol className="mcs-issues">
               {AUDIT.map(({ title, text, img, law }) => (
                 <li key={title}>
@@ -742,7 +743,7 @@ const MeridianCaseStudy = () => {
         <Section id="structure" kicker="Chapter 3 · Structure" title="Reordering the page around decisions">
           <div className="mcs-ia">
             <div>
-              <p className="cs-eyebrow">2022</p>
+              <p className="cs-eyebrow">2023</p>
               <ol>{IA_BEFORE.map(([a, b]) => <li key={a}>{a}<span>{b}</span></li>)}</ol>
             </div>
             <div className="mcs-ia__arrow" aria-hidden="true">→</div>
@@ -786,7 +787,7 @@ const MeridianCaseStudy = () => {
 
           <h3 className="cs-card__title" style={{ marginTop: 24 }}>Chef card directions</h3>
           <div className="cs-grid cs-grid--3">
-            <Concept label="A · Stats card (2022)" title="Keep the stats, fix the layout" text="Cheapest change, but likes and counts still don't help anyone choose what to cook.">
+            <Concept label="A · Stats card (2023)" title="Keep the stats, fix the layout" text="Cheapest change, but likes and counts still don't help anyone choose what to cook.">
               <div className="mcs-row" style={{ flex: 1 }}><Box style={{ flex: 1 }} /><div style={{ flex: 1, paddingLeft: 16 }}><Ln h={9} tone="dark" /><Ln w="50%" /><Ln w="30%" /><Ln w="60%" /></div></div>
               <Ln h={13} tone="btn" />
             </Concept>
@@ -845,7 +846,7 @@ const MeridianCaseStudy = () => {
         {/* ═════ Chapter 5: Designing ═════ */}
         <Section id="laws" kicker="Chapter 5 · Designing with principles" title="The UX laws behind each decision">
           <p className="cs-text">
-            In 2022 I chose layouts because they looked fine. This time every decision had to answer
+            In 2023 I chose layouts because they looked fine. This time every decision had to answer
             to a known principle of how people perceive and choose. These are the laws I leaned on most.
           </p>
           <div className="mcs-laws">
@@ -872,7 +873,7 @@ const MeridianCaseStudy = () => {
             </p>
             <LawChips laws={["Hick's law", "Law of similarity", "Law of proximity"]} />
             <div className="mcs-cards" style={{ marginTop: 16 }}>
-              <div><span className="mcs-tag">2022</span><img src={CARD_BEFORE} alt="Original chef card for Arjun Mehra" /></div>
+              <div><span className="mcs-tag">2023</span><img src={CARD_BEFORE} alt="Original chef card for Arjun Mehra" /></div>
               <div><span className="mcs-tag mcs-tag--dark">2026</span><img src={CARD_AFTER} alt="Redesigned chef card for Arjun Mehra" /></div>
             </div>
             <dl className="cs-findings" style={{ marginTop: 16 }}>
@@ -895,7 +896,7 @@ const MeridianCaseStudy = () => {
         {/* ═════ Chapter 6: Look & feel ═════ */}
         <Section id="typography" kicker="Chapter 6 · Look and feel" title="Why these two typefaces">
           <p className="cs-text">
-            In 2022 one default sans-serif did everything, so nothing felt more important than
+            In 2023 one default sans-serif did everything, so nothing felt more important than
             anything else. Now two typefaces have separate jobs: one for voice, one for information.
           </p>
           <div className="cs-grid cs-grid--2 cs-grid--start">
@@ -1042,15 +1043,15 @@ const MeridianCaseStudy = () => {
         </Section>
 
         {/* ═════ Chapter 8: The result ═════ */}
-        <Section id="result" kicker="Chapter 8 · The result" title="2022 vs 2026">
+        <Section id="result" kicker="Chapter 8 · The result" title="2023 vs 2026">
           <p className="cs-text">Same content, same photos, the same six chefs. A different page.</p>
           <DesktopPair large />
           <h3 className="cs-card__title" style={{ marginTop: 16 }}>The full pages</h3>
           <p className="cs-small">Click either page to open it full size.</p>
           <div className="mcs-full">
             <a href={FULL_BEFORE} target="_blank" rel="noreferrer" className="mcs-full__item">
-              <span className="mcs-tag">2022 · Before</span>
-              <img src={FULL_BEFORE} alt="Full 2022 homepage in a browser window" loading="lazy" />
+              <span className="mcs-tag">2023 · Before</span>
+              <img src={FULL_BEFORE} alt="Full 2023 homepage in a browser window" loading="lazy" />
             </a>
             <a href={FULL_AFTER} target="_blank" rel="noreferrer" className="mcs-full__item">
               <span className="mcs-tag mcs-tag--dark">2026 · After</span>
@@ -1065,7 +1066,7 @@ const MeridianCaseStudy = () => {
         {/* ═════ Epilogue ═════ */}
         <Section id="learnings" kicker="Epilogue · What changed in me" title="From “it works” to “it helps”">
           <div className="mcs-then">
-            <div><p className="cs-eyebrow">2022 me asked</p><p className="mcs-serif" style={{ fontSize: 22 }}>Does it run?<br />Does it look like a website?</p></div>
+            <div><p className="cs-eyebrow">2023 me asked</p><p className="mcs-serif" style={{ fontSize: 22 }}>Does it run?<br />Does it look like a website?</p></div>
             <div><p className="cs-eyebrow">2026 me asks</p><p className="mcs-serif" style={{ fontSize: 22 }}>Who is it for?<br />What does each section help them do?</p></div>
           </div>
           <div className="cs-grid cs-grid--2">

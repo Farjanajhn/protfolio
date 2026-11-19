@@ -49,9 +49,9 @@ function Home() {
     <>
       <Sidenav />
       <Main />
+      <Projects />
       <About />
       <Skills />
-      <Projects />
       <Contact />
       <Footer />
     </>
@@ -93,9 +93,9 @@ function Home() {
     <>
       <Sidenav />
       <Main />
+      <Projects />
       <About />
       <Skills />
-      <Projects />
       <Contact />
       <Footer />
     </>
