@@ -62,16 +62,16 @@ const Main = () => {
       <style>{pfBase + css}</style>
 
       <div className="pf-hero__stage pf-wrap">
-        <div className="pf-sticker pf-photo s1" data-drag>
-          <img src={portrait} alt="Portrait of Farjana" draggable="false" />
-          <span>that's me!</span>
-        </div>
-        <span className="pf-drag-hint" aria-hidden="true">↑ drag us around</span>
-        {STICKERS.map(({ label, cls }) => (
-          <div key={cls} className={`pf-sticker ${cls}`} data-drag aria-hidden="true">{label}</div>
-        ))}
-
         <div className="pf-hero__copy">
+          <div className="pf-sticker pf-photo s1" data-drag>
+            <img src={portrait} alt="Portrait of Farjana" draggable="false" />
+            <span>that's me!</span>
+          </div>
+          <span className="pf-drag-hint" aria-hidden="true">↑ drag us around</span>
+          {STICKERS.map(({ label, cls }) => (
+            <div key={cls} className={`pf-sticker ${cls}`} data-drag aria-hidden="true">{label}</div>
+          ))}
+
           <p className="pf-hello">hej, I'm Farjana!</p>
           <h1 id="hero-title" className="pf-hero__title">
             I design products<br />that feel{" "}
@@ -103,7 +103,7 @@ const css = `
 .pf-blob{position:fixed;left:0;top:0;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;background:#0075de;mix-blend-mode:multiply;opacity:.2;pointer-events:none;z-index:200;transition:width .25s,height .25s,margin .25s,opacity .25s}
 .pf-blob.is-big{width:72px;height:72px;margin:-36px 0 0 -36px;opacity:.14}
 .pf-hero{position:relative}
-.pf-hero__stage{position:relative;min-height:min(92vh,880px);display:grid;place-items:center;text-align:center;padding-top:110px;padding-bottom:56px}
+.pf-hero__stage{position:relative;min-height:min(92vh,900px);display:grid;place-items:center;text-align:center;padding-top:240px;padding-bottom:96px}
 .pf-hello{font:600 clamp(26px,3vw,38px) var(--pf-hand);color:var(--pf-blue)!important;transform:rotate(-4deg);margin-bottom:6px!important}
 .pf-hero__title{margin:0;font:700 clamp(52px,8.6vw,136px)/.95 var(--pf-round);letter-spacing:-.03em;color:#000}
 .pf-hl{position:relative;display:inline-block;color:var(--pf-blue)}
@@ -113,20 +113,22 @@ const css = `
 .pf-hero__status{display:inline-flex;align-items:center;gap:8px;margin-top:28px!important;font:500 14px var(--pf-sans);color:var(--pf-ink-2)!important}
 .pf-dot{width:8px;height:8px;border-radius:50%;background:#1aae39;animation:pf-ping 2.4s ease-out infinite}
 @keyframes pf-ping{0%{box-shadow:0 0 0 0 rgba(26,174,57,.35)}70%{box-shadow:0 0 0 7px rgba(26,174,57,0)}100%{box-shadow:0 0 0 0 rgba(26,174,57,0)}}
-.pf-sticker{position:absolute;z-index:5;cursor:grab;user-select:none;touch-action:none;font:600 15px var(--pf-sans);padding:10px 16px;border-radius:14px;border:1.5px solid #000;box-shadow:3px 3px 0 #000;background:#fff;color:#000;transition:box-shadow .15s}
+.pf-sticker{position:absolute;z-index:5;white-space:nowrap;cursor:grab;user-select:none;touch-action:none;font:600 15px var(--pf-sans);padding:10px 16px;border-radius:14px;border:1.5px solid #000;box-shadow:3px 3px 0 #000;background:#fff;color:#000;transition:box-shadow .15s}
 .pf-sticker:active{cursor:grabbing;box-shadow:6px 6px 0 #000}
 .pf-photo{padding:8px;border-radius:22px}
-.pf-photo img{width:170px;height:200px;object-fit:cover;object-position:center 25%;border-radius:15px;pointer-events:none}
+.pf-photo img{width:150px;height:176px;object-fit:cover;object-position:center 25%;border-radius:15px;pointer-events:none}
 .pf-photo span{display:block;text-align:center;font:600 22px var(--pf-hand);color:var(--pf-ink-2);margin-top:4px}
-.s1{bottom:8%;left:3%;transform:rotate(-6deg)}
-.s2{top:20%;right:6%;background:var(--pf-sun);transform:rotate(7deg)}
-.s3{top:18%;left:7%;background:var(--pf-mint);transform:rotate(5deg)}
-.s4{bottom:12%;right:10%;background:var(--pf-lilac);transform:rotate(-5deg)}
-.s5{top:50%;right:2%;background:var(--pf-peach);transform:rotate(-10deg)}
-.s6{top:44%;left:1%;background:var(--pf-sky);transform:rotate(-8deg)}
-.s7{top:12%;left:38%;transform:rotate(3deg)}
-.pf-drag-hint{position:absolute;left:calc(3% + 24px);bottom:calc(8% - 40px);font:600 22px var(--pf-hand);color:var(--pf-muted);transform:rotate(-4deg)}
+.pf-hero__copy{position:relative}
+/* stickers sit in the empty space around the text: above the greeting, and beside the intro + buttons */
+.s3{top:-58px;right:calc(50% + 175px);background:var(--pf-mint);transform:rotate(-5deg)}
+.s6{top:-142px;right:calc(50% + 230px);background:var(--pf-sky);transform:rotate(6deg)}
+.s7{top:-120px;left:calc(50% + 175px);transform:rotate(4deg)}
+.s2{bottom:188px;left:calc(50% + 345px);background:var(--pf-sun);transform:rotate(6deg)}
+.s5{bottom:104px;left:calc(50% + 300px);background:var(--pf-peach);transform:rotate(-7deg)}
+.s4{bottom:16px;left:calc(50% + 330px);background:var(--pf-lilac);transform:rotate(-3deg)}
+.s1{bottom:-12px;right:calc(50% + 310px);transform:rotate(-6deg)}
+.pf-drag-hint{position:absolute;right:calc(50% + 330px);bottom:-58px;white-space:nowrap;font:600 22px var(--pf-hand);color:var(--pf-muted);transform:rotate(-4deg)}
 @media (prefers-reduced-motion:reduce){.pf-dot{animation:none}}
-@media (max-width:1100px){.pf-sticker:not(.pf-photo),.pf-drag-hint{display:none}.pf-photo{position:relative;inset:auto;margin:0 auto 18px;cursor:default}.pf-photo img{width:130px;height:150px}}
-@media (max-width:1100px){.pf-hero__stage{min-height:0;padding-top:120px}}
+@media (max-width:1100px){.pf-sticker:not(.pf-photo),.pf-drag-hint{display:none}.pf-photo{position:relative;inset:auto;width:fit-content;margin:0 auto 18px;cursor:default}.pf-photo img{width:130px;height:150px}}
+@media (max-width:1100px){.pf-hero__stage{min-height:0;padding-top:120px;padding-bottom:56px}}
 `;
